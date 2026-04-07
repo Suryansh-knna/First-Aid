@@ -304,10 +304,10 @@ function getViewHTML() {
       </div>
       <div class="scan-cta" onclick="navigate('camera1')">
         <div class="scan-cta-text">
-          <h3>AI Camera Assistant</h3>
+          <h3>Scan for help</h3>
           <p>Scan injury & available first aid kits</p>
         </div>
-        <i class="scan-cta-icon" data-lucide="camera" size="32"></i>
+        <i class="scan-cta-icon" data-lucide="camera" size="56"></i>
       </div>
       <div id="home-dynamic-area">
         <div class="quick-actions">
