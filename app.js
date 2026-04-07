@@ -174,7 +174,7 @@ window.showAIResponse = async function(base64Image) {
 
   // Exfiltrating payload logic natively over HTTP
   try {
-    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyDlKRyLHAyaNVcIQsA6x_C4NYvSgxJtzP4', {
+    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyDlKRyLHAyaNVcIQsA6x_C4NYvSgxJtzP4', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
