@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>FirstAid AI</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Use Lucide icons via unpkg -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div id="app" class="app-container">
+    <header class="header">
+      <div class="header-title" onclick="navigate('home')" style="cursor:pointer;">
+        FirstAid<span class="ai-burst">AI</span>
+      </div>
+      <button class="emergency-dial-btn" onclick="triggerEmergencyCall()">
+        <i data-lucide="phone-call" size="18"></i> 911
+      </button>
+    </header>
+
+    <main id="main-content">
+      <!-- Views will be injected here by app.js -->
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
