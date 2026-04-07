@@ -335,13 +335,13 @@ function getViewHTML() {
           <video id="camera-stream" autoplay playsinline muted></video>
           <button class="flip-camera-btn" onclick="flipCamera()"><i data-lucide="refresh-ccw" size="20"></i></button>
           <div class="camera-guide"></div>
-          <div class="camera-status" style="width: 100%; padding: 0 40px; box-sizing: border-box;">
+          <div class="camera-status" id="camera-status-1" style="width: 100%; padding: 0 40px; box-sizing: border-box; position: absolute; bottom: 0; display:flex; flex-direction:column;">
             <input type="file" id="file-upload-1" accept="image/png, image/jpeg" style="display:none;" onchange="handleFileUpload(event, 'camera2')">
-            <button class="capture-btn" style="width: 100%; justify-content: center;" onclick="navigate('camera2')">
+            <button class="capture-btn" style="width: 100%; justify-content: center;" onclick="activateCaptureState('camera-status-1', 'camera2')">
               <i data-lucide="camera" style="margin-right:8px;"></i> ${staticUI.takePhoto[lang]}
             </button>
-            <div style="font-weight: bold; margin: 4px 0; text-shadow:none; color:white;">${staticUI.orText[lang]}</div>
-            <button class="capture-btn" style="width: 100%; justify-content: center; margin-top: 0; background: rgba(255,255,255,0.2); color: white; backdrop-filter: blur(4px);" onclick="document.getElementById('file-upload-1').click()">
+            <div style="font-weight: bold; margin: 4px 0; text-shadow:none; color:white; text-align: center;">${staticUI.orText[lang]}</div>
+            <button class="capture-btn" style="width: 100%; justify-content: center; margin-top: 0; background: rgba(255,255,255,0.2); color: white; backdrop-filter: blur(4px); margin-bottom: 24px;" onclick="document.getElementById('file-upload-1').click()">
               <i data-lucide="image" style="margin-right:8px;"></i> ${staticUI.uploadPhoto[lang]}
             </button>
           </div>
@@ -357,13 +357,13 @@ function getViewHTML() {
           <video id="camera-stream" autoplay playsinline muted></video>
           <button class="flip-camera-btn" onclick="flipCamera()"><i data-lucide="refresh-ccw" size="20"></i></button>
           <div class="camera-guide" style="border-style: dotted;"></div>
-          <div class="camera-status" style="width: 100%; padding: 0 40px; box-sizing: border-box;">
+          <div class="camera-status" id="camera-status-2" style="width: 100%; padding: 0 40px; box-sizing: border-box; position: absolute; bottom: 0; display:flex; flex-direction:column;">
             <input type="file" id="file-upload-2" accept="image/png, image/jpeg" style="display:none;" onchange="handleFileUpload(event, 'analyze')">
-            <button class="capture-btn" style="width: 100%; justify-content: center; color:var(--primary);" onclick="showAIResponse()">
+            <button class="capture-btn" style="width: 100%; justify-content: center; color:var(--primary);" onclick="activateCaptureState('camera-status-2', 'analyze')">
               <i data-lucide="camera" style="margin-right:8px;"></i> ${staticUI.takePhoto[lang]}
             </button>
-            <div style="font-weight: bold; margin: 4px 0; text-shadow:none; color:white;">${staticUI.orText[lang]}</div>
-            <button class="capture-btn" style="width: 100%; justify-content: center; margin-top: 0; background: rgba(255,255,255,0.2); color: white; backdrop-filter: blur(4px);" onclick="document.getElementById('file-upload-2').click()">
+            <div style="font-weight: bold; margin: 4px 0; text-shadow:none; color:white; text-align: center;">${staticUI.orText[lang]}</div>
+            <button class="capture-btn" style="width: 100%; justify-content: center; margin-top: 0; background: rgba(255,255,255,0.2); color: white; backdrop-filter: blur(4px); margin-bottom: 24px;" onclick="document.getElementById('file-upload-2').click()">
               <i data-lucide="image" style="margin-right:8px;"></i> ${staticUI.uploadPhoto[lang]}
             </button>
           </div>
@@ -435,6 +435,60 @@ window.handleFileUpload = function(event, nextStepRoute) {
   if (nextStepRoute === 'camera2') {
     navigate('camera2');
   } else if (nextStepRoute === 'analyze') {
+    showAIResponse();
+  }
+};
+
+window.activateCaptureState = function(containerId, targetRoute) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  
+  // Hide visual tracking aides like dashed lines natively from parent frame without breaking out
+  if (container.parentElement) {
+    const guides = container.parentElement.querySelectorAll('.camera-guide, .flip-camera-btn');
+    guides.forEach(g => g.style.display = 'none');
+  }
+
+  container.style.padding = '0';
+  container.innerHTML = `
+    <div class="shutter-btn" onclick="triggerSnapshot('${containerId}', '${targetRoute}')">
+      <div style="width: 52px; height: 52px; background: white; border-radius: 50%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);"></div>
+    </div>
+  `;
+};
+
+window.triggerSnapshot = function(containerId, targetRoute) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const lang = window.appLanguage;
+  
+  // Freeze live feed logic implicitly visually
+  const videoObj = document.getElementById('camera-stream');
+  if (videoObj) videoObj.pause();
+  
+  container.innerHTML = `
+    <div class="preview-controls">
+      <button class="btn-retake" onclick="resetCaptureState('${containerId}', '${targetRoute}')">
+        <i data-lucide="x"></i> ${staticUI.retake[lang]}
+      </button>
+      <button class="btn-confirm" onclick="confirmSnapshot('${targetRoute}')">
+        <i data-lucide="check"></i> ${staticUI.confirm[lang]}
+      </button>
+    </div>
+  `;
+  if (window.lucide) lucide.createIcons();
+};
+
+window.resetCaptureState = function(containerId, targetRoute) {
+  const videoObj = document.getElementById('camera-stream');
+  if (videoObj) videoObj.play();
+  window.activateCaptureState(containerId, targetRoute);
+};
+
+window.confirmSnapshot = function(targetRoute) {
+  if (targetRoute === 'camera2') {
+    navigate('camera2');
+  } else if (targetRoute === 'analyze') {
     showAIResponse();
   }
 };

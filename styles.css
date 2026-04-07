@@ -556,3 +556,54 @@ body {
   border-color: var(--primary);
   box-shadow: 0 2px 8px rgba(0, 47, 153, 0.3);
 }
+
+/* Shutter Substate Layouts */
+.shutter-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: white;
+  border: 4px solid var(--primary);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-top: auto;
+  margin-bottom: 24px;
+  transition: transform 0.2s;
+}
+.shutter-btn:active {
+  transform: scale(0.9);
+}
+
+.preview-controls {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  margin-top: auto;
+  margin-bottom: 24px;
+}
+.preview-controls button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 24px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.btn-retake {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  backdrop-filter: blur(4px);
+}
+.btn-confirm {
+  background: var(--primary);
+  color: white;
+}

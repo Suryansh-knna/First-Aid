@@ -23,7 +23,9 @@ const staticUI = {
   uploadPhoto: { en: "Upload Photo", hi: "फोटो अपलोड करें", gu: "ફોટો અપલોડ કરો" },
   orText: { en: "OR", hi: "या", gu: "અથવા" },
   noImageError: { en: "No image selected. Please try again.", hi: "कोई छवि नहीं चुनी गई। कृपया पुनः प्रयास करें।", gu: "કોઈ છબી પસંદ કરેલ નથી. કૃપા કરીને ફરી પ્રયાસ કરો." },
-  invalidFormatError: { en: "Unsupported format. Please upload JPG or PNG.", hi: "असमर्थित प्रारूप। कृपया JPG या PNG अपलोड करें।", gu: "અસમર્થિત ફોર્મેટ. કૃપા કરીને JPG અથવા PNG અપલોડ કરો." }
+  invalidFormatError: { en: "Unsupported format. Please upload JPG or PNG.", hi: "असमर्थित प्रारूप। कृपया JPG या PNG अपलोड करें।", gu: "અસમર્થિત ફોર્મેટ. કૃપા કરીને JPG અથવા PNG અપલોડ કરો." },
+  retake: { en: "Retake", hi: "फिर से लें", gu: "ફરીથી લો" },
+  confirm: { en: "Confirm", hi: "पुष्टि करें", gu: "ખાતરી કરો" }
 };
 
 const firstAidData = {
