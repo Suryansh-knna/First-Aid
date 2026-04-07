@@ -162,6 +162,16 @@ window.showAIResponse = async function(base64Image) {
     if (loaderText) loaderText.innerText = staticUI.generatingSteps[lang];
   }, 2600);
 
+  // Construct exact mapping arrays natively
+  let validCats = [];
+  let validSubcats = [];
+  for (const catKey of Object.keys(firstAidData)) {
+    validCats.push(firstAidData[catKey].title.en);
+    for (const subKey of Object.keys(firstAidData[catKey].subcategories)) {
+      validSubcats.push(firstAidData[catKey].subcategories[subKey].title.en);
+    }
+  }
+
   // Exfiltrating payload logic natively over HTTP
   try {
     const response = await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=AIzaSyBdab3zGjgCUHG2EgDfR45AwTlk54D2Hpk', {
@@ -170,20 +180,23 @@ window.showAIResponse = async function(base64Image) {
       body: JSON.stringify({
         contents: [{
           parts: [
-            { text: "You are a first aid assistant.\n\nAnalyze the provided image and:\n1. Identify the visible injury\n2. Classify it into one of these categories: Bleeding & Cuts, Burns, Fractures & Sprains, Breathing Problems, Head Injury, Bites & Stings\n3. Identify the specific subcategory\n4. Estimate severity (Mild, Moderate, Severe)\n5. Provide clear step-by-step first aid instructions\n\nRules:\n- Do NOT give medical diagnosis\n- Keep instructions simple and safe\n- If severe, advise seeking medical help\n\nRespond ONLY in JSON format like this:\n{\n  \"injury\": \"\",\n  \"category\": \"\",\n  \"subcategory\": \"\",\n  \"severity\": \"\",\n  \"steps\": [\"\", \"\", \"\"]\n}" },
+            { text: `You are a first aid assistant.\n\nAnalyze the provided image and:\n1. Identify the visible injury\n2. Classify it strictly into one of these categories: ${validCats.join(", ")}\n3. Identify the specific subcategory STRICTLY as one of these exact phrases: ${validSubcats.join(", ")}\n4. Estimate severity (Mild, Moderate, Severe)\n5. Provide clear step-by-step first aid instructions\n\nRules:\n- Do NOT give medical diagnosis\n- Keep instructions simple and safe\n- If severe, advise seeking medical help\n\nRespond ONLY in JSON format like this:\n{\n  "injury": "",\n  "category": "",\n  "subcategory": "",\n  "severity": "",\n  "steps": ["", "", ""]\n}` },
             { inline_data: { mime_type: "image/jpeg", data: base64Image } }
           ]
         }]
       })
     });
     
-    if (!response.ok) throw new Error("API Connection Failed");
+    if (!response.ok) {
+        const errText = await response.text();
+        throw new Error("API Connection Failed: " + errText);
+    }
     const data = await response.json();
     let aiText = data.candidates[0].content.parts[0].text;
     if (aiText.startsWith('\`\`\`json')) aiText = aiText.replace(/^\`\`\`json/, '').replace(/\`\`\`$/, '').trim();
     const aiResult = JSON.parse(aiText);
     
-    // Fallback dictionary map to match Gemini's subcategory text locally
+    // Strict Fallback dictionary map to match Gemini's exact subcategory text locally
     window.activeCategory = null;
     window.activeSubcategory = null;
     
@@ -191,7 +204,7 @@ window.showAIResponse = async function(base64Image) {
     for (const catKey of Object.keys(firstAidData)) {
       for (const subKey of Object.keys(firstAidData[catKey].subcategories)) {
         const subData = firstAidData[catKey].subcategories[subKey];
-        if (targetSub.includes(subData.title.en.toLowerCase()) || subData.title.en.toLowerCase().includes(targetSub) || aiResult.category.toLowerCase().includes(firstAidData[catKey].title.en.toLowerCase())) {
+        if (targetSub === subData.title.en.toLowerCase() || targetSub.includes(subData.title.en.toLowerCase()) || subData.title.en.toLowerCase().includes(targetSub)) {
            window.activeCategory = catKey;
            window.activeSubcategory = subKey;
            break;
@@ -200,15 +213,18 @@ window.showAIResponse = async function(base64Image) {
       if (window.activeCategory) break;
     }
     
-    // Safely default to generic if confused matching
-    if (!window.activeCategory) { window.activeCategory = "bleeding_cuts"; window.activeSubcategory = "minor_cuts"; }
+    // Safely default if confused but log issue
+    if (!window.activeCategory) { 
+        console.warn("AI failed to match category explicitly. Fallback applied.");
+        window.activeCategory = "bleeding_cuts"; 
+        window.activeSubcategory = "minor_cuts"; 
+    }
     navigate('chat');
     
   } catch (err) {
     console.error("Gemini Vision API Failed:", err);
-    window.activeCategory = "bleeding_cuts";
-    window.activeSubcategory = "minor_cuts";
-    navigate('chat');
+    alert(staticUI.noImageError && staticUI.noImageError[window.appLanguage] ? staticUI.noImageError[window.appLanguage] + " (API Error)" : "API Request Failed. Please select manually.");
+    navigate('home');
   }
 };
 
