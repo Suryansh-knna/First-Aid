@@ -379,3 +379,83 @@ body {
 .emergency-prompt button:active {
   transform: scale(0.98);
 }
+
+/* Subcategory List */
+.subcategory-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.list-item {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  cursor: pointer;
+  transition: transform 0.1s, background 0.1s;
+}
+.list-item:active {
+  transform: scale(0.98);
+  background: var(--bg);
+}
+.list-item-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+.list-item-title {
+  flex: 1;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+/* Severity Badges & Steps */
+.severity-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.severity-badge.critical { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+.severity-badge.warning { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+.severity-badge.safe { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+
+.step-card {
+  display: flex;
+  align-items: flex-start;
+  background: white;
+  padding: 16px;
+  border-left: 4px solid var(--primary);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.step-number {
+  background: var(--bg);
+  color: var(--primary);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  margin-right: 16px;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+}
+.step-text {
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-top: 4px;
+}

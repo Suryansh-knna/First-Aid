@@ -1,45 +1,22 @@
 // Application State
 let currentState = 'home';
 
-// Basic HTML strings for different views
+// Application Routing State
+window.activeCategory = null;
+window.activeSubcategory = null;
+
+window.openCategory = function(category) {
+  window.activeCategory = category;
+  navigate('subcategories');
+};
+
+window.openInstruction = function(subcategory) {
+  window.activeSubcategory = subcategory;
+  navigate('instructions');
+};
+
+// Basic HTML strings for static views
 const views = {
-  home: `
-    <div class="search-container">
-      <i data-lucide="search" color="var(--text-muted)"></i>
-      <input type="text" id="search-input" placeholder="Describe the emergency..." onkeypress="if(event.key === 'Enter') handleSearch()">
-      <i id="mic-icon" data-lucide="mic" color="var(--primary)" style="cursor:pointer;" onclick="startVoiceSearch()"></i>
-    </div>
-
-    <div class="scan-cta" onclick="navigate('camera1')">
-      <div class="scan-cta-text">
-        <h3>AI Camera Assistant</h3>
-        <p>Scan injury & available first aid kits</p>
-      </div>
-      <i data-lucide="camera" size="32"></i>
-    </div>
-
-    <div class="quick-actions">
-      <h3>Quick Guides</h3>
-      <div class="action-grid">
-        <div class="action-card" onclick="startChat('Bleeding')">
-          <div class="action-icon"><i data-lucide="droplet"></i></div>
-          Bleeding
-        </div>
-        <div class="action-card" onclick="startChat('Burns')">
-          <div class="action-icon" style="color: #f59e0b;"><i data-lucide="flame"></i></div>
-          Burns
-        </div>
-        <div class="action-card" onclick="startChat('Fractures')">
-          <div class="action-icon" style="color: #8b5cf6;"><i data-lucide="activity"></i></div>
-          Fractures
-        </div>
-        <div class="action-card" onclick="startChat('Choking')">
-          <div class="action-icon" style="color: #ef4444;"><i data-lucide="user-x"></i></div>
-          Choking
-        </div>
-      </div>
-    </div>
-  `,
   camera1: `
     <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> Back</button>
     
@@ -233,9 +210,117 @@ window.triggerEmergencyCall = function() {
   window.location.href = "tel:112";
 };
 
+function getViewHTML() {
+  if (currentState === 'home') {
+    let cards = '';
+    for (const [catName, catData] of Object.entries(firstAidData)) {
+      const safeName = catName.replace(/'/g, "\\'");
+      cards += `
+        <div class="action-card" onclick="openCategory('${safeName}')">
+          <div class="action-icon" style="color: ${catData.color}; background: ${catData.color}20;"><i data-lucide="${catData.icon}"></i></div>
+          ${catName}
+        </div>
+      `;
+    }
+    return `
+      <div class="search-container">
+        <i data-lucide="search" color="var(--text-muted)"></i>
+        <input type="text" id="search-input" placeholder="Describe the emergency..." onkeypress="if(event.key === 'Enter') handleSearch()">
+        <i id="mic-icon" data-lucide="mic" color="var(--primary)" style="cursor:pointer;" onclick="startVoiceSearch()"></i>
+      </div>
+      <div class="scan-cta" onclick="navigate('camera1')">
+        <div class="scan-cta-text">
+          <h3>AI Camera Assistant</h3>
+          <p>Scan injury & available first aid kits</p>
+        </div>
+        <i data-lucide="camera" size="32"></i>
+      </div>
+      <div class="quick-actions">
+        <h3>Quick Guides</h3>
+        <div class="action-grid">
+          ${cards}
+        </div>
+      </div>
+    `;
+  } else if (currentState === 'subcategories') {
+    const catData = firstAidData[window.activeCategory];
+    if (!catData) return '';
+    let listHTML = '';
+    for (const [subName, subcatObj] of Object.entries(catData.subcategories)) {
+      const safeSubName = subName.replace(/'/g, "\\'");
+      listHTML += `
+        <div class="list-item" onclick="openInstruction('${safeSubName}')">
+          <div class="list-item-icon" style="background: ${catData.color}20; color: ${catData.color}">
+            <i data-lucide="${catData.icon}" size="20"></i>
+          </div>
+          <span class="list-item-title">${subName}</span>
+          <i data-lucide="chevron-right" size="18" color="var(--text-muted)"></i>
+        </div>
+      `;
+    }
+    return `
+      <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> Categories</button>
+      <h3 style="margin-top:0; margin-bottom:16px;">${window.activeCategory}</h3>
+      <div class="subcategory-list">
+        ${listHTML}
+      </div>
+    `;
+  } else if (currentState === 'instructions') {
+    const subcatObj = firstAidData[window.activeCategory]?.subcategories[window.activeSubcategory];
+    if (!subcatObj) return '';
+    
+    let severityHtml = '';
+    const sev = subcatObj.severity;
+    if (sev === 'Severe') {
+      severityHtml = `<div class="severity-badge critical"><i data-lucide="alert-octagon" size="14"></i> Severe / Emergency</div>`;
+    } else if (sev === 'Moderate') {
+      severityHtml = `<div class="severity-badge warning"><i data-lucide="alert-triangle" size="14"></i> Moderate</div>`;
+    } else {
+      severityHtml = `<div class="severity-badge safe"><i data-lucide="info" size="14"></i> Low</div>`;
+    }
+    
+    let stepsHtml = '';
+    subcatObj.steps.forEach((step, idx) => {
+      stepsHtml += `
+        <div class="step-card">
+          <div class="step-number">${idx + 1}</div>
+          <div class="step-text">${step}</div>
+        </div>
+      `;
+    });
+
+    let emergencyPrompt = '';
+    if (sev === 'Severe') {
+      emergencyPrompt = `
+        <div class="emergency-prompt" style="margin-top: 24px;">
+          <p>Seek emergency help immediately.</p>
+          <button onclick="triggerEmergencyCall()"><i data-lucide="phone" size="18"></i> Call Emergency Services</button>
+        </div>
+      `;
+    }
+
+    return `
+      <button class="back-btn" onclick="navigate('subcategories')"><i data-lucide="arrow-left"></i> ${window.activeCategory}</button>
+      <div class="disclaimer" style="margin-bottom:16px;">
+        <i data-lucide="alert-triangle" color="#856404" style="flex-shrink:0;"></i>
+        This is first aid guidance only.
+      </div>
+      <h2 style="margin: 0 0 12px 0;">${window.activeSubcategory}</h2>
+      ${severityHtml}
+      
+      <div class="steps-container" style="margin-top:24px;">
+        ${stepsHtml}
+      </div>
+      ${emergencyPrompt}
+    `;
+  }
+  
+  return views[currentState] || '';
+}
+
 function render() {
   const main = document.getElementById('main-content');
-  main.innerHTML = `<div class="view">${views[currentState]}</div>`;
+  main.innerHTML = `<div class="view">${getViewHTML()}</div>`;
   
   // Re-initialize lucide icons for newly injected HTML
   if (window.lucide) {
