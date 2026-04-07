@@ -335,11 +335,14 @@ function getViewHTML() {
           <video id="camera-stream" autoplay playsinline muted></video>
           <button class="flip-camera-btn" onclick="flipCamera()"><i data-lucide="refresh-ccw" size="20"></i></button>
           <div class="camera-guide"></div>
-          <div class="camera-status">
-            <i data-lucide="focus" size="32"></i>
-            <span>${staticUI.positionInFrame[lang]}</span>
-            <button class="capture-btn" onclick="navigate('camera2')">
-              <i data-lucide="camera"></i> ${staticUI.capture[lang]}
+          <div class="camera-status" style="width: 100%; padding: 0 40px; box-sizing: border-box;">
+            <input type="file" id="file-upload-1" accept="image/png, image/jpeg" style="display:none;" onchange="handleFileUpload(event, 'camera2')">
+            <button class="capture-btn" style="width: 100%; justify-content: center;" onclick="navigate('camera2')">
+              <i data-lucide="camera" style="margin-right:8px;"></i> ${staticUI.takePhoto[lang]}
+            </button>
+            <div style="font-weight: bold; margin: 4px 0; text-shadow:none; color:white;">${staticUI.orText[lang]}</div>
+            <button class="capture-btn" style="width: 100%; justify-content: center; margin-top: 0; background: rgba(255,255,255,0.2); color: white; backdrop-filter: blur(4px);" onclick="document.getElementById('file-upload-1').click()">
+              <i data-lucide="image" style="margin-right:8px;"></i> ${staticUI.uploadPhoto[lang]}
             </button>
           </div>
         </div>
@@ -354,11 +357,14 @@ function getViewHTML() {
           <video id="camera-stream" autoplay playsinline muted></video>
           <button class="flip-camera-btn" onclick="flipCamera()"><i data-lucide="refresh-ccw" size="20"></i></button>
           <div class="camera-guide" style="border-style: dotted;"></div>
-          <div class="camera-status">
-            <i data-lucide="package" size="32"></i>
-            <span>${staticUI.positionKitFrame[lang]}</span>
-            <button class="capture-btn" onclick="showAIResponse()" style="color:var(--primary);">
-              <i data-lucide="scan"></i> ${staticUI.capture[lang]}
+          <div class="camera-status" style="width: 100%; padding: 0 40px; box-sizing: border-box;">
+            <input type="file" id="file-upload-2" accept="image/png, image/jpeg" style="display:none;" onchange="handleFileUpload(event, 'analyze')">
+            <button class="capture-btn" style="width: 100%; justify-content: center; color:var(--primary);" onclick="showAIResponse()">
+              <i data-lucide="camera" style="margin-right:8px;"></i> ${staticUI.takePhoto[lang]}
+            </button>
+            <div style="font-weight: bold; margin: 4px 0; text-shadow:none; color:white;">${staticUI.orText[lang]}</div>
+            <button class="capture-btn" style="width: 100%; justify-content: center; margin-top: 0; background: rgba(255,255,255,0.2); color: white; backdrop-filter: blur(4px);" onclick="document.getElementById('file-upload-2').click()">
+              <i data-lucide="image" style="margin-right:8px;"></i> ${staticUI.uploadPhoto[lang]}
             </button>
           </div>
         </div>
@@ -410,6 +416,26 @@ window.stopCamera = function() {
   if (window.currentStream) {
     window.currentStream.getTracks().forEach(track => track.stop());
     window.currentStream = null;
+  }
+};
+
+window.handleFileUpload = function(event, nextStepRoute) {
+  const file = event.target.files[0];
+  if (!file) {
+    alert(staticUI.noImageError[window.appLanguage]);
+    return;
+  }
+  
+  if (!file.type.match('image/jpeg') && !file.type.match('image/png')) {
+    alert(staticUI.invalidFormatError[window.appLanguage]);
+    return;
+  }
+  
+  // Proceed directly if successfully uploaded valid image
+  if (nextStepRoute === 'camera2') {
+    navigate('camera2');
+  } else if (nextStepRoute === 'analyze') {
+    showAIResponse();
   }
 };
 

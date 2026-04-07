@@ -18,7 +18,12 @@ const staticUI = {
   severity: { en: "Severity", hi: "गंभीरता", gu: "ગંભીરતા" },
   disclaimer: { en: "This is first aid guidance. Call emergency services if needed.", hi: "यह प्राथमिक चिकित्सा मार्गदर्शन है। आवश्यकता पड़ने पर आपातकालीन सेवाओं को कॉल करें।", gu: "આ પ્રાથમિક સારવાર માર્ગદર્શન છે. જરૂરી હોય તો કટોકટી સેવાઓને કૉલ કરો." },
   noResults: { en: "No results found. Try another keyword.", hi: "कोई परिणाम नहीं मिला। कोई अन्य कीवर्ड आज़माएं।", gu: "કોઈ પરિણામ મળ્યું નથી. બીજો કીવર્ડ અજમાવો." },
-  searchResults: { en: "Search Results", hi: "खोज के परिणाम", gu: "શોધનાં પરિણામો" }
+  searchResults: { en: "Search Results", hi: "खोज के परिणाम", gu: "શોધનાં પરિણામો" },
+  takePhoto: { en: "Take Photo", hi: "फोटो लें", gu: "ફોટો લો" },
+  uploadPhoto: { en: "Upload Photo", hi: "फोटो अपलोड करें", gu: "ફોટો અપલોડ કરો" },
+  orText: { en: "OR", hi: "या", gu: "અથવા" },
+  noImageError: { en: "No image selected. Please try again.", hi: "कोई छवि नहीं चुनी गई। कृपया पुनः प्रयास करें।", gu: "કોઈ છબી પસંદ કરેલ નથી. કૃપા કરીને ફરી પ્રયાસ કરો." },
+  invalidFormatError: { en: "Unsupported format. Please upload JPG or PNG.", hi: "असमर्थित प्रारूप। कृपया JPG या PNG अपलोड करें।", gu: "અસમર્થિત ફોર્મેટ. કૃપા કરીને JPG અથવા PNG અપલોડ કરો." }
 };
 
 const firstAidData = {
