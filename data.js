@@ -387,15 +387,22 @@ const searchDataset = [];
 // Populate search dataset locally from the firstAidData dynamically to avoid repeating translations
 Object.values(firstAidData).forEach(cat => {
   Object.values(cat.subcategories).forEach(subcat => {
-    // Generate basic keywords based on titles automatically + specific hardcoded tags.
-    // For production, exact granular cross-language keywords can be populated.
+    let phoneticWords = [];
+    if (cat.id === "bleeding_cuts") phoneticWords = ["khoon", "bleeding", "blood", "khun", "chot", "cut"];
+    if (cat.id === "burns") phoneticWords = ["jalna", "burn", "aag", "dhup", "garam"];
+    if (cat.id === "fractures") phoneticWords = ["haddi tootna", "fracture", "bone break", "moch", "haddi", "pain"];
+    if (cat.id === "breathing") phoneticWords = ["saans nahi aa rahi", "choking", "saans", "dhuan", "gas", "oxygen"];
+    if (cat.id === "head") phoneticWords = ["sar pe chot", "head injury", "behoshi", "daura", "sir", "sar"];
+    if (cat.id === "bites") phoneticWords = ["kaat liya", "snake bite", "insect bite", "jaanwar", "keeda", "saamp"];
+    
     searchDataset.push({
       id: subcat.id,
       category_id: cat.id,
       keywords: {
         en: [subcat.title.en.toLowerCase(), cat.title.en.toLowerCase()],
         hi: [subcat.title.hi.toLowerCase(), cat.title.hi.toLowerCase()],
-        gu: [subcat.title.gu.toLowerCase(), cat.title.gu.toLowerCase()]
+        gu: [subcat.title.gu.toLowerCase(), cat.title.gu.toLowerCase()],
+        phonetic: phoneticWords
       }
     });
   });

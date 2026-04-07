@@ -68,11 +68,24 @@ window.liveSearch = function(query) {
       </div>
     `;
   } else {
-    // Search within searchDataset
+    // Search within searchDataset across all native languages and phonetic keys
     const results = searchDataset.filter(item => {
-      // Check keyword array for current language
-      if (item.keywords[lang] && item.keywords[lang].some(k => k.includes(window.currentSearchQuery))) return true;
-      return false;
+      const catData = firstAidData[item.category_id];
+      const subCat = catData.subcategories[item.id];
+      
+      const combinedTitles = [
+        subCat.title.en.toLowerCase(), subCat.title.hi.toLowerCase(), subCat.title.gu.toLowerCase(),
+        catData.title.en.toLowerCase(), catData.title.hi.toLowerCase(), catData.title.gu.toLowerCase()
+      ].join(' ');
+      
+      const mixedKeywords = [
+        ...(item.keywords.en || []), 
+        ...(item.keywords.hi || []), 
+        ...(item.keywords.gu || []), 
+        ...(item.keywords.phonetic || [])
+      ].join(' ');
+      
+      return combinedTitles.includes(window.currentSearchQuery) || mixedKeywords.includes(window.currentSearchQuery);
     });
     
     if (results.length === 0) {
