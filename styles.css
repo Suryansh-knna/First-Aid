@@ -126,20 +126,45 @@ body {
 }
 
 .scan-cta {
-  background: linear-gradient(135deg, var(--primary), #0044d6);
+  position: relative;
+  background: url('bandage-bg.jpg') center/cover no-repeat;
+  height: 200px;
   color: white;
   border-radius: var(--radius);
   padding: 24px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: flex-end;
   margin-bottom: 24px;
   cursor: pointer;
   box-shadow: var(--shadow);
   transition: transform 0.2s;
+  overflow: hidden;
+}
+.scan-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, var(--primary) 0%, transparent 100%);
+  z-index: 1;
 }
 .scan-cta:active {
   transform: scale(0.98);
+}
+
+.scan-cta-text {
+  position: relative;
+  z-index: 2;
+}
+
+.scan-cta > i {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  z-index: 2;
 }
 
 .scan-cta-text h3 { margin: 0 0 8px 0; font-size: 1.2rem; }
