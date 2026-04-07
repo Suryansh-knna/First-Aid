@@ -175,7 +175,7 @@ window.showAIResponse = function() {
 };
 
 window.triggerEmergencyCall = function() {
-  alert("Initiating emergency call to 911...");
+  window.location.href = "tel:112";
 };
 
 function render() {
