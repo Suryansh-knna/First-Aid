@@ -144,18 +144,39 @@ window.showAIResponse = function() {
   const main = document.getElementById('main-content');
   const lang = window.appLanguage;
   main.innerHTML = `
-    <div class="view" style="flex-direction:column; align-items:center; justify-content:center; height:100%; color:var(--primary); gap: 16px;">
+    <div class="view" style="flex-direction:column; align-items:center; justify-content:center; height:100%; color:var(--primary); gap: 16px; text-align: center;">
       <i data-lucide="loader-2" class="spinner" size="48" style="animation: spin 1s linear infinite;"></i>
-      <h3 style="margin:0;">${staticUI.analyzing[lang]}</h3>
+      <h3 id="ai-loading-text" style="margin:0;">${staticUI.analyzingImage[lang]}</h3>
     </div>
   `;
-  if (window.lucide) {
-    lucide.createIcons();
-  }
+  if (window.lucide) lucide.createIcons();
   
+  // Simulated Pipeline Sequence
   setTimeout(() => {
+    const loaderText = document.getElementById('ai-loading-text');
+    if (loaderText) loaderText.innerText = staticUI.identifyingInjury[lang];
+  }, 1200);
+
+  setTimeout(() => {
+    const loaderText = document.getElementById('ai-loading-text');
+    if (loaderText) loaderText.innerText = staticUI.generatingSteps[lang];
+  }, 2600);
+
+  setTimeout(() => {
+    // Generate Mock Diagnostic locally from dataset to simulate Vision Model classification
+    const categories = Object.keys(firstAidData);
+    const randomCatKey = categories[Math.floor(Math.random() * categories.length)];
+    const catData = firstAidData[randomCatKey];
+    
+    const subcats = Object.keys(catData.subcategories);
+    const randomSubCatKey = subcats[Math.floor(Math.random() * subcats.length)];
+    
+    // Store mock result in global state
+    window.activeCategory = randomCatKey;
+    window.activeSubcategory = randomSubCatKey;
+    
     navigate('chat');
-  }, 1500);
+  }, 4000);
 };
 
 window.handleSearch = function() {
@@ -370,21 +391,62 @@ function getViewHTML() {
         </div>
       `;
   } else if (currentState === 'chat') {
+    // Simulated AI Diagnostics Render
+    const catData = firstAidData[window.activeCategory];
+    const subcatObj = catData?.subcategories[window.activeSubcategory];
+    if (!subcatObj) return ''; // Fallback
+    
+    let severityHtml = '';
+    const sev = subcatObj.severity;
+    if (sev === 'Severe') {
+      severityHtml = `<div class="severity-badge critical"><i data-lucide="alert-octagon" size="14"></i> ${staticUI.severity[lang]}: Severe</div>`;
+    } else if (sev === 'Moderate') {
+      severityHtml = `<div class="severity-badge warning"><i data-lucide="alert-triangle" size="14"></i> ${staticUI.severity[lang]}: Moderate</div>`;
+    } else {
+      severityHtml = `<div class="severity-badge safe"><i data-lucide="info" size="14"></i> ${staticUI.severity[lang]}: Low</div>`;
+    }
+    
+    let stepsHtml = '';
+    subcatObj.steps.forEach((step, idx) => {
+      stepsHtml += `
+        <div class="step-card">
+          <div class="step-number">${idx + 1}</div>
+          <div class="step-text">${step[lang]}</div>
+        </div>
+      `;
+    });
+
+    let emergencyPrompt = '';
+    if (sev === 'Severe') {
+      emergencyPrompt = `
+        <div class="emergency-prompt" style="margin-top: 24px;">
+          <button onclick="triggerEmergencyCall()"><i data-lucide="phone" size="18"></i> ${staticUI.callEmergency[lang]}</button>
+        </div>
+      `;
+    }
+
     return `
-      <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> ${staticUI.back[lang]}</button>
-      <div class="disclaimer">
+      <div class="disclaimer" style="margin-bottom: 20px;">
         <i data-lucide="alert-triangle" color="#856404" style="flex-shrink: 0;"></i>
         <div>${staticUI.disclaimer[lang]}</div>
       </div>
-      <div class="chat-bubble ai">
-        <strong><i data-lucide="bot" size="18" style="vertical-align: middle; margin-right:4px;"></i>AI Assistant:</strong>
-        <p style="margin: 8px 0; font-size:0.8rem; color:var(--text-muted);">
-          [Internal Node Override] Act as a medical assistant. Native translation target: <b>${lang.toUpperCase()}</b>. Provide diagnosis details securely matching the user's localized configuration.
-        </p>
-        <div class="emergency-prompt">
-          <button onclick="triggerEmergencyCall()"><i data-lucide="phone" size="18"></i> ${staticUI.callEmergency[lang]}</button>
+      
+      <div style="background: white; border-radius: 12px; padding: 16px; border: 1px solid var(--border); margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom: 16px; color: var(--primary);">
+            <i data-lucide="bot" size="24"></i> <span style="font-weight: 800; font-size:1.2rem;">${staticUI.aiAssessment[lang]}</span>
         </div>
+        <h2 style="margin: 0 0 12px 0;">${subcatObj.title[lang]}</h2>
+        ${severityHtml}
+        
+        <div class="steps-container" style="margin-top:24px;">
+          ${stepsHtml}
+        </div>
+        ${emergencyPrompt}
       </div>
+      
+      <button class="capture-btn" style="width: 100%; justify-content: center; background: rgba(0,0,0,0.05); color: var(--text-dark); margin-top:0;" onclick="navigate('home')">
+        <i data-lucide="list"></i> ${staticUI.notAccurate[lang]}
+      </button>
     `;
   }
 }

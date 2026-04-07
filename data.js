@@ -25,7 +25,12 @@ const staticUI = {
   noImageError: { en: "No image selected. Please try again.", hi: "कोई छवि नहीं चुनी गई। कृपया पुनः प्रयास करें।", gu: "કોઈ છબી પસંદ કરેલ નથી. કૃપા કરીને ફરી પ્રયાસ કરો." },
   invalidFormatError: { en: "Unsupported format. Please upload JPG or PNG.", hi: "असमर्थित प्रारूप। कृपया JPG या PNG अपलोड करें।", gu: "અસમર્થિત ફોર્મેટ. કૃપા કરીને JPG અથવા PNG અપલોડ કરો." },
   retake: { en: "Retake", hi: "फिर से लें", gu: "ફરીથી લો" },
-  confirm: { en: "Confirm", hi: "पुष्टि करें", gu: "ખાતરી કરો" }
+  confirm: { en: "Confirm", hi: "पुष्टि करें", gu: "ખાતરી કરો" },
+  analyzingImage: { en: "Analyzing image...", hi: "छवि का विश्लेषण हो रहा है...", gu: "છબીનું વિશ્લેષણ કરી રહ્યા છીએ..." },
+  identifyingInjury: { en: "Identifying injury...", hi: "चोट की पहचान हो रही है...", gu: "ઇજાને ઓળખી રહ્યા છીએ..." },
+  generatingSteps: { en: "Generating first aid steps...", hi: "प्राथमिक चिकित्सा चरण उत्पन्न हो रहे हैं...", gu: "પ્રાથમિક સારવારનાં પગલાં જનરેટ કરી રહ્યા છીએ..." },
+  aiAssessment: { en: "AI Assessment", hi: "AI मूल्यांकन", gu: "AI આકારણી" },
+  notAccurate: { en: "Not accurate? Select manually", hi: "सटीक नहीं है? मैन्युअल रूप से चुनें", gu: "ચોક્કસ નથી? જાતે પસંદ કરો" }
 };
 
 const firstAidData = {
