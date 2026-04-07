@@ -4,6 +4,7 @@ let currentState = 'home';
 // Application Routing State
 window.activeCategory = null;
 window.activeSubcategory = null;
+window.currentSearchQuery = '';
 
 window.openCategory = function(category) {
   window.activeCategory = category;
@@ -13,6 +14,79 @@ window.openCategory = function(category) {
 window.openInstruction = function(subcategory) {
   window.activeSubcategory = subcategory;
   navigate('instructions');
+};
+
+window.openSearchResult = function(category, subcategory) {
+  window.activeCategory = category;
+  window.activeSubcategory = subcategory;
+  window.currentSearchQuery = ''; 
+  navigate('instructions');
+};
+
+window.liveSearch = function(query) {
+  window.currentSearchQuery = query.toLowerCase().trim();
+  const dynamicArea = document.getElementById('home-dynamic-area');
+  
+  if (!dynamicArea) return;
+  
+  if (window.currentSearchQuery === '') {
+    let cards = '';
+    for (const [catName, catData] of Object.entries(firstAidData)) {
+      const safeName = catName.replace(/'/g, "\\'");
+      cards += `
+        <div class="action-card" onclick="openCategory('${safeName}')">
+          <div class="action-icon" style="color: ${catData.color}; background: ${catData.color}20;"><i data-lucide="${catData.icon}"></i></div>
+          ${catName}
+        </div>
+      `;
+    }
+    dynamicArea.innerHTML = `
+      <div class="quick-actions">
+        <h3>Quick Guides</h3>
+        <div class="action-grid">
+          ${cards}
+        </div>
+      </div>
+    `;
+  } else {
+    const results = searchDataset.filter(item => {
+      if (item.name.toLowerCase().includes(window.currentSearchQuery)) return true;
+      if (item.keywords.some(k => k.toLowerCase().includes(window.currentSearchQuery))) return true;
+      return false;
+    });
+    
+    if (results.length === 0) {
+      dynamicArea.innerHTML = `
+        <div class="empty-search">
+          <i data-lucide="search-x" size="32" color="var(--text-muted)"></i>
+          <p>No results found. Try another keyword.</p>
+        </div>
+      `;
+    } else {
+      let listHTML = '';
+      results.forEach(result => {
+        const catData = firstAidData[result.category];
+        const safeCat = result.category.replace(/'/g, "\\'");
+        const safeSub = result.name.replace(/'/g, "\\'");
+        listHTML += `
+          <div class="search-result-item" onclick="openSearchResult('${safeCat}', '${safeSub}')">
+            <div class="search-result-name">${result.name}</div>
+            <div class="search-result-category" style="color: ${catData.color};"><i data-lucide="${catData.icon}" size="12"></i> ${result.category}</div>
+          </div>
+        `;
+      });
+      dynamicArea.innerHTML = `
+        <h3 style="margin-top:0;">Search Results</h3>
+        <div class="subcategory-list">
+          ${listHTML}
+        </div>
+      `;
+    }
+  }
+  
+  if (window.lucide) {
+    lucide.createIcons();
+  }
 };
 
 // Basic HTML strings for static views
@@ -162,8 +236,8 @@ window.showAIResponse = function() {
 
 window.handleSearch = function() {
   const input = document.getElementById('search-input');
-  if (input && input.value.trim() !== '') {
-    window.showAIResponse();
+  if (input) {
+    window.liveSearch(input.value);
   }
 };
 
@@ -191,7 +265,7 @@ window.startVoiceSearch = function() {
     if (input) {
       input.value = transcript;
     }
-    window.handleSearch();
+    window.liveSearch(transcript);
   };
   
   recognition.onerror = function(event) {
@@ -225,7 +299,7 @@ function getViewHTML() {
     return `
       <div class="search-container">
         <i data-lucide="search" color="var(--text-muted)"></i>
-        <input type="text" id="search-input" placeholder="Describe the emergency..." onkeypress="if(event.key === 'Enter') handleSearch()">
+        <input type="text" id="search-input" placeholder="Search injuries..." oninput="liveSearch(this.value)" onkeypress="if(event.key === 'Enter') handleSearch()">
         <i id="mic-icon" data-lucide="mic" color="var(--primary)" style="cursor:pointer;" onclick="startVoiceSearch()"></i>
       </div>
       <div class="scan-cta" onclick="navigate('camera1')">
@@ -235,10 +309,12 @@ function getViewHTML() {
         </div>
         <i data-lucide="camera" size="32"></i>
       </div>
-      <div class="quick-actions">
-        <h3>Quick Guides</h3>
-        <div class="action-grid">
-          ${cards}
+      <div id="home-dynamic-area">
+        <div class="quick-actions">
+          <h3>Quick Guides</h3>
+          <div class="action-grid">
+            ${cards}
+          </div>
         </div>
       </div>
     `;

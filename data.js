@@ -69,3 +69,44 @@ const firstAidData = {
     }
   }
 };
+
+const searchDataset = [
+  { name: "Minor cuts & scrapes", category: "Bleeding & Cuts", keywords: ["cut", "scrape", "small wound"] },
+  { name: "Deep cuts", category: "Bleeding & Cuts", keywords: ["deep cut", "open wound"] },
+  { name: "Heavy bleeding", category: "Bleeding & Cuts", keywords: ["bleeding", "blood loss"] },
+  { name: "Puncture wounds", category: "Bleeding & Cuts", keywords: ["puncture", "nail injury"] },
+  { name: "Nosebleed", category: "Bleeding & Cuts", keywords: ["nose bleed", "bleeding nose"] },
+  { name: "Bruises", category: "Bleeding & Cuts", keywords: ["bruise", "contusion"] },
+  { name: "Blisters", category: "Bleeding & Cuts", keywords: ["blister", "skin bubble"] },
+
+  { name: "Minor burns", category: "Burns", keywords: ["burn", "small burn"] },
+  { name: "Severe burns", category: "Burns", keywords: ["serious burn"] },
+  { name: "Scalds", category: "Burns", keywords: ["hot water burn", "steam burn"] },
+  { name: "Electrical burns", category: "Burns", keywords: ["electric shock burn"] },
+  { name: "Chemical burns", category: "Burns", keywords: ["acid burn", "chemical spill"] },
+  { name: "Sunburn", category: "Burns", keywords: ["sun burn"] },
+
+  { name: "Fractures", category: "Fractures & Sprains", keywords: ["broken bone"] },
+  { name: "Sprains", category: "Fractures & Sprains", keywords: ["twisted ankle"] },
+  { name: "Strains", category: "Fractures & Sprains", keywords: ["muscle strain"] },
+  { name: "Dislocations", category: "Fractures & Sprains", keywords: ["joint out"] },
+
+  { name: "Choking (adult)", category: "Breathing Problems", keywords: ["choking"] },
+  { name: "Choking (child)", category: "Breathing Problems", keywords: ["child choking"] },
+  { name: "Not breathing / CPR", category: "Breathing Problems", keywords: ["cpr", "not breathing"] },
+  { name: "Breathing difficulty", category: "Breathing Problems", keywords: ["cant breathe", "asthma"] },
+  { name: "Smoke inhalation", category: "Breathing Problems", keywords: ["smoke breathing"] },
+  { name: "Gas exposure", category: "Breathing Problems", keywords: ["gas leak"] },
+
+  { name: "Mild head injury", category: "Head Injury", keywords: ["head bump"] },
+  { name: "Severe head injury", category: "Head Injury", keywords: ["head trauma"] },
+  { name: "Concussion", category: "Head Injury", keywords: ["dizzy head"] },
+  { name: "Unconscious person", category: "Head Injury", keywords: ["passed out"] },
+  { name: "Seizures", category: "Head Injury", keywords: ["fits"] },
+
+  { name: "Insect bites", category: "Bites & Stings", keywords: ["mosquito bite"] },
+  { name: "Animal bites", category: "Bites & Stings", keywords: ["dog bite"] },
+  { name: "Snake bites", category: "Bites & Stings", keywords: ["snake bite"] },
+  { name: "Allergic reaction (mild)", category: "Bites & Stings", keywords: ["rash", "allergy"] },
+  { name: "Severe allergic reaction", category: "Bites & Stings", keywords: ["anaphylaxis"] }
+];
