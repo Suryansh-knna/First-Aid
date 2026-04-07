@@ -181,7 +181,7 @@ window.showAIResponse = async function(base64Image) {
         contents: [{
           parts: [
             { text: `You are a first aid assistant.\n\nAnalyze the provided image and:\n1. Identify the visible injury\n2. Classify it strictly into one of these categories: ${validCats.join(", ")}\n3. Identify the specific subcategory STRICTLY as one of these exact phrases: ${validSubcats.join(", ")}\n4. Estimate severity (Mild, Moderate, Severe)\n5. Provide clear step-by-step first aid instructions\n\nRules:\n- Do NOT give medical diagnosis\n- Keep instructions simple and safe\n- If severe, advise seeking medical help\n\nRespond ONLY in JSON format like this:\n{\n  "injury": "",\n  "category": "",\n  "subcategory": "",\n  "severity": "",\n  "steps": ["", "", ""]\n}` },
-            { inline_data: { mime_type: "image/jpeg", data: base64Image } }
+            { inline_data: { mime_type: window.capturedMimeType || "image/jpeg", data: base64Image } }
           ]
         }]
       })
@@ -223,7 +223,7 @@ window.showAIResponse = async function(base64Image) {
     
   } catch (err) {
     console.error("Gemini Vision API Failed:", err);
-    alert(staticUI.noImageError && staticUI.noImageError[window.appLanguage] ? staticUI.noImageError[window.appLanguage] + " (API Error)" : "API Request Failed. Please select manually.");
+    alert("API Request Failed. " + err.message);
     navigate('home');
   }
 };
@@ -544,7 +544,9 @@ window.handleFileUpload = function(event, nextStepRoute) {
   
   const reader = new FileReader();
   reader.onload = function(e) {
-    window.capturedBase64 = e.target.result.split(',')[1];
+    const dataUrl = e.target.result;
+    window.capturedMimeType = dataUrl.split(';')[0].split(':')[1];
+    window.capturedBase64 = dataUrl.split(',')[1];
     
     if (nextStepRoute === 'camera2') {
       navigate('camera2');
@@ -589,6 +591,7 @@ window.triggerSnapshot = function(containerId, targetRoute) {
       const ctx = canvas.getContext('2d');
       ctx.drawImage(videoObj, 0, 0, canvas.width, canvas.height);
       const dataUrl = canvas.toDataURL('image/jpeg');
+      window.capturedMimeType = "image/jpeg";
       window.capturedBase64 = dataUrl.split(',')[1];
     } catch(e) { 
       console.error("Canvas draw framework error", e); 
