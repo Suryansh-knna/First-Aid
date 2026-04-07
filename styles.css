@@ -158,13 +158,15 @@ body {
 .scan-cta-text {
   position: relative;
   z-index: 2;
+  padding-right: 48px;
 }
 
-.scan-cta > i {
+.scan-cta-icon {
   position: absolute;
   right: 24px;
   bottom: 24px;
   z-index: 2;
+  opacity: 0.9;
 }
 
 .scan-cta-text h3 { margin: 0 0 8px 0; font-size: 1.2rem; }

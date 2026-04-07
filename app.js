@@ -307,7 +307,7 @@ function getViewHTML() {
           <h3>AI Camera Assistant</h3>
           <p>Scan injury & available first aid kits</p>
         </div>
-        <i data-lucide="camera" size="32"></i>
+        <i class="scan-cta-icon" data-lucide="camera" size="32"></i>
       </div>
       <div id="home-dynamic-area">
         <div class="quick-actions">
