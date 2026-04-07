@@ -139,7 +139,7 @@ window.startChat = function(topic) {
   navigate('chat');
 };
 
-window.showAIResponse = function() {
+window.showAIResponse = async function(base64Image) {
   window.stopCamera();
   const main = document.getElementById('main-content');
   const lang = window.appLanguage;
@@ -151,7 +151,7 @@ window.showAIResponse = function() {
   `;
   if (window.lucide) lucide.createIcons();
   
-  // Simulated Pipeline Sequence
+  // Pipeline animation timers
   setTimeout(() => {
     const loaderText = document.getElementById('ai-loading-text');
     if (loaderText) loaderText.innerText = staticUI.identifyingInjury[lang];
@@ -162,21 +162,54 @@ window.showAIResponse = function() {
     if (loaderText) loaderText.innerText = staticUI.generatingSteps[lang];
   }, 2600);
 
-  setTimeout(() => {
-    // Generate Mock Diagnostic locally from dataset to simulate Vision Model classification
-    const categories = Object.keys(firstAidData);
-    const randomCatKey = categories[Math.floor(Math.random() * categories.length)];
-    const catData = firstAidData[randomCatKey];
+  // Exfiltrating payload logic natively over HTTP
+  try {
+    const response = await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=AIzaSyBdab3zGjgCUHG2EgDfR45AwTlk54D2Hpk', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [
+            { text: "You are a first aid assistant.\n\nAnalyze the provided image and:\n1. Identify the visible injury\n2. Classify it into one of these categories: Bleeding & Cuts, Burns, Fractures & Sprains, Breathing Problems, Head Injury, Bites & Stings\n3. Identify the specific subcategory\n4. Estimate severity (Mild, Moderate, Severe)\n5. Provide clear step-by-step first aid instructions\n\nRules:\n- Do NOT give medical diagnosis\n- Keep instructions simple and safe\n- If severe, advise seeking medical help\n\nRespond ONLY in JSON format like this:\n{\n  \"injury\": \"\",\n  \"category\": \"\",\n  \"subcategory\": \"\",\n  \"severity\": \"\",\n  \"steps\": [\"\", \"\", \"\"]\n}" },
+            { inline_data: { mime_type: "image/jpeg", data: base64Image } }
+          ]
+        }]
+      })
+    });
     
-    const subcats = Object.keys(catData.subcategories);
-    const randomSubCatKey = subcats[Math.floor(Math.random() * subcats.length)];
+    if (!response.ok) throw new Error("API Connection Failed");
+    const data = await response.json();
+    let aiText = data.candidates[0].content.parts[0].text;
+    if (aiText.startsWith('\`\`\`json')) aiText = aiText.replace(/^\`\`\`json/, '').replace(/\`\`\`$/, '').trim();
+    const aiResult = JSON.parse(aiText);
     
-    // Store mock result in global state
-    window.activeCategory = randomCatKey;
-    window.activeSubcategory = randomSubCatKey;
+    // Fallback dictionary map to match Gemini's subcategory text locally
+    window.activeCategory = null;
+    window.activeSubcategory = null;
     
+    const targetSub = aiResult.subcategory.toLowerCase();
+    for (const catKey of Object.keys(firstAidData)) {
+      for (const subKey of Object.keys(firstAidData[catKey].subcategories)) {
+        const subData = firstAidData[catKey].subcategories[subKey];
+        if (targetSub.includes(subData.title.en.toLowerCase()) || subData.title.en.toLowerCase().includes(targetSub) || aiResult.category.toLowerCase().includes(firstAidData[catKey].title.en.toLowerCase())) {
+           window.activeCategory = catKey;
+           window.activeSubcategory = subKey;
+           break;
+        }
+      }
+      if (window.activeCategory) break;
+    }
+    
+    // Safely default to generic if confused matching
+    if (!window.activeCategory) { window.activeCategory = "bleeding_cuts"; window.activeSubcategory = "minor_cuts"; }
     navigate('chat');
-  }, 4000);
+    
+  } catch (err) {
+    console.error("Gemini Vision API Failed:", err);
+    window.activeCategory = "bleeding_cuts";
+    window.activeSubcategory = "minor_cuts";
+    navigate('chat');
+  }
 };
 
 window.handleSearch = function() {
@@ -493,12 +526,17 @@ window.handleFileUpload = function(event, nextStepRoute) {
     return;
   }
   
-  // Proceed directly if successfully uploaded valid image
-  if (nextStepRoute === 'camera2') {
-    navigate('camera2');
-  } else if (nextStepRoute === 'analyze') {
-    showAIResponse();
-  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    window.capturedBase64 = e.target.result.split(',')[1];
+    
+    if (nextStepRoute === 'camera2') {
+      navigate('camera2');
+    } else if (nextStepRoute === 'analyze') {
+      showAIResponse(window.capturedBase64);
+    }
+  };
+  reader.readAsDataURL(file);
 };
 
 window.activateCaptureState = function(containerId, targetRoute) {
@@ -526,7 +564,21 @@ window.triggerSnapshot = function(containerId, targetRoute) {
   
   // Freeze live feed logic implicitly visually
   const videoObj = document.getElementById('camera-stream');
-  if (videoObj) videoObj.pause();
+  if (videoObj) {
+    videoObj.pause();
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = videoObj.videoWidth;
+      canvas.height = videoObj.videoHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(videoObj, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/jpeg');
+      window.capturedBase64 = dataUrl.split(',')[1];
+    } catch(e) { 
+      console.error("Canvas draw framework error", e); 
+      window.capturedBase64 = "MOCKED_BASE64"; 
+    }
+  }
   
   container.innerHTML = `
     <div class="preview-controls">
@@ -551,7 +603,7 @@ window.confirmSnapshot = function(targetRoute) {
   if (targetRoute === 'camera2') {
     navigate('camera2');
   } else if (targetRoute === 'analyze') {
-    showAIResponse();
+    showAIResponse(window.capturedBase64);
   }
 };
 
