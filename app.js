@@ -53,6 +53,7 @@ const views = {
     
     <div class="camera-placeholder">
       <video id="camera-stream" autoplay playsinline muted></video>
+      <button class="flip-camera-btn" onclick="flipCamera()"><i data-lucide="refresh-ccw" size="20"></i></button>
       <div class="camera-guide"></div>
       <div class="camera-status">
         <i data-lucide="focus" size="32"></i>
@@ -71,6 +72,7 @@ const views = {
     
     <div class="camera-placeholder" style="background: #222;">
       <video id="camera-stream" autoplay playsinline muted></video>
+      <button class="flip-camera-btn" onclick="flipCamera()"><i data-lucide="refresh-ccw" size="20"></i></button>
       <div class="camera-guide" style="border-style: dotted;"></div>
       <div class="camera-status">
         <i data-lucide="package" size="32"></i>
@@ -118,10 +120,11 @@ const views = {
 
 // Camera state
 window.currentStream = null;
+window.currentFacingMode = 'environment';
 
 window.startCamera = async function() {
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: window.currentFacingMode } });
     window.currentStream = stream;
     const videoObj = document.getElementById('camera-stream');
     if (videoObj) {
@@ -130,6 +133,12 @@ window.startCamera = async function() {
   } catch (err) {
     console.error('Camera access denied or unavailable', err);
   }
+};
+
+window.flipCamera = async function() {
+  window.currentFacingMode = window.currentFacingMode === 'environment' ? 'user' : 'environment';
+  window.stopCamera();
+  await window.startCamera();
 };
 
 window.stopCamera = function() {
