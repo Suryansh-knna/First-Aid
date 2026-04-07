@@ -6,8 +6,8 @@ const views = {
   home: `
     <div class="search-container">
       <i data-lucide="search" color="var(--text-muted)"></i>
-      <input type="text" placeholder="Describe the emergency...">
-      <i data-lucide="mic" color="var(--primary)" style="cursor:pointer;" onclick="alert('Microphone input simulated')"></i>
+      <input type="text" id="search-input" placeholder="Describe the emergency..." onkeypress="if(event.key === 'Enter') handleSearch()">
+      <i id="mic-icon" data-lucide="mic" color="var(--primary)" style="cursor:pointer;" onclick="startVoiceSearch()"></i>
     </div>
 
     <div class="scan-cta" onclick="navigate('camera1')">
@@ -181,6 +181,52 @@ window.showAIResponse = function() {
   setTimeout(() => {
     navigate('chat');
   }, 1500);
+};
+
+window.handleSearch = function() {
+  const input = document.getElementById('search-input');
+  if (input && input.value.trim() !== '') {
+    window.showAIResponse();
+  }
+};
+
+window.startVoiceSearch = function() {
+  const micIcon = document.getElementById('mic-icon');
+  if (micIcon) {
+    micIcon.style.color = "var(--accent)";
+  }
+  
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    alert("Speech recognition isn't supported in this browser.");
+    if (micIcon) micIcon.style.color = "var(--primary)";
+    return;
+  }
+  
+  const recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.lang = 'en-US';
+  
+  recognition.onresult = function(event) {
+    const transcript = event.results[0][0].transcript;
+    const input = document.getElementById('search-input');
+    if (input) {
+      input.value = transcript;
+    }
+    window.handleSearch();
+  };
+  
+  recognition.onerror = function(event) {
+    console.error("Speech recognition error:", event.error);
+    if (micIcon) micIcon.style.color = "var(--primary)";
+  };
+  
+  recognition.onend = function() {
+    if (micIcon) micIcon.style.color = "var(--primary)";
+  };
+  
+  recognition.start();
 };
 
 window.triggerEmergencyCall = function() {
