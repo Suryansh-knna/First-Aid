@@ -52,6 +52,7 @@ const views = {
     <p style="color: var(--text-muted); margin: 0 0 20px 0; font-size:0.9rem;">Use the camera to roughly show the affected area.</p>
     
     <div class="camera-placeholder">
+      <video id="camera-stream" autoplay playsinline muted></video>
       <div class="camera-guide"></div>
       <div class="camera-status">
         <i data-lucide="focus" size="32"></i>
@@ -69,6 +70,7 @@ const views = {
     <p style="color: var(--text-muted); margin: 0 0 20px 0; font-size:0.9rem;">Show us what supplies you have available.</p>
     
     <div class="camera-placeholder" style="background: #222;">
+      <video id="camera-stream" autoplay playsinline muted></video>
       <div class="camera-guide" style="border-style: dotted;"></div>
       <div class="camera-status">
         <i data-lucide="package" size="32"></i>
@@ -114,8 +116,38 @@ const views = {
   `
 };
 
+// Camera state
+window.currentStream = null;
+
+window.startCamera = async function() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+    window.currentStream = stream;
+    const videoObj = document.getElementById('camera-stream');
+    if (videoObj) {
+      videoObj.srcObject = stream;
+    }
+  } catch (err) {
+    console.error('Camera access denied or unavailable', err);
+  }
+};
+
+window.stopCamera = function() {
+  if (window.currentStream) {
+    window.currentStream.getTracks().forEach(track => track.stop());
+    window.currentStream = null;
+  }
+};
+
 // Routing logic
 window.navigate = function(viewName) {
+  const wasCamera = (currentState === 'camera1' || currentState === 'camera2');
+  const isCamera = (viewName === 'camera1' || viewName === 'camera2');
+  
+  if (wasCamera && !isCamera) {
+    window.stopCamera();
+  }
+  
   currentState = viewName;
   render();
 };
@@ -125,6 +157,7 @@ window.startChat = function(topic) {
 };
 
 window.showAIResponse = function() {
+  window.stopCamera();
   const main = document.getElementById('main-content');
   main.innerHTML = `
     <div class="view" style="flex-direction:column; align-items:center; justify-content:center; height:100%; color:var(--primary); gap: 16px;">
@@ -152,6 +185,16 @@ function render() {
   // Re-initialize lucide icons for newly injected HTML
   if (window.lucide) {
     lucide.createIcons();
+  }
+
+  // Handle camera lifecycle
+  if (currentState === 'camera1' || currentState === 'camera2') {
+    if (!window.currentStream) {
+      window.startCamera();
+    } else {
+      const videoObj = document.getElementById('camera-stream');
+      if (videoObj) videoObj.srcObject = window.currentStream;
+    }
   }
 }
 
