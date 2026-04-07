@@ -17,8 +17,6 @@ window.setLanguage = function(lang) {
 
 // Set initial header translation on load
 document.addEventListener('DOMContentLoaded', () => {
-  const selectEl = document.getElementById('language-switcher');
-  if (selectEl) selectEl.value = window.appLanguage;
   window.setLanguage(window.appLanguage);
 });
 
@@ -214,10 +212,15 @@ function getViewHTML() {
       `;
     }
     return `
-      <div class="search-container">
+      <div class="search-container" style="margin-bottom: 12px;">
         <i data-lucide="search" color="var(--text-muted)"></i>
         <input type="text" id="search-input" placeholder="${staticUI.placeholder[lang]}" oninput="liveSearch(this.value)" onkeypress="if(event.key === 'Enter') handleSearch()">
         <i id="mic-icon" data-lucide="mic" color="var(--primary)" style="cursor:pointer;" onclick="startVoiceSearch()"></i>
+      </div>
+      <div class="lang-toggle-container">
+        <button class="lang-btn ${lang === 'en' ? 'active' : ''}" onclick="window.setLanguage('en')">EN</button>
+        <button class="lang-btn ${lang === 'hi' ? 'active' : ''}" onclick="window.setLanguage('hi')">हिन्दी</button>
+        <button class="lang-btn ${lang === 'gu' ? 'active' : ''}" onclick="window.setLanguage('gu')">ગુજરાતી</button>
       </div>
       <div class="scan-cta" onclick="navigate('camera1')">
         <div class="scan-cta-text">
