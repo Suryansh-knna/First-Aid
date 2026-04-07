@@ -12,11 +12,18 @@
   <div id="app" class="app-container">
     <header class="header">
       <div class="header-title" onclick="navigate('home')" style="cursor:pointer;">
-        FirstAid<span class="ai-burst">AI</span>
+        <span id="header-title-text">FirstAid</span><span class="ai-burst">AI</span>
       </div>
-      <button class="emergency-dial-btn" onclick="triggerEmergencyCall()">
-        <i data-lucide="phone-call" size="18"></i> 112
-      </button>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <select id="language-switcher" onchange="window.setLanguage(this.value)" style="padding:4px; border-radius:6px; background:white; border:1px solid var(--border); font-weight:600; font-size:0.8rem; color:var(--text-dark); cursor:pointer;">
+          <option value="en">EN</option>
+          <option value="hi">हिन्दी</option>
+          <option value="gu">ગુજરાતી</option>
+        </select>
+        <button class="emergency-dial-btn" onclick="triggerEmergencyCall()">
+          <i data-lucide="phone-call" size="18"></i> <span id="emergency-dial-text">112</span>
+        </button>
+      </div>
     </header>
 
     <main id="main-content">

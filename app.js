@@ -1,24 +1,45 @@
 // Application State
 let currentState = 'home';
+window.appLanguage = localStorage.getItem('appLang') || 'en';
+
+window.setLanguage = function(lang) {
+  window.appLanguage = lang;
+  localStorage.setItem('appLang', lang);
+  
+  // Update static header elements
+  const titleEl = document.getElementById('header-title-text');
+  if (titleEl) titleEl.innerText = staticUI.appTitle[lang];
+  const emergencyDialText = document.getElementById('emergency-dial-text');
+  if (emergencyDialText) emergencyDialText.innerText = staticUI.callEmergency[lang];
+  
+  render();
+};
+
+// Set initial header translation on load
+document.addEventListener('DOMContentLoaded', () => {
+  const selectEl = document.getElementById('language-switcher');
+  if (selectEl) selectEl.value = window.appLanguage;
+  window.setLanguage(window.appLanguage);
+});
 
 // Application Routing State
-window.activeCategory = null;
-window.activeSubcategory = null;
+window.activeCategory = null; // Storing the ID now
+window.activeSubcategory = null; // Storing the ID now
 window.currentSearchQuery = '';
 
-window.openCategory = function(category) {
-  window.activeCategory = category;
+window.openCategory = function(categoryId) {
+  window.activeCategory = categoryId;
   navigate('subcategories');
 };
 
-window.openInstruction = function(subcategory) {
-  window.activeSubcategory = subcategory;
+window.openInstruction = function(subcategoryId) {
+  window.activeSubcategory = subcategoryId;
   navigate('instructions');
 };
 
-window.openSearchResult = function(category, subcategory) {
-  window.activeCategory = category;
-  window.activeSubcategory = subcategory;
+window.openSearchResult = function(categoryId, subcategoryId) {
+  window.activeCategory = categoryId;
+  window.activeSubcategory = subcategoryId;
   window.currentSearchQuery = ''; 
   navigate('instructions');
 };
@@ -26,32 +47,33 @@ window.openSearchResult = function(category, subcategory) {
 window.liveSearch = function(query) {
   window.currentSearchQuery = query.toLowerCase().trim();
   const dynamicArea = document.getElementById('home-dynamic-area');
+  const lang = window.appLanguage;
   
   if (!dynamicArea) return;
   
   if (window.currentSearchQuery === '') {
     let cards = '';
-    for (const [catName, catData] of Object.entries(firstAidData)) {
-      const safeName = catName.replace(/'/g, "\\'");
+    for (const catObj of Object.values(firstAidData)) {
       cards += `
-        <div class="action-card" onclick="openCategory('${safeName}')">
-          <div class="action-icon" style="color: ${catData.color}; background: ${catData.color}20;"><i data-lucide="${catData.icon}"></i></div>
-          ${catName}
+        <div class="action-card" onclick="openCategory('${catObj.id}')">
+          <div class="action-icon" style="color: ${catObj.color}; background: ${catObj.color}20;"><i data-lucide="${catObj.icon}"></i></div>
+          ${catObj.title[lang]}
         </div>
       `;
     }
     dynamicArea.innerHTML = `
       <div class="quick-actions">
-        <h3>Quick Guides</h3>
+        <h3>${staticUI.quickGuides[lang]}</h3>
         <div class="action-grid">
           ${cards}
         </div>
       </div>
     `;
   } else {
+    // Search within searchDataset
     const results = searchDataset.filter(item => {
-      if (item.name.toLowerCase().includes(window.currentSearchQuery)) return true;
-      if (item.keywords.some(k => k.toLowerCase().includes(window.currentSearchQuery))) return true;
+      // Check keyword array for current language
+      if (item.keywords[lang] && item.keywords[lang].some(k => k.includes(window.currentSearchQuery))) return true;
       return false;
     });
     
@@ -59,24 +81,24 @@ window.liveSearch = function(query) {
       dynamicArea.innerHTML = `
         <div class="empty-search">
           <i data-lucide="search-x" size="32" color="var(--text-muted)"></i>
-          <p>No results found. Try another keyword.</p>
+          <p>${staticUI.noResults[lang]}</p>
         </div>
       `;
     } else {
       let listHTML = '';
       results.forEach(result => {
-        const catData = firstAidData[result.category];
-        const safeCat = result.category.replace(/'/g, "\\'");
-        const safeSub = result.name.replace(/'/g, "\\'");
+        const catData = firstAidData[result.category_id];
+        const subCatData = catData.subcategories[result.id];
+        
         listHTML += `
-          <div class="search-result-item" onclick="openSearchResult('${safeCat}', '${safeSub}')">
-            <div class="search-result-name">${result.name}</div>
-            <div class="search-result-category" style="color: ${catData.color};"><i data-lucide="${catData.icon}" size="12"></i> ${result.category}</div>
+          <div class="search-result-item" onclick="openSearchResult('${catData.id}', '${subCatData.id}')">
+            <div class="search-result-name">${subCatData.title[lang]}</div>
+            <div class="search-result-category" style="color: ${catData.color};"><i data-lucide="${catData.icon}" size="12"></i> ${catData.title[lang]}</div>
           </div>
         `;
       });
       dynamicArea.innerHTML = `
-        <h3 style="margin-top:0;">Search Results</h3>
+        <h3 style="margin-top:0;">${staticUI.searchResults[lang]}</h3>
         <div class="subcategory-list">
           ${listHTML}
         </div>
@@ -86,116 +108,6 @@ window.liveSearch = function(query) {
   
   if (window.lucide) {
     lucide.createIcons();
-  }
-};
-
-// Basic HTML strings for static views
-const views = {
-  camera1: `
-    <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> Back</button>
-    
-    <div class="disclaimer">
-      <i data-lucide="alert-triangle" color="#856404" style="flex-shrink:0;"></i>
-      This is first aid guidance, not a medical diagnosis. Let UI guide you safely.
-    </div>
-    
-    <h3 style="margin: 0 0 8px 0;">Step 1: Scan Injury</h3>
-    <p style="color: var(--text-muted); margin: 0 0 20px 0; font-size:0.9rem;">Use the camera to roughly show the affected area.</p>
-    
-    <div class="camera-placeholder">
-      <video id="camera-stream" autoplay playsinline muted></video>
-      <button class="flip-camera-btn" onclick="flipCamera()"><i data-lucide="refresh-ccw" size="20"></i></button>
-      <div class="camera-guide"></div>
-      <div class="camera-status">
-        <i data-lucide="focus" size="32"></i>
-        <span>Position injury in frame</span>
-        <button class="capture-btn" onclick="navigate('camera2')">
-          <i data-lucide="camera"></i> Capture
-        </button>
-      </div>
-    </div>
-  `,
-  camera2: `
-    <button class="back-btn" onclick="navigate('camera1')"><i data-lucide="arrow-left"></i> Back</button>
-    
-    <h3 style="margin: 0 0 8px 0;">Step 2: Scan First Aid Kit</h3>
-    <p style="color: var(--text-muted); margin: 0 0 20px 0; font-size:0.9rem;">Show us what supplies you have available.</p>
-    
-    <div class="camera-placeholder" style="background: #222;">
-      <video id="camera-stream" autoplay playsinline muted></video>
-      <button class="flip-camera-btn" onclick="flipCamera()"><i data-lucide="refresh-ccw" size="20"></i></button>
-      <div class="camera-guide" style="border-style: dotted;"></div>
-      <div class="camera-status">
-        <i data-lucide="package" size="32"></i>
-        <span>Scan bandages, antiseptics, etc.</span>
-        <button class="capture-btn" onclick="showAIResponse()" style="color:var(--primary);">
-          <i data-lucide="scan"></i> Analyze Resources
-        </button>
-      </div>
-    </div>
-  `,
-  chat: `
-    <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> End Session</button>
-    
-    <div class="disclaimer">
-      <i data-lucide="alert-triangle" color="#856404" style="flex-shrink: 0;"></i>
-      <div>This is first aid guidance, not a medical diagnosis. When in doubt or if severe, seek professional help.</div>
-    </div>
-
-    <div class="chat-bubble ai">
-      <strong><i data-lucide="bot" size="18" style="vertical-align: middle; margin-right:4px;"></i>AI Assistant:</strong>
-      <p style="margin: 8px 0;">I've analyzed the wound (moderate bleeding) and your kit. Here are the immediate steps using items identified:</p>
-      
-      <div class="step-list">
-        <div class="step-item">
-          <div class="step-number">1</div>
-          <div><strong>Apply Pressure</strong><br><span style="color:var(--text-muted); font-size:0.9rem;">Use the clean cloth to apply firm pressure directly on the wound.</span></div>
-        </div>
-        <div class="step-item">
-          <div class="step-number">2</div>
-          <div><strong>Clean Wound</strong><br><span style="color:var(--text-muted); font-size:0.9rem;">Use the <em>antiseptic wipes</em> from your kit to clean around the area gently.</span></div>
-        </div>
-        <div class="step-item">
-          <div class="step-number">3</div>
-          <div><strong>Bandage</strong><br><span style="color:var(--text-muted); font-size:0.9rem;">Wrap the <em>sterile bandage</em> tightly, but not so tight it cuts off circulation.</span></div>
-        </div>
-      </div>
-
-      <div class="emergency-prompt">
-        <p>If bleeding continues for 10 minutes, seek immediate help.</p>
-        <button onclick="triggerEmergencyCall()"><i data-lucide="phone" size="18"></i> Call Emergency Services</button>
-      </div>
-    </div>
-  `
-};
-
-// Camera state
-window.currentStream = null;
-window.currentFacingMode = 'environment';
-
-window.startCamera = async function() {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: window.currentFacingMode } });
-    window.currentStream = stream;
-    const videoObj = document.getElementById('camera-stream');
-    if (videoObj) {
-      videoObj.srcObject = stream;
-    }
-  } catch (err) {
-    console.error('Camera access denied or unavailable', err);
-  }
-};
-
-window.flipCamera = async function() {
-  window.currentFacingMode = window.currentFacingMode === 'environment' ? 'user' : 'environment';
-  window.stopCamera();
-  await window.startCamera();
-};
-
-window.stopCamera = function() {
-  if (window.currentStream) {
-    window.currentStream.getTracks().forEach(track => track.stop());
-    window.currentStream = null;
   }
 };
 
@@ -219,10 +131,11 @@ window.startChat = function(topic) {
 window.showAIResponse = function() {
   window.stopCamera();
   const main = document.getElementById('main-content');
+  const lang = window.appLanguage;
   main.innerHTML = `
     <div class="view" style="flex-direction:column; align-items:center; justify-content:center; height:100%; color:var(--primary); gap: 16px;">
       <i data-lucide="loader-2" class="spinner" size="48" style="animation: spin 1s linear infinite;"></i>
-      <h3 style="margin:0;">Analyzing Situation...</h3>
+      <h3 style="margin:0;">${staticUI.analyzing[lang]}</h3>
     </div>
   `;
   if (window.lucide) {
@@ -257,7 +170,9 @@ window.startVoiceSearch = function() {
   const recognition = new SpeechRecognition();
   recognition.continuous = false;
   recognition.interimResults = false;
-  recognition.lang = 'en-US';
+  // Fallback map for listening languages
+  const langMap = { 'en': 'en-US', 'hi': 'hi-IN', 'gu': 'gu-IN' };
+  recognition.lang = langMap[window.appLanguage] || 'en-US';
   
   recognition.onresult = function(event) {
     const transcript = event.results[0][0].transcript;
@@ -284,34 +199,36 @@ window.triggerEmergencyCall = function() {
   window.location.href = "tel:112";
 };
 
+// Dynamic View Getter
 function getViewHTML() {
+  const lang = window.appLanguage;
+
   if (currentState === 'home') {
     let cards = '';
-    for (const [catName, catData] of Object.entries(firstAidData)) {
-      const safeName = catName.replace(/'/g, "\\'");
+    for (const catObj of Object.values(firstAidData)) {
       cards += `
-        <div class="action-card" onclick="openCategory('${safeName}')">
-          <div class="action-icon" style="color: ${catData.color}; background: ${catData.color}20;"><i data-lucide="${catData.icon}"></i></div>
-          ${catName}
+        <div class="action-card" onclick="openCategory('${catObj.id}')">
+          <div class="action-icon" style="color: ${catObj.color}; background: ${catObj.color}20;"><i data-lucide="${catObj.icon}"></i></div>
+          ${catObj.title[lang]}
         </div>
       `;
     }
     return `
       <div class="search-container">
         <i data-lucide="search" color="var(--text-muted)"></i>
-        <input type="text" id="search-input" placeholder="Search injuries..." oninput="liveSearch(this.value)" onkeypress="if(event.key === 'Enter') handleSearch()">
+        <input type="text" id="search-input" placeholder="${staticUI.placeholder[lang]}" oninput="liveSearch(this.value)" onkeypress="if(event.key === 'Enter') handleSearch()">
         <i id="mic-icon" data-lucide="mic" color="var(--primary)" style="cursor:pointer;" onclick="startVoiceSearch()"></i>
       </div>
       <div class="scan-cta" onclick="navigate('camera1')">
         <div class="scan-cta-text">
-          <h3>Scan for help</h3>
-          <p>Scan injury & available first aid kits</p>
+          <h3>${staticUI.cameraAssistant[lang]}</h3>
+          <p>${staticUI.cameraDesc[lang]}</p>
         </div>
         <i class="scan-cta-icon" data-lucide="camera" size="56"></i>
       </div>
       <div id="home-dynamic-area">
         <div class="quick-actions">
-          <h3>Quick Guides</h3>
+          <h3>${staticUI.quickGuides[lang]}</h3>
           <div class="action-grid">
             ${cards}
           </div>
@@ -322,37 +239,37 @@ function getViewHTML() {
     const catData = firstAidData[window.activeCategory];
     if (!catData) return '';
     let listHTML = '';
-    for (const [subName, subcatObj] of Object.entries(catData.subcategories)) {
-      const safeSubName = subName.replace(/'/g, "\\'");
+    for (const subcatObj of Object.values(catData.subcategories)) {
       listHTML += `
-        <div class="list-item" onclick="openInstruction('${safeSubName}')">
+        <div class="list-item" onclick="openInstruction('${subcatObj.id}')">
           <div class="list-item-icon" style="background: ${catData.color}20; color: ${catData.color}">
             <i data-lucide="${catData.icon}" size="20"></i>
           </div>
-          <span class="list-item-title">${subName}</span>
+          <span class="list-item-title">${subcatObj.title[lang]}</span>
           <i data-lucide="chevron-right" size="18" color="var(--text-muted)"></i>
         </div>
       `;
     }
     return `
-      <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> Categories</button>
-      <h3 style="margin-top:0; margin-bottom:16px;">${window.activeCategory}</h3>
+      <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> ${staticUI.categories[lang]}</button>
+      <h3 style="margin-top:0; margin-bottom:16px;">${catData.title[lang]}</h3>
       <div class="subcategory-list">
         ${listHTML}
       </div>
     `;
   } else if (currentState === 'instructions') {
-    const subcatObj = firstAidData[window.activeCategory]?.subcategories[window.activeSubcategory];
+    const catData = firstAidData[window.activeCategory];
+    const subcatObj = catData?.subcategories[window.activeSubcategory];
     if (!subcatObj) return '';
     
     let severityHtml = '';
     const sev = subcatObj.severity;
     if (sev === 'Severe') {
-      severityHtml = `<div class="severity-badge critical"><i data-lucide="alert-octagon" size="14"></i> Severe / Emergency</div>`;
+      severityHtml = `<div class="severity-badge critical"><i data-lucide="alert-octagon" size="14"></i> ${staticUI.severity[lang]}: Severe</div>`;
     } else if (sev === 'Moderate') {
-      severityHtml = `<div class="severity-badge warning"><i data-lucide="alert-triangle" size="14"></i> Moderate</div>`;
+      severityHtml = `<div class="severity-badge warning"><i data-lucide="alert-triangle" size="14"></i> ${staticUI.severity[lang]}: Moderate</div>`;
     } else {
-      severityHtml = `<div class="severity-badge safe"><i data-lucide="info" size="14"></i> Low</div>`;
+      severityHtml = `<div class="severity-badge safe"><i data-lucide="info" size="14"></i> ${staticUI.severity[lang]}: Low</div>`;
     }
     
     let stepsHtml = '';
@@ -360,7 +277,7 @@ function getViewHTML() {
       stepsHtml += `
         <div class="step-card">
           <div class="step-number">${idx + 1}</div>
-          <div class="step-text">${step}</div>
+          <div class="step-text">${step[lang]}</div>
         </div>
       `;
     });
@@ -369,19 +286,18 @@ function getViewHTML() {
     if (sev === 'Severe') {
       emergencyPrompt = `
         <div class="emergency-prompt" style="margin-top: 24px;">
-          <p>Seek emergency help immediately.</p>
-          <button onclick="triggerEmergencyCall()"><i data-lucide="phone" size="18"></i> Call Emergency Services</button>
+          <button onclick="triggerEmergencyCall()"><i data-lucide="phone" size="18"></i> ${staticUI.callEmergency[lang]}</button>
         </div>
       `;
     }
 
     return `
-      <button class="back-btn" onclick="navigate('subcategories')"><i data-lucide="arrow-left"></i> ${window.activeCategory}</button>
+      <button class="back-btn" onclick="navigate('subcategories')"><i data-lucide="arrow-left"></i> ${catData.title[lang]}</button>
       <div class="disclaimer" style="margin-bottom:16px;">
         <i data-lucide="alert-triangle" color="#856404" style="flex-shrink:0;"></i>
-        This is first aid guidance only.
+        ${staticUI.disclaimer[lang]}
       </div>
-      <h2 style="margin: 0 0 12px 0;">${window.activeSubcategory}</h2>
+      <h2 style="margin: 0 0 12px 0;">${subcatObj.title[lang]}</h2>
       ${severityHtml}
       
       <div class="steps-container" style="margin-top:24px;">
@@ -389,21 +305,106 @@ function getViewHTML() {
       </div>
       ${emergencyPrompt}
     `;
+  } else if (currentState === 'camera1') {
+      return `
+        <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> ${staticUI.back[lang]}</button>
+        <div class="disclaimer">
+          <i data-lucide="alert-triangle" color="#856404" style="flex-shrink:0;"></i>
+          ${staticUI.disclaimer[lang]}
+        </div>
+        <h3 style="margin: 0 0 8px 0;">${staticUI.scanInjuryStep[lang]}</h3>
+        <p style="color: var(--text-muted); margin: 0 0 20px 0; font-size:0.9rem;">${staticUI.scanInjuryDesc[lang]}</p>
+        
+        <div class="camera-placeholder">
+          <video id="camera-stream" autoplay playsinline muted></video>
+          <button class="flip-camera-btn" onclick="flipCamera()"><i data-lucide="refresh-ccw" size="20"></i></button>
+          <div class="camera-guide"></div>
+          <div class="camera-status">
+            <i data-lucide="focus" size="32"></i>
+            <span>${staticUI.positionInFrame[lang]}</span>
+            <button class="capture-btn" onclick="navigate('camera2')">
+              <i data-lucide="camera"></i> ${staticUI.capture[lang]}
+            </button>
+          </div>
+        </div>
+      `;
+  } else if (currentState === 'camera2') {
+     return `
+        <button class="back-btn" onclick="navigate('camera1')"><i data-lucide="arrow-left"></i> ${staticUI.back[lang]}</button>
+        <h3 style="margin: 0 0 8px 0;">${staticUI.scanKitStep[lang]}</h3>
+        <p style="color: var(--text-muted); margin: 0 0 20px 0; font-size:0.9rem;">${staticUI.scanKitDesc[lang]}</p>
+        
+        <div class="camera-placeholder" style="background: #222;">
+          <video id="camera-stream" autoplay playsinline muted></video>
+          <button class="flip-camera-btn" onclick="flipCamera()"><i data-lucide="refresh-ccw" size="20"></i></button>
+          <div class="camera-guide" style="border-style: dotted;"></div>
+          <div class="camera-status">
+            <i data-lucide="package" size="32"></i>
+            <span>${staticUI.positionKitFrame[lang]}</span>
+            <button class="capture-btn" onclick="showAIResponse()" style="color:var(--primary);">
+              <i data-lucide="scan"></i> ${staticUI.capture[lang]}
+            </button>
+          </div>
+        </div>
+      `;
+  } else if (currentState === 'chat') {
+    return `
+      <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> ${staticUI.back[lang]}</button>
+      <div class="disclaimer">
+        <i data-lucide="alert-triangle" color="#856404" style="flex-shrink: 0;"></i>
+        <div>${staticUI.disclaimer[lang]}</div>
+      </div>
+      <div class="chat-bubble ai">
+        <strong><i data-lucide="bot" size="18" style="vertical-align: middle; margin-right:4px;"></i>AI Assistant:</strong>
+        <p style="margin: 8px 0; font-size:0.8rem; color:var(--text-muted);">
+          [Internal Node Override] Act as a medical assistant. Native translation target: <b>${lang.toUpperCase()}</b>. Provide diagnosis details securely matching the user's localized configuration.
+        </p>
+        <div class="emergency-prompt">
+          <button onclick="triggerEmergencyCall()"><i data-lucide="phone" size="18"></i> ${staticUI.callEmergency[lang]}</button>
+        </div>
+      </div>
+    `;
   }
-  
-  return views[currentState] || '';
 }
+
+// Camera state logic
+window.currentStream = null;
+window.currentFacingMode = 'environment';
+
+window.startCamera = async function() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: window.currentFacingMode } });
+    window.currentStream = stream;
+    const videoObj = document.getElementById('camera-stream');
+    if (videoObj) {
+      videoObj.srcObject = stream;
+    }
+  } catch (err) {
+    console.error('Camera access denied or unavailable', err);
+  }
+};
+
+window.flipCamera = async function() {
+  window.currentFacingMode = window.currentFacingMode === 'environment' ? 'user' : 'environment';
+  window.stopCamera();
+  await window.startCamera();
+};
+
+window.stopCamera = function() {
+  if (window.currentStream) {
+    window.currentStream.getTracks().forEach(track => track.stop());
+    window.currentStream = null;
+  }
+};
 
 function render() {
   const main = document.getElementById('main-content');
   main.innerHTML = `<div class="view">${getViewHTML()}</div>`;
   
-  // Re-initialize lucide icons for newly injected HTML
   if (window.lucide) {
     lucide.createIcons();
   }
 
-  // Handle camera lifecycle
   if (currentState === 'camera1' || currentState === 'camera2') {
     if (!window.currentStream) {
       window.startCamera();
@@ -414,7 +415,7 @@ function render() {
   }
 }
 
-// Ensure the spin animation exists
+// Global animation
 const style = document.createElement('style');
 style.innerHTML = `
   @keyframes spin {
@@ -424,9 +425,4 @@ style.innerHTML = `
 `;
 document.head.appendChild(style);
 
-// Initial render
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', render);
-} else {
-  render();
-}
+// Do not call initial render here, relying on DOMContentLoaded from the top of the file
