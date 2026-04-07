@@ -28,7 +28,7 @@ body {
   max-width: 480px;
   margin: 0 auto;
   min-height: 100vh;
-  background: var(--surface);
+  background: var(--bg);
   position: relative;
   overflow: hidden;
   display: flex;
@@ -43,7 +43,7 @@ body {
   align-items: center;
   padding: 16px 20px;
   border-bottom: 1px solid var(--border);
-  background: var(--surface);
+  background: var(--bg);
   z-index: 10;
 }
 
@@ -107,7 +107,7 @@ body {
 
 /* Home View Elements */
 .search-container {
-  background: var(--bg);
+  background: var(--surface);
   border-radius: 24px;
   padding: 12px 20px;
   display: flex;
