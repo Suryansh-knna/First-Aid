@@ -9,7 +9,7 @@ $body = @{
     )
 } | ConvertTo-Json -Depth 10
 
-$tests = @("gemini-1.5-flash", "gemini-1.5-flash-latest", "gemini-1.5-pro", "gemini-2.0-flash")
+$tests = @("gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash")
 foreach ($model in $tests) {
     try {
         Write-Host "Testing $model..."
@@ -27,7 +27,8 @@ foreach ($model in $tests) {
         $res = $req.GetResponse()
         $reader = New-Object System.IO.StreamReader($res.GetResponseStream())
         Write-Host "SUCCESS: $model responded. " $reader.ReadToEnd()
-    } catch [System.Net.WebException] {
+    }
+    catch [System.Net.WebException] {
         $ex = $_.Exception
         $reader = New-Object System.IO.StreamReader($ex.Response.GetResponseStream())
         Write-Host "FAILED: $model - " $ex.Message " | " $reader.ReadToEnd()
