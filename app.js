@@ -172,27 +172,44 @@ window.showAIResponse = async function(base64Image) {
     }
   }
 
-  // Exfiltrating payload logic natively over HTTP
+  // OpenRouter Integration
   try {
-    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyCxZy9xj_ks7r-F-TZkGjt9clSDzkKy0mE', {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer YOUR_OPENROUTER_KEY',
+        'HTTP-Referer': 'https://first-aid-app.vercel.app', // Optional
+        'X-Title': 'FirstAid AI' // Optional
+      },
       body: JSON.stringify({
-        contents: [{
-          parts: [
-            { text: `You are a first aid assistant.\n\nAnalyze the provided image and:\n1. Identify the visible injury\n2. Classify it strictly into one of these categories: ${validCats.join(", ")}\n3. Identify the specific subcategory STRICTLY as one of these exact phrases: ${validSubcats.join(", ")}\n4. Estimate severity (Mild, Moderate, Severe)\n5. Provide clear step-by-step first aid instructions\n\nRules:\n- Do NOT give medical diagnosis\n- Keep instructions simple and safe\n- If severe, advise seeking medical help\n\nRespond ONLY in JSON format like this:\n{\n  "injury": "",\n  "category": "",\n  "subcategory": "",\n  "severity": "",\n  "steps": ["", "", ""]\n}` },
-            { inline_data: { mime_type: window.capturedMimeType || "image/jpeg", data: base64Image } }
-          ]
-        }]
+        model: 'google/gemini-2.0-flash-001',
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: `You are a first aid assistant.\n\nAnalyze the provided image and:\n1. Identify the visible injury\n2. Classify it strictly into one of these categories: ${validCats.join(", ")}\n3. Identify the specific subcategory STRICTLY as one of these exact phrases: ${validSubcats.join(", ")}\n4. Estimate severity (Mild, Moderate, Severe)\n5. Provide clear step-by-step first aid instructions\n\nRules:\n- Do NOT give medical diagnosis\n- Keep instructions simple and safe\n- If severe, advise seeking medical help\n\nRespond ONLY in JSON format like this:\n{\n  "injury": "",\n  "category": "",\n  "subcategory": "",\n  "severity": "",\n  "steps": ["", "", ""]\n}`
+              },
+              {
+                type: "image_url",
+                image_url: {
+                  url: `data:${window.capturedMimeType || "image/jpeg"};base64,${base64Image}`
+                }
+              }
+            ]
+          }
+        ]
       })
     });
     
     if (!response.ok) {
         const errText = await response.text();
-        throw new Error("API Connection Failed: " + errText);
+        throw new Error("OpenRouter API Failed: " + errText);
     }
     const data = await response.json();
-    let aiText = data.candidates[0].content.parts[0].text;
+    let aiText = data.choices[0].message.content;
     if (aiText.startsWith('\`\`\`json')) aiText = aiText.replace(/^\`\`\`json/, '').replace(/\`\`\`$/, '').trim();
     const aiResult = JSON.parse(aiText);
     

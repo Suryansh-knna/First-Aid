@@ -1,36 +1,31 @@
-$headers = @{ "Content-Type" = "application/json" }
+$headers = @{ 
+    "Content-Type" = "application/json"
+    "Authorization" = "Bearer YOUR_OPENROUTER_KEY"
+}
+
 $body = @{
-    contents = @(
+    model = "google/gemini-2.0-flash-001"
+    messages = @(
         @{
-            parts = @(
-                @{ text = "Hello" }
+            role = "user"
+            content = @(
+                @{
+                    type = "text"
+                    text = "Hello, this is a test. Respond with 'READY' in JSON format: { 'status': 'READY' }"
+                }
             )
         }
     )
 } | ConvertTo-Json -Depth 10
 
-$tests = @("gemini-2.0-flash")
-foreach ($model in $tests) {
-    try {
-        Write-Host "Testing $model..."
-        $url = "https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=AIzaSyCxZy9xj_ks7r-F-TZkGjt9clSDzkKy0mE"
-        $req = [System.Net.HttpWebRequest]::Create($url)
-        $req.Method = "POST"
-        $req.ContentType = "application/json"
-        
-        $bytes = [System.Text.Encoding]::UTF8.GetBytes($body)
-        $req.ContentLength = $bytes.Length
-        $reqStream = $req.GetRequestStream()
-        $reqStream.Write($bytes, 0, $bytes.Length)
-        $reqStream.Close()
-
-        $res = $req.GetResponse()
-        $reader = New-Object System.IO.StreamReader($res.GetResponseStream())
-        Write-Host "SUCCESS: $model responded. " $reader.ReadToEnd()
-    }
-    catch [System.Net.WebException] {
-        $ex = $_.Exception
-        $reader = New-Object System.IO.StreamReader($ex.Response.GetResponseStream())
-        Write-Host "FAILED: $model - " $ex.Message " | " $reader.ReadToEnd()
-    }
+try {
+    Write-Host "Testing OpenRouter connection..."
+    $response = Invoke-RestMethod -Uri "https://openrouter.ai/api/v1/chat/completions" -Method Post -Headers $headers -Body $body
+    Write-Host "SUCCESS: OpenRouter responded."
+    $response.choices[0].message.content | Write-Host
+} catch {
+    $stream = $_.Exception.Response.GetResponseStream()
+    $reader = New-Object System.IO.StreamReader($stream)
+    $errText = $reader.ReadToEnd()
+    Write-Host "FAILED: OpenRouter - $errText"
 }
