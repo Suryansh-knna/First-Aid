@@ -13,7 +13,7 @@ $tests = @("gemini-3-flash")
 foreach ($model in $tests) {
     try {
         Write-Host "Testing $model..."
-        $url = "https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=AIzaSyDf23GmbrDZSBlrHs13w_FFlahkemmwMt8"
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=AIzaSyCxZy9xj_ks7r-F-TZkGjt9clSDzkKy0mE"
         $req = [System.Net.HttpWebRequest]::Create($url)
         $req.Method = "POST"
         $req.ContentType = "application/json"
