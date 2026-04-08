@@ -1,6 +1,6 @@
 const staticUI = {
   appTitle: { en: "FirstAid AI", hi: "फर्स्टएड AI", gu: "ફર્સ્ટએડ AI" },
-  cameraAssistant: { en: "Scan for help", hi: "मदद के लिए स्कैन करें", gu: "મદદ માટે સ્કેન કરો" },
+  cameraAssistant: { en: "Scan for help", hi: "मदદ के लिए स्कैन करें", gu: "મદદ માટે સ્કેન કરો" },
   cameraDesc: { en: "Scan injury & available first aid kits", hi: "चोट और उपलब्ध प्राथमिक चिकित्सा किट स्कैन करें", gu: "ઇજા અને ઉપલબ્ધ પ્રાથમિક સારવાર કીટ્સ સ્કેન કરો" },
   placeholder: { en: "Search injuries...", hi: "चोटें खोजें...", gu: "ઇજાઓ શોધો..." },
   quickGuides: { en: "Quick Guides", hi: "त्वरित मार्गदर्शिका", gu: "ઝડપી માર્ગદર્શિકા" },
@@ -15,7 +15,7 @@ const staticUI = {
   positionKitFrame: { en: "Position kit in frame", hi: "किट को फ्रेम में लाएं", gu: "કીટને ફ્રેમમાં ગોઠવો" },
   analyzing: { en: "Analyzing Situation...", hi: "स्थिति का विश्लेषण हो रहा है...", gu: "સ્થિતિનું વિશ્લેષણ થઈ રહ્યું છે..." },
   callEmergency: { en: "CALL 112", hi: "112 डायल करें", gu: "112 ડાયલ કરો" },
-  severity: { en: "Severity", hi: "गंभीरता", gu: "ગંભીરતા" },
+  severity: { en: "Severity", hi: "गंभीरता", gu: "ગંભીૂરતા" },
   disclaimer: { en: "This is first aid guidance. Call emergency services if needed.", hi: "यह प्राथमिक चिकित्सा मार्गदर्शन है। आवश्यकता पड़ने पर आपातकालीन सेवाओं को कॉल करें।", gu: "આ પ્રાથમિક સારવાર માર્ગદર્શન છે. જરૂરી હોય તો કટોકટી સેવાઓને કૉલ કરો." },
   noResults: { en: "No results found. Try another keyword.", hi: "कोई परिणाम नहीं मिला। कोई अन्य कीवर्ड आज़माएं।", gu: "કોઈ પરિણામ મળ્યું નથી. બીજો કીવર્ડ અજમાવો." },
   searchResults: { en: "Search Results", hi: "खोज के परिणाम", gu: "શોધનાં પરિણામો" },
@@ -39,6 +39,20 @@ const firstAidData = {
     title: { en: "Bleeding & Cuts", hi: "खून बहना और कट", gu: "રક્તસ્રાવ અને કાપા" },
     icon: "droplet",
     color: "#ef4444",
+    groups: [
+      {
+        title: { en: "Open Wounds", hi: "खुले घाव", gu: "ખુલ્લા ઘા" },
+        items: ["minor_cuts", "deep_cuts", "heavy_bleeding"]
+      },
+      {
+        title: { en: "Specific Bleeding Cases", hi: "विशेष रक्तस्राव मामले", gu: "ચોક્કસ રક્તસ્રાવ કિસ્સાઓ" },
+        items: ["nosebleed", "puncture_wounds"]
+      },
+      {
+        title: { en: "Surface Injuries", hi: "सतह की चोटें", gu: "સપાટીની ઇજાઓ" },
+        items: ["bruises", "blisters"]
+      }
+    ],
     subcategories: {
       "minor_cuts": {
         id: "minor_cuts",
@@ -115,6 +129,16 @@ const firstAidData = {
     title: { en: "Burns", hi: "जलना", gu: "દાઝવું" },
     icon: "flame",
     color: "#f59e0b",
+    groups: [
+      {
+        title: { en: "By Severity", hi: "गंभीरता के अनुसार", gu: "ગંભીરતા મુજબ" },
+        items: ["minor_burns", "severe_burns"]
+      },
+      {
+        title: { en: "By Cause", hi: "कारण के अनुसार", gu: "કારણ મુજબ" },
+        items: ["scalds", "electrical_burns", "chemical_burns", "sunburn"]
+      }
+    ],
     subcategories: {
       "minor_burns": {
         id: "minor_burns",
@@ -180,6 +204,16 @@ const firstAidData = {
     title: { en: "Fractures & Sprains", hi: "हड्डी टूटना और मोच", gu: "અસ્થિભંગ અને મચકોડ" },
     icon: "activity",
     color: "#8b5cf6",
+    groups: [
+      {
+        title: { en: "Bone Injuries", hi: "हड्डी की चोटें", gu: "હાડકાની ઇજાઓ" },
+        items: ["fractures_sub", "dislocations"]
+      },
+      {
+        title: { en: "Soft Tissue Injuries", hi: "कोमल ऊतक चोटें", gu: "નરમ પેશીઓની ઇજાઓ" },
+        items: ["sprains", "strains"]
+      }
+    ],
     subcategories: {
       "fractures_sub": {
         id: "fractures_sub",
@@ -228,6 +262,24 @@ const firstAidData = {
     title: { en: "Breathing Problems", hi: "सांस की समस्या", gu: "શ્વાસની સમસ્યાઓ" },
     icon: "wind",
     color: "#06b6d4",
+    groups: [
+      {
+        title: { en: "Airway Blockage", hi: "वायुमार्ग अवरोध", gu: "વાયુમાર્ગમાં અવરોધ" },
+        items: ["choking_adult", "choking_child"]
+      },
+      {
+        title: { en: "Breathing Failure", hi: "सांस की विफलता", gu: "શ્વાસ લેવામાં નિષ્ફળતા" },
+        items: ["cpr"]
+      },
+      {
+        title: { en: "Breathing Distress", hi: "सांस लेने में तकलीफ", gu: "શ્વાસ લેવામાં તકલીફ" },
+        items: ["breathing_difficulty"]
+      },
+      {
+        title: { en: "Environmental Causes", hi: "पर्यावरणीय कारण", gu: "પર્યાવરણીય કારણો" },
+        items: ["smoke_inhalation", "gas_exposure"]
+      }
+    ],
     subcategories: {
       "choking_adult": {
         id: "choking_adult",
@@ -288,6 +340,20 @@ const firstAidData = {
     title: { en: "Head Injury", hi: "सिर की चोट", gu: "માથામાં ઇજા" },
     icon: "brain",
     color: "#ec4899",
+    groups: [
+      {
+        title: { en: "Trauma Levels", hi: "आघात का स्तर", gu: "આઘાતનું સ્તર" },
+        items: ["mild_head", "severe_head"]
+      },
+      {
+        title: { en: "Brain-related Conditions", hi: "मस्तिष्क संबंधी स्थितियां", gu: "મગજ સંબંધિત સ્થિતિઓ" },
+        items: ["concussion", "seizures"]
+      },
+      {
+        title: { en: "Consciousness", hi: "चेतना", gu: "ચેતના" },
+        items: ["unconscious"]
+      }
+    ],
     subcategories: {
       "mild_head": {
         id: "mild_head",
@@ -342,6 +408,16 @@ const firstAidData = {
     title: { en: "Bites & Stings", hi: "काटना और डंक", gu: "કરડવું અને ડંખ" },
     icon: "bug",
     color: "#10b981",
+    groups: [
+      {
+        title: { en: "Type of Source", hi: "स्रोत का प्रकार", gu: "સ્ત્રોતનો પ્રકાર" },
+        items: ["insect", "animal", "snake"]
+      },
+      {
+        title: { en: "Body Reaction", hi: "शरीर की प्रतिक्रिया", gu: "શરીરની પ્રતિક્રિયા" },
+        items: ["allergy_mild", "allergy_severe"]
+      }
+    ],
     subcategories: {
       "insect": {
         id: "insect",

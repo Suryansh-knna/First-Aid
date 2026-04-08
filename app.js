@@ -342,17 +342,25 @@ function getViewHTML() {
     const catData = firstAidData[window.activeCategory];
     if (!catData) return '';
     let listHTML = '';
-    for (const subcatObj of Object.values(catData.subcategories)) {
-      listHTML += `
-        <div class="list-item" onclick="openInstruction('${subcatObj.id}')">
-          <div class="list-item-icon" style="background: ${catData.color}20; color: ${catData.color}">
-            <i data-lucide="${catData.icon}" size="20"></i>
-          </div>
-          <span class="list-item-title">${subcatObj.title[lang]}</span>
-          <i data-lucide="chevron-right" size="18" color="var(--text-muted)"></i>
-        </div>
-      `;
-    }
+    
+    catData.groups.forEach(group => {
+      listHTML += `<div class="group-title" style="color: ${catData.color};">${group.title[lang]}</div>`;
+      group.items.forEach(itemId => {
+        const subcatObj = catData.subcategories[itemId];
+        if (subcatObj) {
+          listHTML += `
+            <div class="list-item" onclick="openInstruction('${subcatObj.id}')">
+              <div class="list-item-icon" style="background: ${catData.color}20; color: ${catData.color}">
+                <i data-lucide="${catData.icon}" size="20"></i>
+              </div>
+              <span class="list-item-title">${subcatObj.title[lang]}</span>
+              <i data-lucide="chevron-right" size="18" color="var(--text-muted)"></i>
+            </div>
+          `;
+        }
+      });
+    });
+
     return `
       <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> ${staticUI.categories[lang]}</button>
       <h3 style="margin-top:0; margin-bottom:16px;">${catData.title[lang]}</h3>
