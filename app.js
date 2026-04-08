@@ -178,7 +178,7 @@ window.showAIResponse = async function(base64Image) {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer YOUR_OPENROUTER_KEY',
+        'Authorization': 'Bearer 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',
         'HTTP-Referer': 'https://first-aid-app.vercel.app', // Optional
         'X-Title': 'FirstAid AI' // Optional
       },
