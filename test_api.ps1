@@ -9,7 +9,7 @@ $body = @{
     )
 } | ConvertTo-Json -Depth 10
 
-$tests = @("gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash")
+$tests = @("gemini-2.5-flash", "gemini-2")
 foreach ($model in $tests) {
     try {
         Write-Host "Testing $model..."
