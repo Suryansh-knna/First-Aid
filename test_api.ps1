@@ -1,13 +1,13 @@
 $headers = @{ 
-    "Content-Type" = "application/json"
-    "Authorization" = "Bearer YOUR_OPENROUTER_KEY"
+    "Content-Type"  = "application/json"
+    "Authorization" = "Bearer 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"
 }
 
 $body = @{
-    model = "google/gemini-2.0-flash-001"
+    model    = "google/gemma-4-26b-a4b-it:free"
     messages = @(
         @{
-            role = "user"
+            role    = "user"
             content = @(
                 @{
                     type = "text"
@@ -23,7 +23,8 @@ try {
     $response = Invoke-RestMethod -Uri "https://openrouter.ai/api/v1/chat/completions" -Method Post -Headers $headers -Body $body
     Write-Host "SUCCESS: OpenRouter responded."
     $response.choices[0].message.content | Write-Host
-} catch {
+}
+catch {
     $stream = $_.Exception.Response.GetResponseStream()
     $reader = New-Object System.IO.StreamReader($stream)
     $errText = $reader.ReadToEnd()
