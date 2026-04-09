@@ -39,7 +39,8 @@ const staticUI = {
   itemsFromKit: { en: "🧾 Use These Items from Your Kit", hi: "🧾 अपनी किट से इन वस्तुओं का उपयोग करें", gu: "🧾 તમારી કીટમાંથી આ વસ્તુઓનો ઉપયોગ કરો" },
   stepsFromKit: { en: "📋 Step-by-Step First Aid", hi: "📋 चरण-दर-चरण प्राथमिक चिकित्सा", gu: "📋 પગલું-દર-પગલું પ્રાથમિક સારવાર" },
   standardKitAvailable: { en: "Standard first aid kit available", hi: "मानक प्राथमिक चिकित्सा किट उपलब्ध है", gu: "સ્ટાન્ડર્ડ ફર્સ્ટ એઇડ કીટ ઉપલબ્ધ છે" },
-  kitScanPrompt: { en: "Injury identified. Now scan original first aid kit.", hi: "चोट की पहचान हो गई है। अब अपनी मूल प्राथमिक चिकित्सा किट को स्कैन करें।", gu: "ઇજાની ઓળખ થઈ ગઈ છે. હવે તમારી મૂળ પ્રાથમિક સારવાર કીટને સ્કેન કરો." }
+  kitScanPrompt: { en: "Injury identified. Now scan original first aid kit.", hi: "चोट की पहचान हो गई है। अब अपनी मूल प्राथमिक चिकित्सा किट को स्कैन करें.", gu: "ઇજાની ઓળખ થઈ ગઈ છે. હવે તમારી મૂળ પ્રાથમિક સારવાર કીટને સ્કેન કરો." },
+  preparingGuidance: { en: "Preparing guidance...", hi: "मार्गदर्शन तैयार हो रहा है...", gu: "માર્ગદર્શન તૈયાર કરી રહ્યા છીએ..." }
 };
 
 const firstAidData = {

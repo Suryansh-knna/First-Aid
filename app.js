@@ -151,14 +151,26 @@ window.showAIResponse = async function(base64Image, source) {
   // Pipeline simulation timers
   const pipeline = [
     { text: staticUI.analyzingImage[lang], delay: 800 },
-    { text: source === 'injury' ? staticUI.identifyingInjury[lang] : staticUI.matchingDatabase[lang], delay: 1000 }
+    { text: source === 'injury' ? staticUI.identifyingInjury[lang] : staticUI.matchingDatabase[lang], delay: 800 },
+    { text: staticUI.preparingGuidance[lang], delay: 800 }
   ];
 
   for (const step of pipeline) {
     const loaderText = document.getElementById('ai-loading-text');
-    if (loaderText) loaderText.innerText = step.text;
+    if (loaderText) {
+      loaderText.style.opacity = '0';
+      setTimeout(() => {
+        loaderText.innerText = step.text;
+        loaderText.style.opacity = '1';
+      }, 250);
+    }
     await new Promise(r => setTimeout(r, step.delay));
   }
+
+  // Brief pause for the 'settle' animation
+  const container = document.querySelector('.analyzing-container');
+  if (container) container.classList.add('analysis-complete');
+  await new Promise(r => setTimeout(r, 600));
   
   const sample = base64Image.substring(0, 5000);
   let hash = 0;
@@ -511,10 +523,16 @@ function getViewHTML() {
     `;
   } else if (currentState === 'analyzing') {
     return `
-      <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px;">
-        <div class="ai-loader" style="width: 80px; height: 80px; border: 6px solid #f3f3f3; border-top: 6px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 24px;"></div>
-        <h2 id="ai-loading-text" style="color: var(--primary);">${staticUI.analyzing[lang]}</h2>
-        <p style="color: var(--text-muted); margin-top: 12px;">${staticUI.matchingDatabase[lang]}</p>
+      <div class="analyzing-container">
+        <div class="liquid-cross-wrapper">
+          <div class="liquid-cross">
+            <div class="liquid-fill"></div>
+          </div>
+        </div>
+        <div class="analyzing-text-container">
+          <h2 id="ai-loading-text">${staticUI.analyzing[lang]}</h2>
+          <p style="color: var(--text-muted); margin-top: 12px; font-size: 0.9rem;">${staticUI.matchingDatabase[lang]}</p>
+        </div>
       </div>
     `;
   }
