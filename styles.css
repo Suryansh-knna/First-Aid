@@ -444,6 +444,19 @@ body {
   margin: 0 0 12px 0;
 }
 
+.emergency-help {
+  background: #fff5f5;
+  border: 1px dashed #feb2b2;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 24px;
+  color: #c53030;
+  white-space: pre-line;
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
 .emergency-prompt button {
   background: var(--accent);
   color: white;

@@ -16,21 +16,17 @@ const staticUI = {
   analyzing: { en: "Analyzing Situation...", hi: "स्थिति का विश्लेषण हो रहा है...", gu: "સ્થિતિનું વિશ્લેષણ થઈ રહ્યું છે..." },
   callEmergency: { en: "CALL 112", hi: "112 डायल करें", gu: "112 ડાયલ કરો" },
   severity: { en: "Severity", hi: "गंभीरता", gu: "ગંભીૂરતા" },
-  disclaimer: { en: "This is first aid guidance. Call emergency services if needed.", hi: "यह प्राथमिक चिकित्सा मार्गदर्शन है। आवश्यकता पड़ने पर आपातकालीन सेवाओं को कॉल करें।", gu: "આ પ્રાથમિક સારવાર માર્ગદર્શન છે. જરૂરી હોય તો કટોકટી સેવાઓને કૉલ કરો." },
-  noResults: { en: "No results found. Try another keyword.", hi: "कोई परिणाम नहीं मिला। कोई अन्य कीवर्ड आज़माएं।", gu: "કોઈ પરિણામ મળ્યું નથી. બીજો કીવર્ડ અજમાવો." },
-  searchResults: { en: "Search Results", hi: "खोज के परिणाम", gu: "શોધનાં પરિણામો" },
-  takePhoto: { en: "Take Photo", hi: "फोटो लें", gu: "ફોટો લો" },
-  uploadPhoto: { en: "Upload Photo", hi: "फोटो अपलोड करें", gu: "ફોટો અપલોડ કરો" },
-  orText: { en: "OR", hi: "या", gu: "અથવા" },
-  noImageError: { en: "No image selected. Please try again.", hi: "कोई छवि नहीं चुनी गई। कृपया पुनः प्रयास करें।", gu: "કોઈ છબી પસંદ કરેલ નથી. કૃપા કરીને ફરી પ્રયાસ કરો." },
-  invalidFormatError: { en: "Unsupported format. Please upload JPG or PNG.", hi: "असमर्थित प्रारूप। कृपया JPG या PNG अपलोड करें।", gu: "અસમર્થિત ફોર્મેટ. કૃપા કરીને JPG અથવા PNG અપલોડ કરો." },
-  retake: { en: "Retake", hi: "फिर से लें", gu: "ફરીથી લો" },
-  confirm: { en: "Confirm", hi: "पुष्टि करें", gu: "ખાતરી કરો" },
-  analyzingImage: { en: "Analyzing image...", hi: "छवि का विश्लेषण हो रहा है...", gu: "છબીનું વિશ્લેષણ કરી રહ્યા છીએ..." },
-  identifyingInjury: { en: "Identifying injury...", hi: "चोट की पहचान हो रही है...", gu: "ઇજાને ઓળખી રહ્યા છીએ..." },
-  generatingSteps: { en: "Generating first aid steps...", hi: "प्राथमिक चिकित्सा चरण उत्पन्न हो रहे हैं...", gu: "પ્રાથમિક સારવારનાં પગલાં જનરેટ કરી રહ્યા છીએ..." },
-  aiAssessment: { en: "AI Assessment", hi: "AI मूल्यांकन", gu: "AI આકારણી" },
-  notAccurate: { en: "Not accurate? Select manually", hi: "सटीक नहीं है? मैन्युअल रूप से चुनें", gu: "ચોક્કસ નથી? જાતે પસંદ કરો" }
+  disclaimer: { en: "This is first aid guidance. Call emergency services if needed.", hi: "यह प्राथमिक चिकित्सा मार्गदर्शन है। आवश्यकता पड़ने पर आपातकालीन सेवाओं को कॉल करें।", gu: "આ પ્રાથમિક સારવાર   aiAssessment: { en: "AI Assessment", hi: "AI मूल्यांकन", gu: "AI આકારણી" },
+  notAccurate: { en: "Not accurate? Select manually", hi: "सटीक नहीं है? मैन्युअल रूप से चुनें", gu: "ચોક્કસ નથી? જાતે પસંદ કરો" },
+  matchingDatabase: { en: "Matching against reference database...", hi: "संदर्भ डेटाबेस के साथ मिलान हो रहा है...", gu: "સંદર્ભ ડેટાબેઝ સાથે મેચ કરી રહ્યા છીએ..." },
+  unableToIdentify: { en: "Unable to identify injury. Please select manually.", hi: "चोट की पहचान करने में असमर्थ। कृपया मैन्युअल रूप से चुनें।", gu: "ઇજાને ઓળખવામાં અસમર્થ. કૃપા કરીને જાતે પસંદ કરો." },
+  injuryDetected: { en: "🩸 Injury Detected", hi: "🩸 चोट की पहचान", gu: "🩸 ઇજાની ઓળખ" },
+  kitDetectedLabel: { en: "🧰 First Aid Kit Detected", hi: "🧰 फर्स्ट एड किट की पहचान", gu: "🧰 ફર્સ્ટ એઇડ કીટની ઓળખ" },
+  kitNotRecognized: { en: "First aid kit not recognized. Showing general instructions.", hi: "फर्स्ट एड किट की पहचान नहीं हुई। सामान्य निर्देश दिखाए जा रहे हैं।", gu: "ફર્સ્ટ એઇડ કીટ ઓળખાઈ નથી. સામાન્ય સૂચનાઓ બતાવવામાં આવી રહી છે." },
+  itemsFromKit: { en: "🧾 Use These Items from Your Kit", hi: "🧾 अपनी किट से इन वस्तुओं का उपयोग करें", gu: "🧾 તમારી કીટમાંથી આ વસ્તુઓનો ઉપયોગ કરો" },
+  stepsFromKit: { en: "📋 Step-by-Step First Aid", hi: "📋 चरण-दर-चरण प्राथमिक चिकित्सा", gu: "📋 પગલું-દર-પગલું પ્રાથમિક સારવાર" },
+  standardKitAvailable: { en: "Standard first aid kit available", hi: "मानक प्राथमिक चिकित्सा किट उपलब्ध है", gu: "સ્ટાન્ડર્ડ ફર્સ્ટ એઇડ કીટ ઉપલબ્ધ છે" },
+  kitScanPrompt: { en: "Injury identified. Now scan original first aid kit.", hi: "चोट की पहचान हो गई है। अब अपनी मूल प्राथमिक चिकित्सा किट को स्कैन करें।", gu: "ઇજાની ઓળખ થઈ ગઈ છે. હવે તમારી મૂળ પ્રાથમિક સારવાર કીટને સ્કેન કરો." }
 };
 
 const firstAidData = {
@@ -50,7 +46,7 @@ const firstAidData = {
       },
       {
         title: { en: "Surface Injuries", hi: "सतह की चोटें", gu: "સપાટીની ઇજાઓ" },
-        items: ["bruises", "blisters"]
+        items: ["bruises", "blisters", "minor_knee_scrape"]
       }
     ],
     subcategories: {
@@ -72,6 +68,81 @@ const firstAidData = {
           { en: "Apply firm pressure", hi: "मजबूती से दबाव डालें", gu: "મજબૂત દબાણ આપો" },
           { en: "Elevate injured area", hi: "घायल हिस्से को ऊपर उठाएं", gu: "ઇજાગ્રસ્ત ભાગને ઊંચો કરો" },
           { en: "Cover with clean cloth", hi: "साफ कपड़े से ढकें", gu: "સ્વચ્છ કપડાથી ઢાંકો" }
+        ]
+      },
+      "heavy_bleeding": {
+        id: "heavy_bleeding",
+        title: { en: "Heavy bleeding", hi: "भारी रक्तस्राव", gu: "ભારે રક્તસ્રાવ" },
+        severity: "Severe",
+        steps: [
+          { en: "Apply strong pressure immediately", hi: "तुरंत मजबूत दबाव डालें", gu: "તરત જ મજબૂત દબાણ આપો" },
+          { en: "Keep person still", hi: "व्यक्ति को स्थिर रखें", gu: "વ્યક્તિને સ્થિર રાખો" },
+          { en: "Seek emergency help", hi: "आपातकालीन मदद लें", gu: "कટોકટી મદદ મેળવો" }
+        ]
+      },
+      "puncture_wounds": {
+        id: "puncture_wounds",
+        title: { en: "Puncture wounds", hi: "पंक्चर के घाव", gu: "પંચરનાં ઘા" },
+        severity: "Moderate",
+        steps: [
+          { en: "Clean wound carefully", hi: "घाव को सावधानी से साफ करें", gu: "જખમને સાવધાનીથી સાફ કરો" },
+          { en: "Stop bleeding", hi: "खून बहना रोकें", gu: "લોહી  વહેતું અટકાવો" },
+          { en: "Seek medical help if deep", hi: "अगर घाव गहरा है तो चिकित्सीय मदद लें", gu: "જો ઘા ઊંડો હોય તો તબીબી મદદ મેળવો" }
+        ]
+      },
+      "nosebleed": {
+        id: "nosebleed",
+        title: { en: "Nosebleed", hi: "नकसीर", gu: "નસકોરી ફૂટવી" },
+        severity: "Low",
+        steps: [
+          { en: "Sit upright", hi: "सीधे बैठें", gu: "સીધા બેસો" },
+          { en: "Lean forward", hi: "आगे की ओर झुकें", gu: "આગળ ઝુકો" },
+          { en: "Pinch nose", hi: "नाक को दबाएं", gu: "નાક દબાવો" }
+        ]
+      },
+      "bruises": {
+        id: "bruises",
+        title: { en: "Bruises", hi: "चोट के निशान", gu: "ઉઝરડા" },
+        severity: "Low",
+        steps: [
+          { en: "Apply cold compress", hi: "ठंडा सेक लगाएं", gu: "ઠંડો શેક લગાવો" },
+          { en: "Rest area", hi: "घायल हिस्से को आराम दें", gu: "વિસ્તારને આરામ આપો" }
+        ]
+      },
+      "blisters": {
+        id: "blisters",
+        title: { en: "Blisters", hi: "छाले", gu: "ફોલ્લા" },
+        severity: "Low",
+        steps: [
+          { en: "Do not burst", hi: "फोड़ें नहीं", gu: "ફોડશો નહીં" },
+          { en: "Keep clean and covered", hi: "साफ और ढका हुआ रखें", gu: "સ્વચ્છ અને ઢાંકેલું રાખો" }
+        ]
+      },
+      "minor_knee_scrape": {
+        id: "minor_knee_scrape",
+        title: { en: "Minor knee scrape (abrasion)", hi: "घुटने की हल्की रगड़ (Abrasion)", gu: "ઘૂંટણની સામાન્ય છોલા (Abrasion)" },
+        severity: "Mild",
+        kit_items: {
+          en: "Clean cloth / gauze, Antiseptic cream, Bandage",
+          hi: "साफ कपड़ा / धुंध, एंटीसेप्टिक क्रीम, पट्टी",
+          gu: "ચોખ્ખું કપડું / જાળીદાર કાપડ, એન્ટિસેપ્ટિક ક્રીમ, પાટો"
+        },
+        steps: [
+          { en: "Clean the wound using clean water and gauze", hi: "साफ पानी और धुंध का उपयोग करके घाव को साफ करें", gu: "ચોખ્ખા પાણી અને જાળીદાર કાપડનો ઉપયોગ કરીને ઘા સાફ કરો" },
+          { en: "Gently remove dirt (do not scrub harshly)", hi: "धीरे से गंदगी हटाएं (तेजी से न रगड़ें)", gu: "ધીમેથી ગંદકી દૂર કરો (જોરથી ઘસશો નહીં)" },
+          { en: "Apply antiseptic cream from the kit", hi: "किट में दी गई एंटीसेप्टिक क्रीम लगाएं", gu: "કીટમાંથી એન્ટિસેપ્ટિક ક્રીમ લગાવો" },
+          { en: "Cover with sterile gauze or bandage", hi: "स्टेराइल धुंध या पट्टी से ढकें", gu: "જંતુરહિત જાળીદાર કાપડ અથવા પાટા વડે ઢાંકવું" },
+          { en: "Secure with tape or wrap", hi: "टेप या रैप से सुरक्षित करें", gu: "ટેપ અથવા રેપ વડે સુરક્ષિત કરો" },
+          { en: "Keep clean and change dressing daily", hi: "साफ रखें और ड्रेसिंग रोज बदलें", gu: "ચોખ્ખું રાખો અને દરરોજ પાટો બદલો" }
+        ],
+        emergency_help: {
+          en: "🚨 When to Seek Help\n- If swelling increases\n- If pus forms\n- If pain worsens",
+          hi: "🚨 मदद कब लें\n- यदि सूजन बढ़ जाती है\n- यदि मवाद (pus) बनता है\n- यदि दर्द बढ़ जाता है",
+          gu: "🚨 ક્યારે મદદ લેવી\n- જો સોજો વધે\n- જો પરૂ (pus) થાય\n- જો દુખાવો વધે"
+        }
+      }
+    }
+ }
         ]
       },
       "heavy_bleeding": {
@@ -121,6 +192,24 @@ const firstAidData = {
           { en: "Do not burst", hi: "फोड़ें नहीं", gu: "ફોડશો નહીં" },
           { en: "Keep clean and covered", hi: "साफ और ढका हुआ रखें", gu: "સ્વચ્છ અને ઢાંકેલું રાખો" }
         ]
+      },
+      "minor_knee_scrape": {
+        id: "minor_knee_scrape",
+        title: { en: "Minor knee scrape (abrasion)", hi: "घुटने की हल्की रगड़ (Abrasion)", gu: "ઘૂંટણની સામાન્ય છોલા (Abrasion)" },
+        severity: "Mild",
+        steps: [
+          { en: "Clean the wound with clean water to remove dirt", hi: "मिट्टी हटाने के लिए घाव को साफ पानी से धोएं", gu: "ધૂળ દૂર કરવા માટે ઘાને ચોખ્ખા પાણીથી સાફ કરો" },
+          { en: "Gently wash with mild soap (if available)", hi: "हल्के साबुन से धीरे से धोएं (यदि उपलब्ध हो)", gu: "હળવા સાબુથી ધીમેથી ધોવો (જો ઉપલબ્ધ હોય તો)" },
+          { en: "Apply antiseptic ointment", hi: "एंटीसेप्टिक मलहम लगाएं", gu: "એન્ટિસેપ્ટિક મલમ લગાવો" },
+          { en: "Cover with a clean bandage or gauze", hi: "साफ पट्टी या धुंध (gauze) से ढकें", gu: "સ્વચ્છ પાટા અથવા જાળીદાર કપડાથી ઢાંકો" },
+          { en: "Keep the area clean and dry", hi: "क्षेत्र को साफ और सूखा रखें", gu: "વિસ્તારને સ્વચ્છ અને સૂકો રાખો" },
+          { en: "Change dressing daily", hi: "ड्रेसिंग रोज बदलें", gu: "દરરોજ પાટો બદલો" }
+        ],
+        emergency_help: {
+          en: "🚨 When to Seek Help\n- If redness or swelling increases\n- If pus forms\n- If pain worsens",
+          hi: "🚨 मदद कब लें\n- यदि लालिमा या सूजन बढ़ जाती है\n- यदि मवाद (pus) बनता है\n- यदि दर्द बढ़ जाता है",
+          gu: "🚨 ક્યારે મદદ લેવી\n- જો લાલાશ અથવા સોજો વધે\n- જો પરૂ (pus) થાય\n- જો દુખાવો વધે"
+        }
       }
     }
   },
