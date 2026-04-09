@@ -365,8 +365,7 @@ function getViewHTML() {
     });
 
     return `
-      <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> ${staticUI.categories[lang]}</button>
-      <h3 style="margin-top:0; margin-bottom:16px;">${catData.title[lang]}</h3>
+      <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> ${catData.title[lang]}</button>
       <div class="subcategory-list">
         ${listHTML}
       </div>
@@ -407,11 +406,11 @@ function getViewHTML() {
 
     return `
       <button class="back-btn" onclick="navigate('subcategories')"><i data-lucide="arrow-left"></i> ${catData.title[lang]}</button>
-      <div class="disclaimer" style="margin-bottom:16px;">
+      <div class="disclaimer" style="margin-bottom:12px;">
         <i data-lucide="alert-triangle" color="#856404" style="flex-shrink:0;"></i>
         ${staticUI.disclaimer[lang]}
       </div>
-      <h2 style="margin: 0 0 12px 0;">${subcatObj.title[lang]}</h2>
+      <h2 style="margin: 0 0 8px 0;">${subcatObj.title[lang]}</h2>
       ${severityHtml}
       
       <div class="steps-container" style="margin-top:24px;">
@@ -503,6 +502,7 @@ function getViewHTML() {
     }
 
     return `
+      <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> ${catData.title[lang]}</button>
       <div class="disclaimer" style="margin-bottom: 20px;">
         <i data-lucide="alert-triangle" color="#856404" style="flex-shrink: 0;"></i>
         <div>${staticUI.disclaimer[lang]}</div>
