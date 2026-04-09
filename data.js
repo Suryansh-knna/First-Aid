@@ -406,6 +406,10 @@ const firstAidData = {
           gu: "ચોખ્ખું કપડું / જાળીદાર કાપડ, એન્ટિસેપ્ટિક ક્રીમ, પાટો"
         },
         steps: [
+          { en: "Gently clean the area using clean water and gauze", hi: "साफ पानी और धुंध (gauze) का उपयोग करके क्षेत्र को धीरे से साफ करें", gu: "ચોખ્ખા પાણી અને જાળીદાર કાપડનો ઉપયોગ કરીને વિસ્તારને ધીમેથી સાફ કરો" },
+          { en: "Do NOT scrub the skin", hi: "त्वचा को रगड़ें नहीं", gu: "ત્વચા પર ઘસશો નહીં" },
+          { en: "Apply antiseptic solution carefully", hi: "सावधानी से एंटीसेप्टिक घोल लगाएं", gu: "સાવાધાનીપૂર્વક એન્ટિસેપ્ટિક સોલ્યુશન લગાવો" },
+          { en: "Leave wound open or cover lightly with sterile gauze", hi: "घाव को खुला छोड़ दें या स्टेराइल धुंध (gauze) से हल्का ढंक दें", gu: "ઘાને ખુલ્લો રાખો અથવા જંતુરહિત જાળીદાર કાપડથી હળવાશથી ઢાંકો" },
           { en: "Apply cold compress (wrapped cloth) to reduce swelling", hi: "सूजन कम करने के लिए ठंडा सेक (लपेटे हुए कपड़े) लगाएं", gu: "સોજો ઘટાડવા માટે ઠંડો શેક (લપેટેલા કપડાં) લગાવો" },
           { en: "Keep area clean and avoid touching", hi: "क्षेत्र को साफ रखें और छूने से बचें", gu: "વિસ્તાર સ્વચ્છ રાખો અને સ્પર્શ કરવાનું ટાળો" }
         ],
