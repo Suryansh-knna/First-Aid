@@ -326,6 +326,7 @@ const firstAidData = {
         id: "choking_adult",
         title: { en: "Choking (adult)", hi: "दम घुटना (वयस्क)", gu: "ગૂંગળામણ (પુખ્ત)" },
         severity: "Severe",
+        customIcon: "assets/icons/choking_adult.png",
         steps: [
           { en: "Perform abdominal thrusts", hi: "पेट पर दबाव डालें", gu: "પેટ પર દબાણ કરો" }
         ]
@@ -342,6 +343,7 @@ const firstAidData = {
         id: "cpr",
         title: { en: "Not breathing / CPR", hi: "सांस नहीं आना / सीपीआर", gu: "શ્વાસ ન આવવો / સીપીઆર" },
         severity: "Severe",
+        customIcon: "assets/icons/cpr.png",
         steps: [
           { en: "Start chest compressions", hi: "छाती को दबाना शुरू करें", gu: "છાતી દબાવવાનું શરૂ કરો" },
           { en: "Call emergency services", hi: "आपातकालीन सेवाओं को कॉल करें", gu: "કટોકટી સેવાઓને કૉલ કરો" }
@@ -351,6 +353,7 @@ const firstAidData = {
         id: "breathing_difficulty",
         title: { en: "Breathing difficulty", hi: "सांस लेने में कठिनाई", gu: "શ્વાસ લેવામાં તકલીફ" },
         severity: "Moderate",
+        customIcon: "assets/icons/breathing_difficulty.png",
         steps: [
           { en: "Help sit upright", hi: "सीधे बैठने में मदद करें", gu: "સીધા બેસવામાં મદદ કરો" },
           { en: "Loosen clothing", hi: "कपड़े ढीले करें", gu: "કપડાં ઢીલા કરો" }
@@ -360,6 +363,7 @@ const firstAidData = {
         id: "smoke_inhalation",
         title: { en: "Smoke inhalation", hi: "धुआं अंदर जाना", gu: "ધુમાડો શ્વાસમાં જવો" },
         severity: "Severe",
+        customIcon: "assets/icons/smoke_inhalation.png",
         steps: [
           { en: "Move to fresh air", hi: "ताजी हवा में जाएं", gu: "તાજી હવામાં જાવ" },
           { en: "Monitor breathing", hi: "सांसों पर नजर रखें", gu: "શ્વાસ પર નજર રાખો" }
@@ -369,6 +373,7 @@ const firstAidData = {
         id: "gas_exposure",
         title: { en: "Gas exposure", hi: "गैस के संपर्क में आना", gu: "ગેસના સંપર્કમાં આવવું" },
         severity: "Severe",
+        customIcon: "assets/icons/gas_exposure.png",
         steps: [
           { en: "Move to fresh air immediately", hi: "तुरंत ताजी हवा में जाएं", gu: "તરત જ તાજી હવામાં જાવ" },
           { en: "Avoid sparks", hi: "चिंगारी से बचें", gu: "તણખા ટાળો" }
