@@ -194,6 +194,7 @@ const firstAidData = {
         id: "severe_burns",
         title: { en: "Severe burns", hi: "गंभीर जलन", gu: "ગંભીર દાઝવું" },
         severity: "Severe",
+        customIcon: "assets/icons/severe_burns.png",
         steps: [
           { en: "Cover with clean cloth", hi: "साफ कपड़े से ढकें", gu: "સ્વચ્છ કપડાથી ઢાંકો" },
           { en: "Do not apply substances", hi: "कोई क्रीम या मलहम न लगाएं", gu: "કોઈ ક્રીમ કે મલમ ન લગાવો" },
@@ -204,6 +205,7 @@ const firstAidData = {
         id: "scalds",
         title: { en: "Scalds", hi: "गर्म तरल से जलना", gu: "ગરમ પ્રવાહી થી દાઝવું" },
         severity: "Moderate",
+        customIcon: "assets/icons/scalds.png",
         steps: [
           { en: "Cool immediately with water", hi: "तुरंत पानी से ठंडा करें", gu: "તરત જ પાણીથી ઠંડુ કરો" },
           { en: "Remove tight items", hi: "तंग चीजें हटा दें", gu: "ચુસ્ત વસ્તુઓ કાઢી નાખો" }
@@ -233,6 +235,7 @@ const firstAidData = {
         id: "sunburn",
         title: { en: "Sunburn", hi: "धूप से जलना", gu: "સનબર્ન" },
         severity: "Low",
+        customIcon: "assets/icons/sunburn.png",
         steps: [
           { en: "Cool skin", hi: "त्वचा को ठंडा करें", gu: "ત્વચા ઠંડી કરો" },
           { en: "Hydrate", hi: "हाइड्रेट रहें", gu: "હાઇડ્રેટ રહો" },
@@ -261,6 +264,7 @@ const firstAidData = {
         id: "fractures_sub",
         title: { en: "Fractures", hi: "हड्डी टूटना", gu: "અસ્થિભંગ" },
         severity: "Severe",
+        customIcon: "assets/icons/fractures_sub.png",
         steps: [
           { en: "Immobilize area", hi: "प्रभावित हिस्से को स्थिर करें", gu: "અસરગ્રસ્ત ભાગને સ્થિર કરો" },
           { en: "Avoid movement", hi: "हिलने-डुलने से बचें", gu: "હલનચલન ટાળો" },
