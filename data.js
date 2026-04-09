@@ -400,6 +400,7 @@ const firstAidData = {
         id: "mild_head",
         title: { en: "Mild head injury", hi: "सिर की मामूली चोट", gu: "માથાની સામાન્ય ઇજા" },
         severity: "Low",
+        customIcon: "assets/icons/mild_head.png",
         steps: [
           { en: "Keep person still", hi: "व्यक्ति को स्थिर रखें", gu: "વ્યક્તિને સ્થિર રાખો" },
           { en: "Monitor symptoms", hi: "लक्षणों पर नज़र रखें", gu: "લક્ષણો પર નજર રાખો" }
@@ -496,6 +497,7 @@ const firstAidData = {
         id: "animal",
         title: { en: "Animal bites", hi: "जानवर का काटना", gu: "પ્રાણીનું કરડવું" },
         severity: "Moderate",
+        customIcon: "assets/icons/animal.png",
         steps: [
           { en: "Wash thoroughly", hi: "अच्छी तरह से धोएं", gu: "સારી રીતે ધોઈ લો" },
           { en: "Apply antiseptic", hi: "एंटीसेप्टिक लगाएं", gu: "એન્ટિસેપ્ટિક લગાવો" },
@@ -506,6 +508,7 @@ const firstAidData = {
         id: "snake",
         title: { en: "Snake bites", hi: "सांप का काटना", gu: "સાપ કરડવો" },
         severity: "Severe",
+        customIcon: "assets/icons/snake.png",
         steps: [
           { en: "Keep person still", hi: "व्यक्ति को स्थिर रखें", gu: "વ્યક્તિને સ્થિર રાખો" },
           { en: "Immobilize limb", hi: "अंग को अचल करें", gu: "અંગને સ્થિર કરો" },
@@ -516,6 +519,7 @@ const firstAidData = {
         id: "allergy_mild",
         title: { en: "Allergic reaction (mild)", hi: "एलर्जी की प्रतिक्रिया (हल्की)", gu: "એલર્જીક પ્રતિક્રિયા (હળવી)" },
         severity: "Moderate",
+        customIcon: "assets/icons/allergy_mild.png",
         steps: [
           { en: "Identify trigger", hi: "कारण की पहचान करें", gu: "ટ્રિગરની ઓળખ કરો" },
           { en: "Give antihistamine", hi: "एंटीहिस्टामाइन दें", gu: "એન્ટિહિસ્ટામાઇન આપો" }
@@ -525,6 +529,7 @@ const firstAidData = {
         id: "allergy_severe",
         title: { en: "Severe allergic reaction", hi: "गंभीर एलर्जी प्रतिक्रिया", gu: "ગંભીર એલર્જીક પ્રતિક્રિયા" },
         severity: "Severe",
+        customIcon: "assets/icons/allergy_severe.png",
         steps: [
           { en: "Seek emergency help immediately", hi: "तुरंत आपातकालीन सहायता मांगें", gu: "તરત જ કટોકટી મદદ મેળવો" },
           { en: "Assist breathing", hi: "सांस लेने में मदद करें", gu: "શ્વાસ લેવામાં મદદ કરો" }
