@@ -433,6 +433,7 @@ const firstAidData = {
         id: "severe_head",
         title: { en: "Severe head injury", hi: "सिर की गंभीर चोट", gu: "માથાની ગંભીર ઇજા" },
         severity: "Severe",
+        customIcon: "assets/icons/severe_head.png",
         steps: [
           { en: "Do not move person", hi: "व्यक्ति को हिलाएं नहीं", gu: "વ્યક્તિને હલાવશો નહીં" },
           { en: "Seek emergency help", hi: "आपातकालीन सहायता लें", gu: "કટોકટી મદદ મેળવો" }
@@ -442,6 +443,7 @@ const firstAidData = {
         id: "concussion",
         title: { en: "Concussion", hi: "हल्का दिमागी घाव", gu: "મગજનો આઘાત" },
         severity: "Moderate",
+        customIcon: "assets/icons/concussion.png",
         steps: [
           { en: "Rest", hi: "आराम", gu: "આરામ" },
           { en: "Avoid activity", hi: "गतिविधि से बचें", gu: "પ્રવૃત્તિ ટાળો" }
@@ -451,6 +453,7 @@ const firstAidData = {
         id: "unconscious",
         title: { en: "Unconscious person", hi: "बेहोश व्यक्ति", gu: "બેભાન વ્યક્તિ" },
         severity: "Severe",
+        customIcon: "assets/icons/unconscious.png",
         steps: [
           { en: "Check breathing", hi: "सांस की जांच करें", gu: "શ્વાસ તપાસો" },
           { en: "Place in recovery position", hi: "रिकवरी पोजीशन में लिटाएं", gu: "રિકવરી પોઝિશનમાં રાખો" }
@@ -460,6 +463,7 @@ const firstAidData = {
         id: "seizures",
         title: { en: "Seizures", hi: "दौरे", gu: "ખેંચ" },
         severity: "Moderate",
+        customIcon: "assets/icons/seizures.png",
         steps: [
           { en: "Keep person safe", hi: "व्यक्ति को सुरक्षित रखें", gu: "વ્યક્તિને સુરક્ષિત રાખો" },
           { en: "Do not restrain", hi: "रोके नहीं", gu: "અટકાવશો નહીં" },
@@ -488,6 +492,7 @@ const firstAidData = {
         id: "insect",
         title: { en: "Insect bites", hi: "कीड़े का काटना", gu: "જીવજંતુનું કરડવું" },
         severity: "Low",
+        customIcon: "assets/icons/insect.png",
         steps: [
           { en: "Clean area", hi: "जगह को साफ करें", gu: "વિસ્તાર સાફ કરો" },
           { en: "Apply cold pack", hi: "कोल्ड पैक लगाएं", gu: "કોલ્ડ પેક લગાવો" }
