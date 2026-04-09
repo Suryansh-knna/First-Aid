@@ -99,6 +99,7 @@ const firstAidData = {
         id: "puncture_wounds",
         title: { en: "Puncture wounds", hi: "पंक्चर के घाव", gu: "પંચરનાં ઘા" },
         severity: "Moderate",
+        customIcon: "assets/icons/puncture_wounds.png",
         steps: [
           { en: "Clean wound carefully", hi: "घाव को सावधानी से साफ करें", gu: "જખમને સાવધાનીથી સાફ કરો" },
           { en: "Stop bleeding", hi: "खून बहना रोकें", gu: "લોહી  વહેતું અટકાવો" },
@@ -109,6 +110,7 @@ const firstAidData = {
         id: "nosebleed",
         title: { en: "Nosebleed", hi: "नकसीर", gu: "નસકોરી ફૂટવી" },
         severity: "Low",
+        customIcon: "assets/icons/nosebleed.png",
         steps: [
           { en: "Sit upright", hi: "सीधे बैठें", gu: "સીધા બેસો" },
           { en: "Lean forward", hi: "आगे की ओर झुकें", gu: "આગળ ઝુકો" },
@@ -119,6 +121,7 @@ const firstAidData = {
         id: "bruises",
         title: { en: "Bruises", hi: "चोट के निशान", gu: "ઉઝરડા" },
         severity: "Low",
+        customIcon: "assets/icons/bruises.png",
         steps: [
           { en: "Apply cold compress", hi: "ठंडा सेक लगाएं", gu: "ઠંડો શેક લગાવો" },
           { en: "Rest area", hi: "घायल हिस्से को आराम दें", gu: "વિસ્તારને આરામ આપો" }
@@ -128,6 +131,7 @@ const firstAidData = {
         id: "blisters",
         title: { en: "Blisters", hi: "छाले", gu: "ફોલ્લા" },
         severity: "Low",
+        customIcon: "assets/icons/blisters.png",
         steps: [
           { en: "Do not burst", hi: "फोड़ें नहीं", gu: "ફોડશો નહીં" },
           { en: "Keep clean and covered", hi: "साफ और ढका हुआ रखें", gu: "સ્વચ્છ અને ઢાંકેલું રાખો" }
@@ -178,6 +182,7 @@ const firstAidData = {
         id: "minor_burns",
         title: { en: "Minor burns", hi: "मामूली जलन", gu: "સામાન્ય દાઝવું" },
         severity: "Low",
+        customIcon: "assets/icons/minor_burns.png",
         steps: [
           { en: "Cool under running water (10–15 mins)", hi: "बहते पानी के नीचे (10-15 मिनट) ठंडा करें", gu: "વહેતા પાણી નીચે (૧૦-૧૫ મિનિટ) ઠંડુ કરો" },
           { en: "Cover loosely", hi: "हल्के से ढकें", gu: "હળવાશથી ઢાંકો" }
