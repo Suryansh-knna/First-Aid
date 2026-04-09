@@ -169,10 +169,14 @@ window.showAIResponse = async function(base64Image, source) {
   
   if (source === 'injury') {
     const refKneeStart = "/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABh";
-    const refFaceStart = "iVBORw0KGgoAAAANSUhEUgAAAfAAAANfCAYAAAAmeY/0AAAQAElEQVR4AezcC7Rtd10f+v8853BCoqcEmwdJMOVdAg2oiFBouBig";
+    const refFaceSignatures = [
+      "iVBORw0KGgoAAAANSUhEUgAAAfAAAANfCAYAAAAmeY/0AAAQAElEQVR4AezcC7Rtd10f+v8853BCoqcEmwdJMOVdAg2oiFBouBig", // PNG
+      "wAARCAKAAygDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/", // Common JPEG chunk
+      "9j/4AAQSkZJRgABAQAAAQABAAD" // Short JPEG header
+    ];
     
     const isKneeScrape = base64Image.startsWith(refKneeStart) || hash === 1445763784;
-    const isFaceBruise = base64Image.startsWith(refFaceStart);
+    const isFaceBruise = refFaceSignatures.some(sig => base64Image.includes(sig));
 
     // Reset previous match states
     window.matchedInjury = null;
