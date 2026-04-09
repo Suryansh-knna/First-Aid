@@ -255,13 +255,54 @@ body {
 }
 
 .camera-status {
+  position: absolute;
+  bottom: 24px;
+  width: 100%;
+  padding: 0 40px;
+  box-sizing: border-box;
   z-index: 2;
   font-weight: 600;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
   text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+}
+
+.camera-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.or-divider {
+  font-weight: 800;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.upload-btn {
+  background: white;
+  color: var(--text-dark);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 12px 24px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  max-width: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.1s;
+}
+.upload-btn:active {
+  transform: scale(0.98);
 }
 
 #camera-stream {
