@@ -79,6 +79,7 @@ const firstAidData = {
         id: "deep_cuts",
         title: { en: "Deep cuts", hi: "गहरे कट", gu: "ઊંડા કાપા" },
         severity: "Severe",
+        customIcon: "assets/icons/deep_cuts.png",
         steps: [
           { en: "Apply firm pressure", hi: "मजबूती से दबाव डालें", gu: "મજબૂત દબાણ આપો" },
           { en: "Elevate injured area", hi: "घायल हिस्से को ऊपर उठाएं", gu: "ઇજાગ્રસ્ત ભાગને ઊંચો કરો" },
@@ -89,6 +90,7 @@ const firstAidData = {
         id: "heavy_bleeding",
         title: { en: "Heavy bleeding", hi: "भारी रक्तस्राव", gu: "ભારે રક્તસ્રાવ" },
         severity: "Severe",
+        customIcon: "assets/icons/heavy_bleeding.png",
         steps: [
           { en: "Apply strong pressure immediately", hi: "तुरंत मजबूत दबाव डालें", gu: "તરત જ મજબૂત દબાણ આપો" },
           { en: "Keep person still", hi: "व्यक्ति को स्थिर रखें", gu: "વ્યક્તિને સ્થિર રાખો" },
