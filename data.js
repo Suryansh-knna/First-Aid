@@ -558,27 +558,55 @@ const firstAidData = {
   }
 };
 
+const keywordDatabase = [
+  { id: "minor_cuts", en: ["cut", "small cut", "scrape", "scratch", "abrasion", "bloody knee"], hi: ["chota cut", "khurach", "ghis gaya", "thoda khoon", "ghutna ghis gaya"] },
+  { id: "deep_cuts", en: ["deep cut", "open wound", "cut badly"], hi: ["gehra cut", "bada ghaav", "skin khul gaya"] },
+  { id: "heavy_bleeding", en: ["bleeding a lot", "blood flowing", "won’t stop bleeding"], hi: ["bahut khoon", "khoon ruk nahi raha", "bohot bleeding"] },
+  { id: "nosebleed", en: ["nose bleed", "blood from nose"], hi: ["naak se khoon", "nose bleed"] },
+  { id: "puncture_wounds", en: ["nail injury", "sharp object", "pierced skin"], hi: ["nail chubh gaya", "kaanta ghus gaya"] },
+  { id: "bruises", en: ["bruise", "blue mark", "swelling"], hi: ["neela pad gaya", "sujan", "lag gaya"] },
+  { id: "blisters", en: ["blister", "bubble on skin"], hi: ["phoda", "skin bubble"] },
+  { id: "minor_burns", en: ["small burn", "light burn"], hi: ["halka jal gaya", "thoda burn"] },
+  { id: "severe_burns", en: ["severe burn", "burn badly"], hi: ["bahut jal gaya", "zyada burn"] },
+  { id: "scalds", en: ["hot water burn", "steam burn"], hi: ["garam paani gir gaya", "chai gir gayi"] },
+  { id: "electrical_burns", en: ["electric shock", "current injury"], hi: ["current laga", "shock laga"] },
+  { id: "chemical_burns", en: ["acid burn", "chemical spill"], hi: ["acid lag gaya", "chemical gir gaya"] },
+  { id: "sunburn", en: ["sunburn", "sun exposure"], hi: ["dhoop se jal gaya"] },
+  { id: "fractures_sub", en: ["broken bone", "fracture"], hi: ["haddi toot gayi"] },
+  { id: "dislocations", en: ["joint out", "dislocated"], hi: ["joint nikal gaya"] },
+  { id: "sprains", en: ["twisted ankle", "ankle swelling"], hi: ["moch aa gayi", "ankle mud gaya"] },
+  { id: "strains", en: ["muscle pull", "muscle pain"], hi: ["muscle khinch gaya"] },
+  { id: "choking_adult", en: ["choking", "food stuck"], hi: ["gala me atak gaya", "choking"] },
+  { id: "choking_child", en: ["child choking"], hi: ["bachcha choke ho raha"] },
+  { id: "cpr", en: ["not breathing", "CPR"], hi: ["saans nahi aa rahi", "CPR"] },
+  { id: "breathing_difficulty", en: ["hard to breathe", "shortness of breath"], hi: ["saans lene me dikkat"] },
+  { id: "smoke_inhalation", en: ["smoke inhalation"], hi: ["dhuaan andar gaya"] },
+  { id: "gas_exposure", en: ["gas leak"], hi: ["gas leak", "gas smell"] },
+  { id: "mild_head", en: ["hit head", "bumped head"], hi: ["sir lag gaya"] },
+  { id: "severe_head", en: ["head bleeding", "head trauma"], hi: ["sir se khoon"] },
+  { id: "concussion", en: ["dizzy", "confusion"], hi: ["chakkar aa raha"] },
+  { id: "seizures", en: ["seizure", "fits"], hi: ["daura", "fit aa raha"] },
+  { id: "unconscious", en: ["unconscious", "fainted"], hi: ["behosh ho gaya"] },
+  { id: "insect", en: ["mosquito bite", "bee sting"], hi: ["machhar kaata"] },
+  { id: "animal", en: ["dog bite", "animal bite"], hi: ["kutta kaata"] },
+  { id: "snake", en: ["snake bite"], hi: ["saap ne kaata"] },
+  { id: "allergy_mild", en: ["rash", "itching"], hi: ["khujli", "rash"] },
+  { id: "allergy_severe", en: ["anaphylaxis", "severe allergy"], hi: ["face sujan", "saans nahi aa rahi allergy"] }
+];
+
 const searchDataset = [];
 
-// Populate search dataset locally from the firstAidData dynamically to avoid repeating translations
 Object.values(firstAidData).forEach(cat => {
   Object.values(cat.subcategories).forEach(subcat => {
-    let phoneticWords = [];
-    if (cat.id === "bleeding_cuts") phoneticWords = ["khoon", "bleeding", "blood", "khun", "chot", "cut"];
-    if (cat.id === "burns") phoneticWords = ["jalna", "burn", "aag", "dhup", "garam"];
-    if (cat.id === "fractures") phoneticWords = ["haddi tootna", "fracture", "bone break", "moch", "haddi", "pain"];
-    if (cat.id === "breathing") phoneticWords = ["saans nahi aa rahi", "choking", "saans", "dhuan", "gas", "oxygen"];
-    if (cat.id === "head") phoneticWords = ["sar pe chot", "head injury", "behoshi", "daura", "sir", "sar"];
-    if (cat.id === "bites") phoneticWords = ["kaat liya", "snake bite", "insect bite", "jaanwar", "keeda", "saamp"];
+    const customEntry = keywordDatabase.find(k => k.id === subcat.id);
     
     searchDataset.push({
       id: subcat.id,
       category_id: cat.id,
       keywords: {
-        en: [subcat.title.en.toLowerCase(), cat.title.en.toLowerCase()],
-        hi: [subcat.title.hi.toLowerCase(), cat.title.hi.toLowerCase()],
-        gu: [subcat.title.gu.toLowerCase(), cat.title.gu.toLowerCase()],
-        phonetic: phoneticWords
+        en: customEntry ? customEntry.en : [subcat.title.en.toLowerCase()],
+        hi: customEntry ? customEntry.hi : [subcat.title.hi.toLowerCase()],
+        gu: [subcat.title.gu.toLowerCase()]
       }
     });
   });

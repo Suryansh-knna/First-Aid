@@ -46,13 +46,14 @@ window.openSearchResult = function(categoryId, subcategoryId) {
 };
 
 window.liveSearch = function(query) {
-  window.currentSearchQuery = query.toLowerCase().trim();
+  const rawQuery = query.toLowerCase().trim();
+  window.currentSearchQuery = rawQuery;
   const dynamicArea = document.getElementById('home-dynamic-area');
   const lang = window.appLanguage;
   
   if (!dynamicArea) return;
   
-  if (window.currentSearchQuery === '') {
+  if (rawQuery === '') {
     let cards = '';
     for (const catObj of Object.values(firstAidData)) {
       cards += `
@@ -71,27 +72,57 @@ window.liveSearch = function(query) {
       </div>
     `;
   } else {
-    // Search within searchDataset across all native languages and phonetic keys
-    const results = searchDataset.filter(item => {
+    // Smart Search Logic
+    const fillerWords = new Set([
+      "a", "an", "the", "and", "or", "but", "for", "with", "is", "are", "was", "were", 
+      "be", "been", "being", "have", "has", "had", "do", "does", "did", "i", "me", "my", 
+      "you", "your", "he", "him", "his", "she", "her", "it", "its", "we", "us", "our", 
+      "they", "them", "their", "hai", "aur", "ka", "ki", "ke", "me", "se", "par", "hi", 
+      "bhi", "raha", "rahi", "rahe", "hua", "hui", "hue", "tha", "thi", "the"
+    ]);
+
+    // Tokenize and remove fillers
+    const tokens = rawQuery.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").split(/\s+/).filter(t => t.length > 0 && !fillerWords.has(t));
+
+    if (tokens.length === 0 && rawQuery.length > 0) {
+      // If everything was removed but there was a query, just use raw tokens
+      tokens.push(...rawQuery.split(/\s+/).filter(t => t.length > 0));
+    }
+
+    const scoredResults = [];
+
+    searchDataset.forEach(item => {
+      let score = 0;
       const catData = firstAidData[item.category_id];
       const subCat = catData.subcategories[item.id];
       
-      const combinedTitles = [
-        subCat.title.en.toLowerCase(), subCat.title.hi.toLowerCase(), subCat.title.gu.toLowerCase(),
-        catData.title.en.toLowerCase(), catData.title.hi.toLowerCase(), catData.title.gu.toLowerCase()
-      ].join(' ');
-      
-      const mixedKeywords = [
-        ...(item.keywords.en || []), 
-        ...(item.keywords.hi || []), 
-        ...(item.keywords.gu || []), 
-        ...(item.keywords.phonetic || [])
-      ].join(' ');
-      
-      return combinedTitles.includes(window.currentSearchQuery) || mixedKeywords.includes(window.currentSearchQuery);
+      const searchableStrings = [
+        ...item.keywords.en,
+        ...item.keywords.hi,
+        subCat.title.en.toLowerCase(),
+        subCat.title.hi.toLowerCase()
+      ];
+
+      tokens.forEach(token => {
+        // Check exact match in keywords
+        if (searchableStrings.some(s => s.includes(token))) {
+          score += 1;
+        }
+        // Higher weight if token matches a whole keyword exactly
+        if (searchableStrings.some(s => s === token)) {
+          score += 2;
+        }
+      });
+
+      if (score > 0) {
+        scoredResults.push({ ...item, score });
+      }
     });
+
+    // Rank by score descending
+    scoredResults.sort((a, b) => b.score - a.score);
     
-    if (results.length === 0) {
+    if (scoredResults.length === 0) {
       dynamicArea.innerHTML = `
         <div class="empty-search">
           <i data-lucide="search-x" size="32" color="var(--text-muted)"></i>
@@ -100,20 +131,22 @@ window.liveSearch = function(query) {
       `;
     } else {
       let listHTML = '';
-      results.forEach(result => {
+      scoredResults.forEach(result => {
         const catData = firstAidData[result.category_id];
         const subCatData = catData.subcategories[result.id];
         
         listHTML += `
           <div class="search-result-item" onclick="openSearchResult('${catData.id}', '${subCatData.id}')">
             <div class="search-result-name">${subCatData.title[lang]}</div>
-            <div class="search-result-category" style="color: ${catData.color};"><i data-lucide="${catData.icon}" size="12"></i> ${catData.title[lang]}</div>
+            <div class="search-result-category" style="color: ${catData.color};">
+              <i data-lucide="${catData.icon}" size="12"></i> ${catData.title[lang]}
+            </div>
           </div>
         `;
       });
       dynamicArea.innerHTML = `
         <h3 style="margin-top:0;">${staticUI.searchResults[lang]}</h3>
-        <div class="subcategory-list">
+        <div class="subcategory-grid"> <!-- grid layout for cards -->
           ${listHTML}
         </div>
       `;
