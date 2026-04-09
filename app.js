@@ -46,13 +46,14 @@ window.openSearchResult = function(categoryId, subcategoryId) {
 };
 
 window.liveSearch = function(query) {
-  const rawQuery = query.toLowerCase().trim();
+  const rawQuery = (query || "").toLowerCase().trim();
   window.currentSearchQuery = rawQuery;
   const dynamicArea = document.getElementById('home-dynamic-area');
   const lang = window.appLanguage;
   
   if (!dynamicArea) return;
   
+  // Empty Case Handling
   if (rawQuery === '') {
     let cards = '';
     for (const catObj of Object.values(firstAidData)) {
@@ -71,91 +72,127 @@ window.liveSearch = function(query) {
         </div>
       </div>
     `;
-  } else {
-    // Smart Search Logic
-    const fillerWords = new Set([
-      "a", "an", "the", "and", "or", "but", "for", "with", "is", "are", "was", "were", 
-      "be", "been", "being", "have", "has", "had", "do", "does", "did", "i", "me", "my", 
-      "you", "your", "he", "him", "his", "she", "her", "it", "its", "we", "us", "our", 
-      "they", "them", "their", "hai", "aur", "ka", "ki", "ke", "me", "se", "par", "hi", 
-      "bhi", "raha", "rahi", "rahe", "hua", "hui", "hue", "tha", "thi", "the"
-    ]);
+    if (window.lucide) lucide.createIcons();
+    return;
+  }
 
-    // Tokenize and remove fillers
-    const tokens = rawQuery.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").split(/\s+/).filter(t => t.length > 0 && !fillerWords.has(t));
+  // STEP 1 & 3: STOP WORD FILTER & PROCESSING
+  const stopWords = new Set([
+     "i","me","my","you","he","she","it",
+     "is","am","are","was","were",
+     "the","a","an",
+     "in","on","at","to","from",
+     "and","or","but",
+     "have","has","had",
+     "hai","tha","thi","the",
+     "ka","ki","ke",
+     "ko","se","me","par",
+     "aur","ya",
+     "mera","meri","mere",
+     "ye","wo","us"
+  ]);
 
-    if (tokens.length === 0 && rawQuery.length > 0) {
-      // If everything was removed but there was a query, just use raw tokens
-      tokens.push(...rawQuery.split(/\s+/).filter(t => t.length > 0));
-    }
+  // Remove punctuation, tokenize, and filter (stop words + length < 3)
+  const tokens = rawQuery.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")
+                        .split(/\s+/)
+                        .filter(t => t.length >= 3 && !stopWords.has(t));
 
-    const scoredResults = [];
+  // STEP 8: EMPTY CASE HANDLING (if no keywords remain after filtering)
+  if (tokens.length === 0) {
+    dynamicArea.innerHTML = `
+      <div class="empty-search">
+        <i data-lucide="message-square" size="32" color="var(--text-muted)"></i>
+        <p>Please describe the injury<br><span style="font-size: 0.85rem; font-weight: 400; opacity: 0.8;">(e.g., bleeding, burn, fall)</span></p>
+      </div>
+    `;
+    if (window.lucide) lucide.createIcons();
+    return;
+  }
 
-    searchDataset.forEach(item => {
-      let score = 0;
-      const catData = firstAidData[item.category_id];
-      const subCat = catData.subcategories[item.id];
-      
-      const searchableStrings = [
-        ...item.keywords.en,
-        ...item.keywords.hi,
-        subCat.title.en.toLowerCase(),
-        subCat.title.hi.toLowerCase()
-      ];
+  // STEP 4 & 5: SCORING SYSTEM & PRIORITY BOOST
+  const scoredResults = [];
 
-      tokens.forEach(token => {
-        // Check exact match in keywords
-        if (searchableStrings.some(s => s.includes(token))) {
-          score += 1;
-        }
-        // Higher weight if token matches a whole keyword exactly
-        if (searchableStrings.some(s => s === token)) {
-          score += 2;
-        }
-      });
+  searchDataset.forEach(item => {
+    let score = 0;
+    const catData = firstAidData[item.category_id];
+    const subCat = catData.subcategories[item.id];
+    
+    tokens.forEach(token => {
+      // 1. Check database keywords with weights
+      if (item.weightedKeywords && item.weightedKeywords.length > 0) {
+        item.weightedKeywords.forEach(kw => {
+          if (kw.word === token || kw.word.includes(token)) {
+            score += kw.weight;
+          }
+        });
+      }
 
-      if (score > 0) {
-        scoredResults.push({ ...item, score });
+      // 2. Fallback title matching (light weight)
+      if (item.titleKeywords.en.includes(token) || item.titleKeywords.hi.includes(token)) {
+        score += 2;
+      }
+
+      // 3. STEP 5: PRIORITY BOOST (CRITICAL CASES)
+      if (token === "bleeding" || token === "khoon") {
+        if (item.category_id === "bleeding_cuts") score += 2;
+      }
+      if (token === "breathing" || token === "saans") {
+        if (item.id === "cpr") score += 3;
       }
     });
 
-    // Rank by score descending
-    scoredResults.sort((a, b) => b.score - a.score);
-    
-    if (scoredResults.length === 0) {
-      dynamicArea.innerHTML = `
-        <div class="empty-search">
-          <i data-lucide="search-x" size="32" color="var(--text-muted)"></i>
-          <p>${staticUI.noResults[lang]}</p>
-        </div>
-      `;
-    } else {
-      let listHTML = '';
-      scoredResults.forEach(result => {
-        const catData = firstAidData[result.category_id];
-        const subCatData = catData.subcategories[result.id];
-        
-        listHTML += `
-          <div class="search-result-item" onclick="openSearchResult('${catData.id}', '${subCatData.id}')">
-            <div class="search-result-name">${subCatData.title[lang]}</div>
-            <div class="search-result-category" style="color: ${catData.color};">
-              <i data-lucide="${catData.icon}" size="12"></i> ${catData.title[lang]}
-            </div>
-          </div>
-        `;
-      });
-      dynamicArea.innerHTML = `
-        <h3 style="margin-top:0;">${staticUI.searchResults[lang]}</h3>
-        <div class="subcategory-grid"> <!-- grid layout for cards -->
-          ${listHTML}
-        </div>
-      `;
+    if (score >= 2) {
+      scoredResults.push({ ...item, score });
     }
+  });
+
+  // STEP 6: FILTER & RANK (Score >= 2 already filtered, now sort)
+  scoredResults.sort((a, b) => b.score - a.score);
+  
+  // STEP 7: DISPLAY RESULTS
+  if (scoredResults.length === 0) {
+    dynamicArea.innerHTML = `
+      <div class="empty-search">
+        <i data-lucide="search-x" size="32" color="var(--text-muted)"></i>
+        <p>${staticUI.noResults[lang]}</p>
+      </div>
+    `;
+  } else {
+    // Show top 3 first, then others
+    const topMatches = scoredResults.slice(0, 3);
+    const relatedMatches = scoredResults.slice(3);
+
+    let listHTML = '';
+
+    const renderCard = (res) => {
+      const catData = firstAidData[res.category_id];
+      const subCatData = catData.subcategories[res.id];
+      return `
+        <div class="search-result-item" onclick="openSearchResult('${catData.id}', '${subCatData.id}')">
+          <div class="search-result-name">${subCatData.title[lang]}</div>
+          <div class="search-result-category" style="color: ${catData.color};">
+            <i data-lucide="${catData.icon}" size="12"></i> ${catData.title[lang]}
+          </div>
+        </div>
+      `;
+    };
+
+    topMatches.forEach(res => listHTML += renderCard(res));
+    
+    if (relatedMatches.length > 0) {
+      listHTML += `<div style="grid-column: 1 / -1; margin: 12px 0 4px 4px; font-weight: 700; font-size: 0.9rem; color: var(--text-muted);">Related Injuries</div>`;
+      relatedMatches.forEach(res => listHTML += renderCard(res));
+    }
+
+    dynamicArea.innerHTML = `
+      <h3 style="margin-top:0;">${staticUI.searchResults[lang]}</h3>
+      <div class="subcategory-grid">
+        ${listHTML}
+      </div>
+    `;
   }
   
-  if (window.lucide) {
-    lucide.createIcons();
-  }
+  if (window.lucide) lucide.createIcons();
 };
 
 // Routing logic

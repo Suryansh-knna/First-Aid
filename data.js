@@ -559,39 +559,19 @@ const firstAidData = {
 };
 
 const keywordDatabase = [
-  { id: "minor_cuts", en: ["cut", "small cut", "scrape", "scratch", "abrasion", "bloody knee"], hi: ["chota cut", "khurach", "ghis gaya", "thoda khoon", "ghutna ghis gaya"] },
-  { id: "deep_cuts", en: ["deep cut", "open wound", "cut badly"], hi: ["gehra cut", "bada ghaav", "skin khul gaya"] },
-  { id: "heavy_bleeding", en: ["bleeding a lot", "blood flowing", "won’t stop bleeding"], hi: ["bahut khoon", "khoon ruk nahi raha", "bohot bleeding"] },
-  { id: "nosebleed", en: ["nose bleed", "blood from nose"], hi: ["naak se khoon", "nose bleed"] },
-  { id: "puncture_wounds", en: ["nail injury", "sharp object", "pierced skin"], hi: ["nail chubh gaya", "kaanta ghus gaya"] },
-  { id: "bruises", en: ["bruise", "blue mark", "swelling"], hi: ["neela pad gaya", "sujan", "lag gaya"] },
-  { id: "blisters", en: ["blister", "bubble on skin"], hi: ["phoda", "skin bubble"] },
-  { id: "minor_burns", en: ["small burn", "light burn"], hi: ["halka jal gaya", "thoda burn"] },
-  { id: "severe_burns", en: ["severe burn", "burn badly"], hi: ["bahut jal gaya", "zyada burn"] },
-  { id: "scalds", en: ["hot water burn", "steam burn"], hi: ["garam paani gir gaya", "chai gir gayi"] },
-  { id: "electrical_burns", en: ["electric shock", "current injury"], hi: ["current laga", "shock laga"] },
-  { id: "chemical_burns", en: ["acid burn", "chemical spill"], hi: ["acid lag gaya", "chemical gir gaya"] },
-  { id: "sunburn", en: ["sunburn", "sun exposure"], hi: ["dhoop se jal gaya"] },
-  { id: "fractures_sub", en: ["broken bone", "fracture"], hi: ["haddi toot gayi"] },
-  { id: "dislocations", en: ["joint out", "dislocated"], hi: ["joint nikal gaya"] },
-  { id: "sprains", en: ["twisted ankle", "ankle swelling"], hi: ["moch aa gayi", "ankle mud gaya"] },
-  { id: "strains", en: ["muscle pull", "muscle pain"], hi: ["muscle khinch gaya"] },
-  { id: "choking_adult", en: ["choking", "food stuck"], hi: ["gala me atak gaya", "choking"] },
-  { id: "choking_child", en: ["child choking"], hi: ["bachcha choke ho raha"] },
-  { id: "cpr", en: ["not breathing", "CPR"], hi: ["saans nahi aa rahi", "CPR"] },
-  { id: "breathing_difficulty", en: ["hard to breathe", "shortness of breath"], hi: ["saans lene me dikkat"] },
-  { id: "smoke_inhalation", en: ["smoke inhalation"], hi: ["dhuaan andar gaya"] },
-  { id: "gas_exposure", en: ["gas leak"], hi: ["gas leak", "gas smell"] },
-  { id: "mild_head", en: ["hit head", "bumped head"], hi: ["sir lag gaya"] },
-  { id: "severe_head", en: ["head bleeding", "head trauma"], hi: ["sir se khoon"] },
-  { id: "concussion", en: ["dizzy", "confusion"], hi: ["chakkar aa raha"] },
-  { id: "seizures", en: ["seizure", "fits"], hi: ["daura", "fit aa raha"] },
-  { id: "unconscious", en: ["unconscious", "fainted"], hi: ["behosh ho gaya"] },
-  { id: "insect", en: ["mosquito bite", "bee sting"], hi: ["machhar kaata"] },
-  { id: "animal", en: ["dog bite", "animal bite"], hi: ["kutta kaata"] },
-  { id: "snake", en: ["snake bite"], hi: ["saap ne kaata"] },
-  { id: "allergy_mild", en: ["rash", "itching"], hi: ["khujli", "rash"] },
-  { id: "allergy_severe", en: ["anaphylaxis", "severe allergy"], hi: ["face sujan", "saans nahi aa rahi allergy"] }
+  { id: "severe_head", keywords: [{ word: "head", weight: 3 }, { word: "bleeding", weight: 5 }, { word: "trauma", weight: 4 }, { word: "sir", weight: 3 }, { word: "khoon", weight: 5 }] },
+  { id: "mild_head", keywords: [{ word: "head", weight: 3 }, { word: "hit", weight: 2 }, { word: "fell", weight: 1 }, { word: "sir", weight: 3 }] },
+  { id: "minor_cuts", keywords: [{ word: "cut", weight: 3 }, { word: "scrape", weight: 3 }, { word: "abrasion", weight: 3 }, { word: "bloody", weight: 2 }, { word: "khurach", weight: 3 }] },
+  { id: "deep_cuts", keywords: [{ word: "deep cut", weight: 5 }, { word: "open wound", weight: 4 }, { word: "gehra", weight: 5 }] },
+  { id: "heavy_bleeding", keywords: [{ word: "bleeding", weight: 5 }, { word: "blood", weight: 4 }, { word: "khoon", weight: 5 }] },
+  { id: "nosebleed", keywords: [{ word: "nose", weight: 3 }, { word: "bleed", weight: 4 }, { word: "naak", weight: 3 }] },
+  { id: "fractures_sub", keywords: [{ word: "fracture", weight: 5 }, { word: "broken", weight: 4 }, { word: "haddi", weight: 5 }] },
+  { id: "sprains", keywords: [{ word: "twisted", weight: 3 }, { word: "ankle", weight: 3 }, { word: "moch", weight: 4 }] },
+  { id: "minor_burns", keywords: [{ word: "burn", weight: 3 }, { word: "jal gaya", weight: 3 }] },
+  { id: "severe_burns", keywords: [{ word: "severe burn", weight: 5 }, { word: "jal gaya bahut", weight: 5 }] },
+  { id: "choking_adult", keywords: [{ word: "choking", weight: 5 }, { word: "stuck", weight: 4 }, { word: "atak", weight: 5 }] },
+  { id: "cpr", keywords: [{ word: "not breathing", weight: 5 }, { word: "cpr", weight: 5 }, { word: "saans", weight: 5 }] },
+  { id: "breathing_difficulty", keywords: [{ word: "breathing", weight: 4 }, { word: "saans", weight: 4 }] }
 ];
 
 const searchDataset = [];
@@ -603,10 +583,10 @@ Object.values(firstAidData).forEach(cat => {
     searchDataset.push({
       id: subcat.id,
       category_id: cat.id,
-      keywords: {
-        en: customEntry ? customEntry.en : [subcat.title.en.toLowerCase()],
-        hi: customEntry ? customEntry.hi : [subcat.title.hi.toLowerCase()],
-        gu: [subcat.title.gu.toLowerCase()]
+      weightedKeywords: customEntry ? customEntry.keywords : [],
+      titleKeywords: {
+        en: subcat.title.en.toLowerCase(),
+        hi: subcat.title.hi.toLowerCase()
       }
     });
   });
