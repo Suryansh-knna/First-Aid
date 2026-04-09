@@ -334,10 +334,14 @@ function getViewHTML() {
       group.items.forEach(itemId => {
         const subcatObj = catData.subcategories[itemId];
         if (subcatObj) {
+          const iconHTML = subcatObj.customIcon 
+            ? `<img src="${subcatObj.customIcon}" style="width: 24px; height: 24px; object-fit: contain;">`
+            : `<i data-lucide="${catData.icon}" size="20"></i>`;
+            
           listHTML += `
             <div class="list-item" onclick="openInstruction('${subcatObj.id}')">
               <div class="list-item-icon" style="background: ${catData.color}20; color: ${catData.color}">
-                <i data-lucide="${catData.icon}" size="20"></i>
+                ${iconHTML}
               </div>
               <span class="list-item-title">${subcatObj.title[lang]}</span>
               <i data-lucide="chevron-right" size="18" color="var(--text-muted)"></i>

@@ -68,6 +68,7 @@ const firstAidData = {
         id: "minor_cuts",
         title: { en: "Minor cuts & scrapes", hi: "मामूली कट और खरोंच", gu: "નાના કાપા અને ઉઝરડા" },
         severity: "Low",
+        customIcon: "assets/icons/minor_cuts.png",
         steps: [
           { en: "Clean wound with water", hi: "घाव को पानी से साफ करें", gu: "જખમને પાણીથી સાફ કરો" },
           { en: "Apply antiseptic", hi: "एंटीसेप्टिक लगाएं", gu: "એન્ટિસેપ્ટિક લગાવો" },
