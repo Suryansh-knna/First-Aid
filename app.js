@@ -486,10 +486,13 @@ function getViewHTML() {
         </div>
       </div>
       
-      <div style="margin-top: 20px; text-align:center;">
-        <button class="upload-btn" onclick="navigate('home')">
-          <i data-lucide="rotate-ccw"></i> New Scan
-        </button>
+    `;
+  } else if (currentState === 'analyzing') {
+    return `
+      <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px;">
+        <div class="ai-loader" style="width: 80px; height: 80px; border: 6px solid #f3f3f3; border-top: 6px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 24px;"></div>
+        <h2 id="ai-loading-text" style="color: var(--primary);">${staticUI.analyzing[lang]}</h2>
+        <p style="color: var(--text-muted); margin-top: 12px;">${staticUI.matchingDatabase[lang]}</p>
       </div>
     `;
   }
