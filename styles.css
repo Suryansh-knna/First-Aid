@@ -240,7 +240,7 @@ body {
   align-items: center;
   justify-content: center;
   color: #fff;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   position: relative;
   overflow: hidden;
   box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
@@ -273,8 +273,22 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  margin-top: 20px;
+  margin-top: 12px;
   width: 100%;
+}
+
+.disclaimer {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #856404;
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  padding: 12px;
+  border-radius: 8px;
 }
 
 .or-divider {

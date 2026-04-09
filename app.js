@@ -426,7 +426,7 @@ function getViewHTML() {
           ${staticUI.disclaimer[lang]}
         </div>
         <h3 style="margin: 0 0 8px 0;">${staticUI.scanInjuryStep[lang]}</h3>
-        <p style="color: var(--text-muted); margin: 0 0 20px 0; font-size:0.9rem;">${staticUI.scanInjuryDesc[lang]}</p>
+        <p style="color: var(--text-muted); margin: 0 0 12px 0; font-size:0.9rem;">${staticUI.scanInjuryDesc[lang]}</p>
         
         <div class="camera-placeholder">
           <video id="camera-stream" autoplay playsinline muted></video>
@@ -450,7 +450,7 @@ function getViewHTML() {
      return `
         <button class="back-btn" onclick="navigate('camera1')"><i data-lucide="arrow-left"></i> ${staticUI.back[lang]}</button>
         <h3 style="margin: 0 0 8px 0;">${staticUI.scanKitStep[lang]}</h3>
-        <p style="color: var(--text-muted); margin: 0 0 20px 0; font-size:0.9rem;">${staticUI.scanKitDesc[lang]}</p>
+        <p style="color: var(--text-muted); margin: 0 0 12px 0; font-size:0.9rem;">${staticUI.scanKitDesc[lang]}</p>
         
         <div class="camera-placeholder" style="background: #222;">
           <video id="camera-stream" autoplay playsinline muted></video>
