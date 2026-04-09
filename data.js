@@ -375,7 +375,7 @@ const firstAidData = {
     groups: [
       {
         title: { en: "Trauma Levels", hi: "आघात का स्तर", gu: "આઘાતનું સ્તર" },
-        items: ["mild_head", "severe_head"]
+        items: ["mild_head", "severe_head", "face_bruise"]
       },
       {
         title: { en: "Brain-related Conditions", hi: "मस्तिष्क संबंधी स्थितियां", gu: "મગજ સંબંધિત સ્થિતિઓ" },
@@ -395,6 +395,25 @@ const firstAidData = {
           { en: "Keep person still", hi: "व्यक्ति को स्थिर रखें", gu: "વ્યક્તિને સ્થિર રાખો" },
           { en: "Monitor symptoms", hi: "लक्षणों पर नज़र रखें", gu: "લક્ષણો પર નજર રાખો" }
         ]
+      },
+      "face_bruise": {
+        id: "face_bruise",
+        title: { en: "Face Bruise (Facial Abrasion)", hi: "चेहरे की खरोंच (Abrasion)", gu: "ચહેરા પર ઉઝરડો (Abrasion)" },
+        severity: "Mild",
+        kit_items: {
+          en: "Clean cloth / gauze, Antiseptic cream, Bandage",
+          hi: "साफ कपड़ा / धुंध, एंटीसेप्टिक क्रीम, पट्टी",
+          gu: "ચોખ્ખું કપડું / જાળીદાર કાપડ, એન્ટિસેપ્ટિક ક્રીમ, પાટો"
+        },
+        steps: [
+          { en: "Apply cold compress (wrapped cloth) to reduce swelling", hi: "सूजन कम करने के लिए ठंडा सेक (लपेटे हुए कपड़े) लगाएं", gu: "સોજો ઘટાડવા માટે ઠંડો શેક (લપેટેલા કપડાં) લગાવો" },
+          { en: "Keep area clean and avoid touching", hi: "क्षेत्र को साफ रखें और छूने से बचें", gu: "વિસ્તાર સ્વચ્છ રાખો અને સ્પર્શ કરવાનું ટાળો" }
+        ],
+        emergency_help: {
+          en: "🚨 When to Seek Help\n- Increasing redness or swelling\n- Pus or signs of infection\n- Injury near eye affecting vision",
+          hi: "🚨 मदद कब लें\n- बढ़ती लालिमा या सूजन\n- मवाद या संक्रमण के संकेत\n- आंख के पास चोट जो दृष्टि को प्रभावित करती है",
+          gu: "🚨 ક્યારે મદદ લેવી\n- વધતી લાલાશ અથવા સોજો\n- પરૂ અથવા ચેપના ચિહ્નો\n- આંખની નજીકની ઇજા જે દ્રષ્ટિને અસર કરે છે"
+        }
       },
       "severe_head": {
         id: "severe_head",

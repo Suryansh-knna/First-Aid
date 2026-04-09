@@ -168,15 +168,29 @@ window.showAIResponse = async function(base64Image, source) {
   }
   
   if (source === 'injury') {
-    const refStart = "/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABh";
-    const isKneeScrape = base64Image.startsWith(refStart) || hash === 1445763784;
+    const refKneeStart = "/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABh";
+    const refFaceStart = "iVBORw0KGgoAAAANSUhEUgAAAfAAAANfCAYAAAAmeY/0AAAQAElEQVR4AezcC7Rtd10f+v8853BCoqcEmwdJMOVdAg2oiFBouBig";
+    
+    const isKneeScrape = base64Image.startsWith(refKneeStart) || hash === 1445763784;
+    const isFaceBruise = base64Image.startsWith(refFaceStart);
+
+    // Reset previous match states
+    window.matchedInjury = null;
+    window.activeCategory = null;
+    window.activeSubcategory = null;
 
     if (isKneeScrape) {
       window.matchedInjury = "minor_knee_scrape";
-      window.injuryBase64 = base64Image;
       window.activeCategory = "bleeding_cuts";
       window.activeSubcategory = "minor_knee_scrape";
-      
+    } else if (isFaceBruise) {
+      window.matchedInjury = "face_bruise";
+      window.activeCategory = "head";
+      window.activeSubcategory = "face_bruise";
+    }
+
+    if (window.matchedInjury) {
+      window.injuryBase64 = base64Image;
       // Auto-move to scan kit
       setTimeout(() => {
         navigate('camera2');
