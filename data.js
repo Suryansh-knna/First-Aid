@@ -223,6 +223,7 @@ const firstAidData = {
         id: "chemical_burns",
         title: { en: "Chemical burns", hi: "रासायनिक जलन", gu: "રાસાયણિક દાઝવું" },
         severity: "Severe",
+        customIcon: "assets/icons/chemical_burns.png",
         steps: [
           { en: "Rinse with water continuously", hi: "लगातार पानी से धोते रहें", gu: "સતત પાણીથી ધોતા રહો" },
           { en: "Do not apply chemicals", hi: "रसायनों का प्रयोग न करें", gu: "રસાયણો ન લગાવો" }
@@ -270,6 +271,7 @@ const firstAidData = {
         id: "sprains",
         title: { en: "Sprains", hi: "मोच", gu: "મચકોડ" },
         severity: "Moderate",
+        customIcon: "assets/icons/sprains.png",
         steps: [
           { en: "Rest", hi: "आराम", gu: "આરામ" },
           { en: "Ice", hi: "बर्फ लगाएं", gu: "બરફ લગાવો" },
@@ -281,6 +283,7 @@ const firstAidData = {
         id: "strains",
         title: { en: "Strains", hi: "खिंचाव", gu: "ખેંચાણ" },
         severity: "Low",
+        customIcon: "assets/icons/strains.png",
         steps: [
           { en: "Rest muscle", hi: "मांसपेशियों को आराम दें", gu: "સ્નાયુઓને આરામ આપો" },
           { en: "Apply ice", hi: "बर्फ लगाएं", gu: "બરફ લગાવો" }
@@ -290,6 +293,7 @@ const firstAidData = {
         id: "dislocations",
         title: { en: "Dislocations", hi: "जोड़ खिसकना", gu: "સાંધાનું ખસી જવું" },
         severity: "Severe",
+        customIcon: "assets/icons/dislocations.png",
         steps: [
           { en: "Do not move joint", hi: "जोड़ को हिलाएं नहीं", gu: "સાંધાને હલાવશો નહીં" },
           { en: "Immobilize", hi: "स्थिर करें", gu: "સ્થિર કરો" },
@@ -335,6 +339,7 @@ const firstAidData = {
         id: "choking_child",
         title: { en: "Choking (child)", hi: "दम घुटना (बच्चा)", gu: "ગૂંગળામણ (બાળક)" },
         severity: "Severe",
+        customIcon: "assets/icons/choking_child.png",
         steps: [
           { en: "Give back blows", hi: "पीठ पर थपथपाएं", gu: "પીઠ પર થપથપાવો" }
         ]
