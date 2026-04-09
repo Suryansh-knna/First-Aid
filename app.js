@@ -317,10 +317,13 @@ function getViewHTML() {
         <input type="text" id="search-input" placeholder="${staticUI.placeholder[lang]}" oninput="liveSearch(this.value)" onkeypress="if(event.key === 'Enter') handleSearch()">
         <i id="mic-icon" data-lucide="mic" color="var(--primary)" style="cursor:pointer;" onclick="startVoiceSearch()"></i>
       </div>
-      <div class="lang-toggle-container">
-        <button class="lang-btn ${lang === 'en' ? 'active' : ''}" onclick="window.setLanguage('en')">EN</button>
-        <button class="lang-btn ${lang === 'hi' ? 'active' : ''}" onclick="window.setLanguage('hi')">हिन्दी</button>
-        <button class="lang-btn ${lang === 'gu' ? 'active' : ''}" onclick="window.setLanguage('gu')">ગુજરાતી</button>
+      <div class="lang-selector-container">
+        <label class="lang-label">Languages :</label>
+        <select class="lang-select" onchange="window.setLanguage(this.value)">
+          <option value="en" ${lang === 'en' ? 'selected' : ''}>English</option>
+          <option value="hi" ${lang === 'hi' ? 'selected' : ''}>हिन्दी</option>
+          <option value="gu" ${lang === 'gu' ? 'selected' : ''}>ગુજરાતી</option>
+        </select>
       </div>
       <div class="scan-cta" onclick="navigate('camera1')">
         <div class="scan-cta-text">
