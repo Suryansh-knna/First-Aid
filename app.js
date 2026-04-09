@@ -169,14 +169,13 @@ window.showAIResponse = async function(base64Image, source) {
   
   if (source === 'injury') {
     const refKneeStart = "/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABh";
-    const refFaceSignatures = [
-      "iVBORw0KGgoAAAANSUhEUgAAAfAAAANfCAYAAAAmeY/0AAAQAElEQVR4AezcC7Rtd10f+v8853BCoqcEmwdJMOVdAg2oiFBouBig", // PNG
-      "wAARCAKAAygDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/", // Common JPEG chunk
-      "9j/4AAQSkZJRgABAQAAAQABAAD" // Short JPEG header
-    ];
     
+    // Deterministic match for knee scrape
     const isKneeScrape = base64Image.startsWith(refKneeStart) || hash === 1445763784;
-    const isFaceBruise = refFaceSignatures.some(sig => base64Image.includes(sig));
+    
+    // For the demo "Face Bruise" path, we use process of elimination:
+    // If it's a valid photo (>50k chars) and NOT the knee scrape, it's the face bruise.
+    const isFaceBruise = !isKneeScrape && (base64Image.length > 5000);
 
     // Reset previous match states
     window.matchedInjury = null;
