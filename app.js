@@ -18,6 +18,18 @@ window.setLanguage = function(lang) {
 // Set initial header translation on load
 document.addEventListener('DOMContentLoaded', () => {
   window.setLanguage(window.appLanguage);
+
+  // Hide floating button when keyboard is open (detecting window resize)
+  const initialHeight = window.innerHeight;
+  window.addEventListener('resize', () => {
+    const btn = document.querySelector('.floating-no-supplies-btn');
+    if (!btn) return;
+    if (window.innerHeight < initialHeight * 0.8) {
+      btn.style.display = 'none';
+    } else {
+      btn.style.display = 'flex';
+    }
+  });
 });
 
 // Application Routing State
@@ -26,6 +38,7 @@ window.activeSubcategory = null;
 window.currentSearchQuery = '';
 window.matchedInjury = null;
 window.kitDetected = false;
+window.hasFirstAid = true;
 window.injuryBase64 = null;
 
 window.openCategory = function(categoryId) {
@@ -446,7 +459,7 @@ function getViewHTML() {
           <option value="gu" ${lang === 'gu' ? 'selected' : ''}>ગુજરાતી</option>
         </select>
       </div>
-      <div class="scan-cta" onclick="navigate('camera1')">
+      <div class="scan-cta" onclick="window.hasFirstAid = true; navigate('camera1')">
         <div class="scan-cta-text">
           <h3>${staticUI.cameraAssistant[lang]}</h3>
           <p>${staticUI.cameraDesc[lang]}</p>
@@ -500,6 +513,7 @@ function getViewHTML() {
     const subcatObj = catData?.subcategories[window.activeSubcategory];
     if (!subcatObj) return '';
     
+    const lang = window.appLanguage;
     let severityHtml = '';
     const sev = subcatObj.severity;
     if (sev === 'Severe') {
@@ -509,7 +523,61 @@ function getViewHTML() {
     } else {
       severityHtml = `<div class="severity-badge safe"><i data-lucide="info" size="14"></i> ${staticUI.severity[lang]}: Low</div>`;
     }
+
+    // --- NO SUPPLIES MODE ---
+    if (!window.hasFirstAid && subcatObj.noSuppliesMode) {
+      const mode = subcatObj.noSuppliesMode;
+
+      const renderNoSuppSteps = (steps) => steps.map(s => `
+        <div class="no-supplies-step">
+          <div class="no-supplies-step-bullet"></div>
+          <div class="no-supplies-step-text">${s[lang]}</div>
+        </div>
+      `).join('');
+
+      return `
+        <button class="back-btn" onclick="navigate('camera2')"><i data-lucide="arrow-left"></i> ${staticUI.back[lang]}</button>
+        
+        <div class="no-supplies-instructions">
+          <div class="no-supplies-badge">
+            <i data-lucide="package-x" size="14"></i> ${staticUI.noSuppliesLabel[lang]}
+          </div>
+          <h2 style="margin: 0 0 8px 0;">${subcatObj.title[lang]}</h2>
+          ${severityHtml}
+
+          <div class="no-supplies-section">
+            <div class="no-supplies-section-title">
+              <i data-lucide="clock" size="18"></i> ${staticUI.whatToDoNowTitle[lang]}
+            </div>
+            ${renderNoSuppSteps(mode.immediate)}
+          </div>
+
+          <div class="no-supplies-section">
+            <div class="no-supplies-section-title">
+              <i data-lucide="shopping-cart" size="18"></i> ${staticUI.recommendedItemsTitle[lang]}
+            </div>
+            ${renderNoSuppSteps(mode.getToGet)}
+          </div>
+
+          <div class="no-supplies-section">
+            <div class="no-supplies-section-title">
+              <i data-lucide="check-circle" size="18"></i> ${staticUI.afterGettingSuppliesTitle[lang]}
+            </div>
+            ${renderNoSuppSteps(mode.afterSupplies)}
+          </div>
+
+          <div class="safety-note-box">
+            <i data-lucide="alert-circle" color="#b45309" size="20"></i>
+            <div>
+              <div style="font-weight: 800; color: #92400e; margin-bottom: 4px;">${staticUI.safetyNoteTitle[lang]}</div>
+              <div style="font-size: 0.9rem; color: #b45309;">${staticUI.safetyNoteText[lang]}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
     
+    // --- REGULAR MODE ---
     let stepsHtml = '';
     subcatObj.steps.forEach((step, idx) => {
       stepsHtml += `
@@ -575,21 +643,32 @@ function getViewHTML() {
      return `
         <button class="back-btn" onclick="navigate('camera1')"><i data-lucide="arrow-left"></i> ${staticUI.back[lang]}</button>
         <h3 style="margin: 0 0 8px 0;">${staticUI.scanKitStep[lang]}</h3>
-        <p style="color: var(--accent); margin: 0 0 12px 0; font-weight: 700;">${staticUI.kitScanPrompt[lang]}</p>
+        <p style="color: var(--accent); margin: 0 0 4px 0; font-weight: 700;">${staticUI.scanKitHelpSubtitle[lang]}</p>
+        <p style="color: var(--text-muted); margin: 0 0 16px 0; font-size: 0.85rem;">${staticUI.scanHelperText[lang]}</p>
         
         <div class="camera-placeholder" style="background: #222;">
           <video id="camera-stream" autoplay playsinline muted></video>
           <button class="flip-camera-btn" onclick="flipCamera()"><i data-lucide="refresh-ccw" size="20"></i></button>
           <div class="camera-guide" style="border-style: dotted;"></div>
           <div class="camera-status" id="camera-status-2">
-            <button class="capture-btn" style="width: 100%; justify-content: center; color:var(--primary);" onclick="activateCaptureState('camera-status-2', 'analyze')">
+            <button class="capture-btn" style="width: 100%; justify-content: center; color:var(--primary);" onclick="window.hasFirstAid = true; activateCaptureState('camera-status-2', 'analyze')">
               <i data-lucide="camera" style="margin-right:8px;"></i> ${staticUI.takePhoto[lang]}
             </button>
           </div>
         </div>
+
+        <div class="scan-guidelines">
+          <div class="scan-guidelines-title">${staticUI.howToScanTitle[lang]}</div>
+          ${staticUI.howToScanGuidelines[lang].map(g => `<div class="guideline-item"><i data-lucide="check-circle-2" size="14"></i> ${g[lang]}</div>`).join('')}
+        </div>
+
+        <div class="floating-no-supplies-btn" onclick="window.hasFirstAid = false; navigate('instructions')">
+          <i data-lucide="help-circle" size="18"></i> ${staticUI.noFirstAidButtonText[lang]}
+        </div>
+
         <div class="camera-footer" id="camera-footer-2">
           <div class="or-divider">${staticUI.orText[lang]}</div>
-          <input type="file" id="file-upload-2" accept="image/png, image/jpeg" style="display:none;" onchange="handleFileUpload(event, 'analyze')">
+          <input type="file" id="file-upload-2" accept="image/png, image/jpeg" style="display:none;" onchange="window.hasFirstAid = true; handleFileUpload(event, 'analyze')">
           <button class="upload-btn" onclick="document.getElementById('file-upload-2').click()">
             <i data-lucide="image" style="margin-right:8px;"></i> ${staticUI.uploadPhoto[lang]}
           </button>

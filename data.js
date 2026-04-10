@@ -40,7 +40,35 @@ const staticUI = {
   stepsFromKit: { en: "📋 Step-by-Step First Aid", hi: "📋 चरण-दर-चरण प्राथमिक चिकित्सा", gu: "📋 પગલું-દર-પગલું પ્રાથમિક સારવાર" },
   standardKitAvailable: { en: "Standard first aid kit available", hi: "मानक प्राथमिक चिकित्सा किट उपलब्ध है", gu: "સ્ટાન્ડર્ડ ફર્સ્ટ એઇડ કીટ ઉપલબ્ધ છે" },
   kitScanPrompt: { en: "Injury identified. Now scan original first aid kit.", hi: "चोट की पहचान हो गई है। अब अपनी मूल प्राथमिक चिकित्सा किट को स्कैन करें.", gu: "ઇજાની ઓળખ થઈ ગઈ છે. હવે તમારી મૂળ પ્રાથમિક સારવાર કીટને સ્કેન કરો." },
-  preparingGuidance: { en: "Preparing guidance...", hi: "मार्गदर्शन तैयार हो रहा है...", gu: "માર્ગદર્શન તૈયાર કરી રહ્યા છીએ..." }
+  preparingGuidance: { en: "Preparing guidance...", hi: "मार्गदर्शन तैयार हो रहा है...", gu: "માર્ગદર્શન તૈયાર કરી રહ્યા છીએ..." },
+  scanKitHelpSubtitle: { 
+    en: "Scan for first aid kits, medicine cabinets, or individual medicines", 
+    hi: "फर्स्ट एड किट, मेडिसिन कैबिनेट या दवाओं को स्कैन करें", 
+    gu: "ફર્સ્ટ એઇડ કીટ, મેડિસિન કેબિનેટ અથવા દવાઓ સ્કેન કરો" 
+  },
+  scanHelperText: { 
+    en: "Take clear photos of available supplies so we can guide you better", 
+    hi: "उपलब्ध आपूर्ति की स्पष्ट तस्वीरें लें ताकि हम आपको बेहतर मार्गदर्शन दे सकें", 
+    gu: "ઉપલબ્ધ વસ્તુઓના સ્પષ્ટ ફોટા લો જેથી અમે તમને વધુ સારું માર્ગદર્શન આપી શકીએ" 
+  },
+  howToScanTitle: { en: "How to scan properly", hi: "ठीक से स्कैन कैसे करें", gu: "યોગ્ય રીતે કેવી રીતે સ્કેન કરવું" },
+  howToScanGuidelines: [
+    { en: "Keep items clearly visible", hi: "वस्तुओं को स्पष्ट रूप से दिखाई देने दें", gu: "વસ્તુઓ સ્પષ્ટપણે દેખાય તેમ રાખો" },
+    { en: "Avoid blurry or dark images", hi: "धुंधली या डार्क तस्वीरों से बचें", gu: "ઝાંખી અથવા અંધારાવાળી છબીઓ ટાળો" },
+    { en: "Capture medicine names clearly", hi: "दवाओं के नाम स्पष्ट रूप से कैप्चर करें", gu: "દવાઓના નામ સ્પષ્ટપણે દેખાય તેમ ફોટો લો" },
+    { en: "Include all supplies in one frame", hi: "सभी आपूर्ति को एक फ्रेम में शामिल करें", gu: "બધી વસ્તુઓ એક ફ્રેમમાં સમાવવાનો પ્રયાસ કરો" }
+  ],
+  noFirstAidButtonText: { en: "No first aid?", hi: "फर्स्ट एड नहीं है?", gu: "ફર્સ્ટ એઇડ નથી?" },
+  noSuppliesLabel: { en: "No supplies mode", hi: "बिना आपूर्ति मोड", gu: "વસ્તુઓ વગરનો મોડ" },
+  whatToDoNowTitle: { en: "What you can do right now", hi: "अभी आप क्या कर सकते हैं", gu: "તમે અત્યારે શું કરી શકો" },
+  recommendedItemsTitle: { en: "Recommended items to get", hi: "प्राप्त करने के लिए अनुशंसित वस्तुएं", gu: "મેળવવા માટે જરૂરી વસ્તુઓ" },
+  afterGettingSuppliesTitle: { en: "When you have supplies", hi: "जब आपके पास आपूर्ति हो", gu: "જ્યારે તમારી પાસે વસ્તુઓ હોય" },
+  safetyNoteTitle: { en: "Safety Note", hi: "सुरक्षा नोट", gu: "સુરક્ષા નોંધ" },
+  safetyNoteText: { 
+    en: "If symptoms worsen, seek medical help immediately", 
+    hi: "यदि लक्षण बिगड़ते हैं, तो तुरंत चिकित्सा सहायता लें", 
+    gu: "જો લક્ષણો વધુ ખરાબ થાય, તો તરત જ તબીબી મદદ મેળવો" 
+  }
 };
 
 const firstAidData = {
@@ -160,6 +188,26 @@ const firstAidData = {
           en: "🚨 When to Seek Help\n- If swelling increases\n- If pus forms\n- If pain worsens",
           hi: "🚨 मदद कब लें\n- यदि सूजन बढ़ जाती है\n- यदि मवाद (pus) बनता है\n- यदि दर्द बढ़ जाता है",
           gu: "🚨 ક્યારે મદદ લેવી\n- જો સોજો વધે\n- જો પરૂ (pus) થાય\n- જો દુખાવો વધે"
+        },
+        noSuppliesMode: {
+          immediate: [
+            { en: "Rinse wound with clean water", hi: "घाव को साफ पानी से धोएं", gu: "ઘાને ચોખ્ખા પાણીથી ધોઈ લો" },
+            { en: "Remove visible dirt gently", hi: "धीरे से दिखाई देने वाली गंदगी हटाएं", gu: "દેખાતી ગંદકી ધીમેથી દૂર કરો" },
+            { en: "Let it air dry", hi: "इसे हवा में सूखने दें", gu: "તેને હવામાં સૂકાવા દો" },
+            { en: "Avoid touching with dirty hands", hi: "गंदे हाथों से छूने से बचें", gu: "ગંદા હાથે સ્પર્શ કરવાનું ટાળો" }
+          ],
+          getToGet: [
+            { en: "Antiseptic liquid", hi: "एंटीसेप्टिक लिक्विड", gu: "એન્ટિસેપ્ટિક પ્રવાહી" },
+            { en: "Cotton or sterile gauze", hi: "रुई या स्टेरिल गेज", gu: "કપાસ અથવા જંતુરહિત જાળી" },
+            { en: "Adhesive bandages", hi: "बैंड-एड/पट्टियाँ", gu: "એડહેસિવ પાટા (બેન્ડ-એઇડ)" },
+            { en: "Antibiotic ointment", hi: "एंटीबायोटिक मलहम", gu: "એન્ટીબાયોટીક મલમ" }
+          ],
+          afterSupplies: [
+            { en: "Clean wound with antiseptic", hi: "एंटीसेप्टिक से घाव को साफ करें", gu: "એન્ટિસેપ્ટિકથી ઘા સાફ કરો" },
+            { en: "Apply ointment", hi: "मलहम लगाएं", gu: "મલમ લગાવો" },
+            { en: "Cover with bandage", hi: "पट्टी से ढके", gu: "પાટા વડે ઢાંકો" },
+            { en: "Replace daily", hi: "रोजाना बदलें", gu: "દરરોજ બદલો" }
+          ]
         }
       }
     }
@@ -398,7 +446,7 @@ const firstAidData = {
     groups: [
       {
         title: { en: "Trauma Levels", hi: "आघात का स्तर", gu: "આઘાતનું સ્તર" },
-        items: ["mild_head", "severe_head", "face_bruise"]
+        items: ["mild_head", "head_bruise", "severe_head", "face_bruise"]
       },
       {
         title: { en: "Brain-related Conditions", hi: "मस्तिष्क संबंधी स्थितियां", gu: "મગજ સંબંધિત સ્થિતિઓ" },
