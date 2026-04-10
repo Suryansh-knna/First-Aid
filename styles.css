@@ -800,9 +800,83 @@ body {
   100% { transform: scale(1); filter: drop-shadow(0 10px 20px rgba(0,0,0,0.08)); }
 }
 
-.subcategory-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-top: 12px;
+/* Sound Wave Mic Animation */
+.mic-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.voice-wave {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 24px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.wave-bar {
+  width: 3px;
+  height: 20%;
+  background-color: var(--accent);
+  border-radius: 1.5px;
+  transition: height 0.3s ease, background-color 0.3s ease;
+}
+
+/* States */
+.mic-wrapper.listening .voice-wave {
+  opacity: 1;
+}
+
+.mic-wrapper.listening #mic-icon {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+/* Staggered Animations for Listening state */
+.mic-wrapper.listening .wave-bar {
+  animation: soundWave 0.6s ease-in-out infinite alternate;
+}
+
+.mic-wrapper.listening .wave-bar:nth-child(1) { height: 40%; animation-delay: 0.1s; animation-duration: 0.5s; opacity: 0.85; }
+.mic-wrapper.listening .wave-bar:nth-child(2) { height: 70%; animation-delay: 0.2s; animation-duration: 0.7s; }
+.mic-wrapper.listening .wave-bar:nth-child(3) { height: 100%; animation-delay: 0s; animation-duration: 0.4s; }
+.mic-wrapper.listening .wave-bar:nth-child(4) { height: 70%; animation-delay: 0.15s; animation-duration: 0.6s; }
+.mic-wrapper.listening .wave-bar:nth-child(5) { height: 40%; animation-delay: 0.25s; animation-duration: 0.8s; opacity: 0.85; }
+
+/* Processing state: Slow down and shrink */
+.mic-wrapper.processing .wave-bar {
+  animation: processingWave 1.2s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+.mic-wrapper.processing #clear-search {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+@keyframes soundWave {
+  0% { height: 20%; transform: scaleY(1); }
+  100% { height: 100%; transform: scaleY(1.1); }
+}
+
+@keyframes processingWave {
+  0%, 100% { height: 30%; }
+  50% { height: 50%; opacity: 0.8; }
+}
+
+/* Tap feedback */
+.mic-tap-effect {
+  animation: micTap 0.3s ease-out forwards;
+}
+
+@keyframes micTap {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
 }

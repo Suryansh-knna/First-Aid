@@ -329,40 +329,62 @@ window.clearSearch = function() {
 
 window.startVoiceSearch = function() {
   const micIcon = document.getElementById('mic-icon');
-  if (micIcon) {
-    micIcon.style.color = "var(--accent)";
+  const micWrapper = micIcon ? micIcon.closest('.mic-wrapper') : null;
+  
+  if (micWrapper) {
+    micWrapper.classList.add('mic-tap-effect');
+    setTimeout(() => micWrapper.classList.remove('mic-tap-effect'), 300);
   }
   
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) {
     alert("Speech recognition isn't supported in this browser.");
-    if (micIcon) micIcon.style.color = "var(--primary)";
     return;
   }
   
   const recognition = new SpeechRecognition();
   recognition.continuous = false;
   recognition.interimResults = false;
-  // Fallback map for listening languages
   const langMap = { 'en': 'en-US', 'hi': 'hi-IN', 'gu': 'gu-IN' };
   recognition.lang = langMap[window.appLanguage] || 'en-US';
   
+  recognition.onstart = function() {
+    if (micWrapper) {
+      micWrapper.classList.add('listening');
+    }
+  };
+
   recognition.onresult = function(event) {
+    if (micWrapper) {
+      micWrapper.classList.remove('listening');
+      micWrapper.classList.add('processing');
+    }
     const transcript = event.results[0][0].transcript;
     const input = document.getElementById('search-input');
     if (input) {
       input.value = transcript;
     }
-    window.liveSearch(transcript);
+    setTimeout(() => {
+      window.liveSearch(transcript);
+      if (micWrapper) micWrapper.classList.remove('processing');
+    }, 600);
   };
   
   recognition.onerror = function(event) {
     console.error("Speech recognition error:", event.error);
-    if (micIcon) micIcon.style.color = "var(--primary)";
+    if (micWrapper) {
+      micWrapper.classList.remove('listening', 'processing');
+    }
   };
   
   recognition.onend = function() {
-    if (micIcon) micIcon.style.color = "var(--primary)";
+    // Keep processing state a bit if it was triggered by onresult, 
+    // otherwise clean up.
+    setTimeout(() => {
+      if (micWrapper && !micWrapper.classList.contains('processing')) {
+        micWrapper.classList.remove('listening');
+      }
+    }, 500);
   };
   
   recognition.start();
@@ -391,7 +413,16 @@ function getViewHTML() {
         <i data-lucide="search" color="var(--text-muted)"></i>
         <input type="text" id="search-input" placeholder="${staticUI.placeholder[lang]}" oninput="liveSearch(this.value)" onkeypress="if(event.key === 'Enter') handleSearch()">
         <i id="clear-search" data-lucide="x-circle" color="var(--text-muted)" style="cursor:pointer; display:none;" onclick="clearSearch()"></i>
-        <i id="mic-icon" data-lucide="mic" color="var(--primary)" style="cursor:pointer;" onclick="startVoiceSearch()"></i>
+        <div class="mic-wrapper">
+          <div class="voice-wave">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+          </div>
+          <i id="mic-icon" data-lucide="mic" color="var(--primary)" style="cursor:pointer;" onclick="startVoiceSearch()"></i>
+        </div>
       </div>
       <div class="lang-selector-container">
         <label class="lang-label">Languages :</label>
