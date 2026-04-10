@@ -52,9 +52,15 @@ window.liveSearch = function(query) {
   const lang = window.appLanguage;
   
   if (!dynamicArea) return;
+
+  const langSelector = document.querySelector('.lang-selector-container');
+  const scanCta = document.querySelector('.scan-cta');
   
   // Empty Case Handling
   if (rawQuery === '') {
+    if (langSelector) langSelector.style.display = 'flex';
+    if (scanCta) scanCta.style.display = 'flex';
+
     let cards = '';
     for (const catObj of Object.values(firstAidData)) {
       cards += `
@@ -82,6 +88,10 @@ window.liveSearch = function(query) {
     if (window.lucide) lucide.createIcons();
     return;
   }
+
+  // Active Search State: Hide default hero elements
+  if (langSelector) langSelector.style.display = 'none';
+  if (scanCta) scanCta.style.display = 'none';
 
   // STEP 1 & 3: STOP WORD FILTER & PROCESSING
   const stopWords = new Set([
