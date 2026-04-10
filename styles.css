@@ -833,9 +833,18 @@ body {
   opacity: 1;
 }
 
+#mic-icon {
+  transition: transform 0.3s ease, opacity 0.15s ease;
+}
+
 .mic-wrapper.listening #mic-icon {
-  transform: scale(1.05);
-  transition: transform 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mic-wrapper.processing #mic-icon {
+  opacity: 0.2;
+  transform: scale(0.9);
 }
 
 /* Staggered Animations for Listening state */
