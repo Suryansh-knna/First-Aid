@@ -122,6 +122,14 @@ body {
   height: 24px !important;
   flex-shrink: 0 !important;
   min-width: 24px !important;
+  min-height: 24px !important;
+}
+
+/* Ensure Lucide icons are centered and sized properly within their tags */
+.search-container i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mic-wrapper {
