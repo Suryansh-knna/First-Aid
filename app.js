@@ -524,94 +524,105 @@ function getViewHTML() {
       severityHtml = `<div class="severity-badge safe"><i data-lucide="info" size="14"></i> ${staticUI.severity[lang]}: Low</div>`;
     }
 
+    const renderPremiumSteps = (steps) => {
+      if (!steps) return '';
+      return steps.map((s, idx) => `
+        <div class="step-card-premium">
+          <div class="step-number-col">${idx + 1}</div>
+          <div class="step-content-col">${s[lang]}</div>
+        </div>
+      `).join('');
+    };
+
+    const renderEmergencyPremium = (text) => {
+      if (!text) return '';
+      const lines = text.split('\n').filter(l => l.trim());
+      const titleLine = lines.find(l => l.includes('When to Seek Help'));
+      const bulletLines = lines.filter(l => l !== titleLine);
+      
+      return `
+        <div class="emergency-help-premium">
+          <div class="emergency-title-premium">🚨 ${staticUI.emergency_help_title ? staticUI.emergency_help_title[lang] : "When to Seek Help"}</div>
+          <ul class="emergency-list-premium">
+            ${bulletLines.map(line => `<li class="emergency-item-premium">${line.replace(/^- /, '')}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+    };
+
     // --- NO SUPPLIES MODE ---
     if (!window.hasFirstAid && subcatObj.noSuppliesMode) {
       const mode = subcatObj.noSuppliesMode;
 
-      const renderNoSuppSteps = (steps) => steps.map(s => `
-        <div class="no-supplies-step">
-          <div class="no-supplies-step-bullet"></div>
-          <div class="no-supplies-step-text">${s[lang]}</div>
-        </div>
-      `).join('');
-
       return `
         <button class="back-btn" onclick="navigate('camera2')"><i data-lucide="arrow-left"></i> ${staticUI.back[lang]}</button>
         
-        <div class="no-supplies-instructions">
-          <div class="no-supplies-badge">
-            <i data-lucide="package-x" size="14"></i> ${staticUI.noSuppliesLabel[lang]}
+        <div class="assessment-container">
+          <div class="title-section">
+            <div class="ai-header-red">${staticUI.aiAssessment[lang]}</div>
+            <div class="injury-subheader-red">${staticUI.injuryDetected[lang]}</div>
+            <h1 class="injury-title-main">${subcatObj.title[lang]}</h1>
           </div>
-          <h2 style="margin: 0 0 8px 0;">${subcatObj.title[lang]}</h2>
-          ${severityHtml}
 
-          <div class="no-supplies-section">
-            <div class="no-supplies-section-title">
-              <i data-lucide="clock" size="18"></i> ${staticUI.whatToDoNowTitle[lang]}
+          <div style="padding: 0 20px 20px 20px;">
+            <div class="status-card-premium status-card-no-supplies">
+              <div class="kit-header-row">
+                <i data-lucide="package-x" size="20"></i>
+                <span class="kit-title-text">${staticUI.noSuppliesLabel[lang]}</span>
+              </div>
+              <p style="margin: 0; color: #92400e; font-weight: 600; font-size: 0.95rem; line-height: 1.4;">${staticUI.kitNotRecognized[lang]}</p>
             </div>
-            ${renderNoSuppSteps(mode.immediate || [])}
-          </div>
 
-          <div class="no-supplies-section">
-            <div class="no-supplies-section-title">
-              <i data-lucide="shopping-cart" size="18"></i> ${staticUI.recommendedItemsTitle[lang]}
+            <div class="steps-heading-premium">
+              <i data-lucide="clock" size="20" color="#c40000"></i> ${staticUI.whatToDoNowTitle[lang]}
             </div>
-            ${renderNoSuppSteps(mode.getToGet || [])}
-          </div>
+            ${renderPremiumSteps(mode.immediate)}
 
-          <div class="no-supplies-section">
-            <div class="no-supplies-section-title">
-              <i data-lucide="check-circle" size="18"></i> ${staticUI.afterGettingSuppliesTitle[lang]}
+            <div class="steps-heading-premium">
+              <i data-lucide="shopping-cart" size="20" color="#c40000"></i> ${staticUI.recommendedItemsTitle[lang]}
             </div>
-            ${renderNoSuppSteps(mode.afterSupplies || [])}
-          </div>
+            ${renderPremiumSteps(mode.getToGet)}
 
-          <div class="safety-note-box">
-            <i data-lucide="alert-circle" color="#b45309" size="20"></i>
-            <div>
-              <div style="font-weight: 800; color: #92400e; margin-bottom: 4px;">${staticUI.safetyNoteTitle[lang]}</div>
-              <div style="font-size: 0.9rem; color: #b45309;">${staticUI.safetyNoteText[lang]}</div>
+            <div class="steps-heading-premium">
+              <i data-lucide="check-circle" size="20" color="#c40000"></i> ${staticUI.afterGettingSuppliesTitle[lang]}
+            </div>
+            ${renderPremiumSteps(mode.afterSupplies)}
+
+            ${renderEmergencyPremium(subcatObj.emergency_help ? subcatObj.emergency_help[lang] : "")}
+
+            <div class="safety-note-premium">
+                <div class="safety-note-icon">
+                    <i data-lucide="alert-circle" color="#92400e" size="20"></i>
+                </div>
+                <div class="safety-note-content">
+                    <h4>${staticUI.safetyNoteTitle[lang]}</h4>
+                    <p>${staticUI.safetyNoteText[lang]}</p>
+                </div>
             </div>
           </div>
         </div>
       `;
     }
     
-    // --- REGULAR MODE ---
-    let stepsHtml = '';
-    if (subcatObj.steps) {
-      subcatObj.steps.forEach((step, idx) => {
-        stepsHtml += `
-          <div class="step-card">
-            <div class="step-number">${idx + 1}</div>
-            <div class="step-text">${step[lang]}</div>
-          </div>
-        `;
-      });
-    }
-
-    let emergencyPrompt = '';
-    if (sev === 'Severe') {
-      emergencyPrompt = `
-        <div class="emergency-prompt" style="margin-top: 24px;">
-          <button onclick="triggerEmergencyCall()"><i data-lucide="phone" size="18"></i> ${staticUI.callEmergency[lang]}</button>
-        </div>
-      `;
-    }
-
+    // --- REGULAR MODE (Clicking from list) ---
     return `
-      <button class="back-btn" onclick="navigate('subcategories')"><i data-lucide="arrow-left"></i> ${catData.title[lang]}</button>
-      <div class="disclaimer" style="margin-bottom:12px;">
-        <i data-lucide="alert-triangle" color="#856404" style="flex-shrink:0;"></i>
-        ${staticUI.disclaimer[lang]}
-      </div>
-      <h2 style="margin: 0 0 8px 0;">${subcatObj.title[lang]}</h2>
-      ${severityHtml}
+      <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> ${staticUI.back[lang]}</button>
       
-      <div class="steps-container" style="margin-top:24px;">
-        ${stepsHtml}
+      <div class="assessment-container">
+        <div class="title-section">
+          <h1 class="injury-title-main">${subcatObj.title[lang]}</h1>
+          ${severityHtml}
+        </div>
+
+        <div style="padding: 20px;">
+          <div class="steps-heading-premium">
+            <i data-lucide="list-checks" size="20" color="#c40000"></i> Step-by-Step Guide
+          </div>
+          ${renderPremiumSteps(subcatObj.steps)}
+          
+          ${renderEmergencyPremium(subcatObj.emergency_help ? subcatObj.emergency_help[lang] : "")}
+        </div>
       </div>
-      ${emergencyPrompt}
     `;
   } else if (currentState === 'camera1') {
       return `
@@ -628,17 +639,19 @@ function getViewHTML() {
           <button class="flip-camera-btn" onclick="flipCamera()"><i data-lucide="refresh-ccw" size="20"></i></button>
           <div class="camera-guide"></div>
           <div class="camera-status" id="camera-status-1">
-            <button class="capture-btn" style="width: 100%; justify-content: center;" onclick="activateCaptureState('camera-status-1', 'camera2')">
-              <i data-lucide="camera" style="margin-right:8px;"></i> ${staticUI.takePhoto[lang]}
+            <button class="capture-btn" onclick="activateCaptureState('camera-status-1', 'camera2')">
+              <i data-lucide="camera"></i> ${staticUI.takePhoto[lang]}
             </button>
           </div>
         </div>
-        <div class="camera-footer" id="camera-footer-1">
+        <div class="camera-actions-row">
           <div class="or-divider">${staticUI.orText[lang]}</div>
-          <input type="file" id="file-upload-1" accept="image/png, image/jpeg" style="display:none;" onchange="handleFileUpload(event, 'camera2')">
-          <button class="upload-btn" onclick="document.getElementById('file-upload-1').click()">
-            <i data-lucide="image" style="margin-right:8px;"></i> ${staticUI.uploadPhoto[lang]}
-          </button>
+          <div class="camera-action-wrapper">
+             <input type="file" id="file-upload-1" accept="image/png, image/jpeg" style="display:none;" onchange="handleFileUpload(event, 'camera2')">
+             <button class="upload-btn" onclick="document.getElementById('file-upload-1').click()">
+                <i data-lucide="image"></i> ${staticUI.uploadPhoto[lang]}
+             </button>
+          </div>
         </div>
       `;
   } else if (currentState === 'camera2') {
@@ -653,27 +666,37 @@ function getViewHTML() {
           <button class="flip-camera-btn" onclick="flipCamera()"><i data-lucide="refresh-ccw" size="20"></i></button>
           <div class="camera-guide" style="border-style: dotted;"></div>
           <div class="camera-status" id="camera-status-2">
-            <button class="capture-btn" style="width: 100%; justify-content: center; color:var(--primary);" onclick="window.hasFirstAid = true; activateCaptureState('camera-status-2', 'analyze')">
-              <i data-lucide="camera" style="margin-right:8px;"></i> ${staticUI.takePhoto[lang]}
+            <button class="capture-btn" onclick="window.hasFirstAid = true; activateCaptureState('camera-status-2', 'analyze')">
+              <i data-lucide="camera"></i> ${staticUI.takePhoto[lang]}
             </button>
           </div>
         </div>
 
-        <div class="scan-guidelines">
-          <div class="scan-guidelines-title">${staticUI.howToScanTitle[lang]}</div>
-          ${staticUI.howToScanGuidelines.map(g => `<div class="guideline-item"><i data-lucide="check-circle-2" size="14"></i> ${g[lang]}</div>`).join('')}
-        </div>
-
-        <div class="floating-no-supplies-btn" onclick="window.hasFirstAid = false; navigate('instructions')">
-          <i data-lucide="help-circle" size="18"></i> ${staticUI.noFirstAidButtonText[lang]}
-        </div>
-
-        <div class="camera-footer" id="camera-footer-2">
+        <div class="camera-actions-row">
           <div class="or-divider">${staticUI.orText[lang]}</div>
-          <input type="file" id="file-upload-2" accept="image/png, image/jpeg" style="display:none;" onchange="window.hasFirstAid = true; handleFileUpload(event, 'analyze')">
-          <button class="upload-btn" onclick="document.getElementById('file-upload-2').click()">
-            <i data-lucide="image" style="margin-right:8px;"></i> ${staticUI.uploadPhoto[lang]}
-          </button>
+          <div class="camera-action-wrapper">
+            <input type="file" id="file-upload-2" accept="image/png, image/jpeg" style="display:none;" onchange="window.hasFirstAid = true; handleFileUpload(event, 'analyze')">
+            <button class="upload-btn" onclick="document.getElementById('file-upload-2').click()">
+              <i data-lucide="image"></i> ${staticUI.uploadPhoto[lang]}
+            </button>
+            <div class="floating-no-supplies-btn" onclick="window.hasFirstAid = false; navigate('instructions')">
+              <i data-lucide="help-circle" size="20"></i> ${staticUI.noFirstAidButtonText[lang]}
+            </div>
+          </div>
+        </div>
+
+        <div class="scan-guidelines" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin: 24px 0 0 0;">
+          <div class="scan-guidelines-title" style="color: #1a1a1a; font-size: 1rem; margin-bottom: 16px;">
+            <i data-lucide="info" size="18" color="#c40000"></i> ${staticUI.howToScanTitle[lang]}
+          </div>
+          <div style="display: grid; gap: 12px;">
+            ${staticUI.howToScanGuidelines.map(g => `
+              <div class="guideline-item" style="color: #475569; font-weight: 500; font-size: 0.9rem; gap: 12px;">
+                <i data-lucide="check-circle-2" size="18" color="#10b981"></i> 
+                <span>${g[lang]}</span>
+              </div>
+            `).join('')}
+          </div>
         </div>
       `;
   } else if (currentState === 'chat') {
@@ -681,70 +704,85 @@ function getViewHTML() {
     const subcatObj = catData?.subcategories[window.activeSubcategory];
     if (!subcatObj) return '';
     
+    const lang = window.appLanguage;
+
+    const renderPremiumSteps = (steps) => {
+      if (!steps) return '';
+      return steps.map((s, idx) => `
+        <div class="step-card-premium">
+          <div class="step-number-col">${idx + 1}</div>
+          <div class="step-content-col">${s[lang]}</div>
+        </div>
+      `).join('');
+    };
+
+    const renderEmergencyPremium = (text) => {
+      if (!text) return '';
+      const lines = text.split('\n').filter(l => l.trim());
+      const titleLine = lines.find(l => l.includes('When to Seek Help'));
+      const bulletLines = lines.filter(l => l !== titleLine);
+      
+      return `
+        <div class="emergency-help-premium">
+          <div class="emergency-title-premium">🚨 ${staticUI.emergency_help_title ? staticUI.emergency_help_title[lang] : "When to Seek Help"}</div>
+          <ul class="emergency-list-premium">
+            ${bulletLines.map(line => `<li class="emergency-item-premium">${line.replace(/^- /, '')}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+    };
+    
     let kitSection = '';
     if (window.kitDetected) {
       kitSection = `
-        <div style="margin-top: 20px; padding: 16px; background: #f0fdf4; border: 1px solid #bcf0da; border-radius: 12px;">
-          <h4 style="margin: 0 0 8px 0; color: #166534; display: flex; align-items:center; gap:8px;">
-            <i data-lucide="package-check" size="18"></i> ${staticUI.kitDetectedLabel[lang]}
-          </h4>
-          <p style="margin: 0 0 12px 0; font-size: 0.9rem; color: #166534; font-weight: 600;">${staticUI.standardKitAvailable[lang]}</p>
-          
-          <div style="border-top: 1px solid #bcf0da; pt: 12px; margin-top: 12px;">
-            <p style="font-weight: 800; font-size: 0.85rem; color: #166534; margin: 12px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;">${staticUI.itemsFromKit[lang]}</p>
-            <p style="color: #14532d; font-weight: 600;">${subcatObj.kit_items ? subcatObj.kit_items[lang] : "-"}</p>
+        <div class="status-card-premium status-card-kit">
+          <div class="kit-header-row">
+            <i data-lucide="package-check" size="20"></i>
+            <span class="kit-title-text">🧰 ${staticUI.kitDetectedLabel[lang].replace('🧰 ', '')}</span>
           </div>
+          <p style="margin: 0; font-size: 0.95rem; color: #166534; font-weight: 600;">${staticUI.standardKitAvailable[lang]}</p>
+          
+          <div class="use-items-label">
+            📝 ${staticUI.itemsFromKit[lang].replace('🧾 ', '')}
+          </div>
+          <div class="kit-items-list">${subcatObj.kit_items ? subcatObj.kit_items[lang] : "-"}</div>
         </div>
       `;
     } else {
        kitSection = `
-        <div style="margin-top: 20px; padding: 16px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px;">
-          <p style="margin: 0; color: #92400e; font-weight: 600; font-size: 0.9rem;">${staticUI.kitNotRecognized[lang]}</p>
+        <div class="status-card-premium status-card-no-supplies">
+          <div class="kit-header-row">
+            <i data-lucide="package-x" size="20"></i>
+            <span class="kit-title-text">${staticUI.noSuppliesLabel[lang]}</span>
+          </div>
+          <p style="margin: 0; color: #92400e; font-weight: 600; font-size: 0.95rem;">${staticUI.kitNotRecognized[lang]}</p>
         </div>
       `;
-    }
-    
-    let stepsHtml = '';
-    if (subcatObj.steps) {
-      subcatObj.steps.forEach((step, idx) => {
-        stepsHtml += `
-          <div class="step-card">
-            <div class="step-number">${idx + 1}</div>
-            <div class="step-text">${step[lang]}</div>
-          </div>
-        `;
-      });
     }
 
     return `
       <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> ${staticUI.back[lang]}</button>
       
-      <div class="assessment-container" style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.08); border: 1px solid var(--border);">
-        <div style="padding: 20px; border-bottom: 1px solid var(--border); background: linear-gradient(to right, #f8fafc, #fff);">
-           <div style="display:flex; align-items:center; gap:10px; margin-bottom: 12px; color: var(--primary);">
-              <i data-lucide="bot" size="28"></i> <span style="font-weight: 800; font-size:1.3rem;">${staticUI.aiAssessment[lang]}</span>
-          </div>
-          
-          <h3 style="margin: 12px 0 4px 0; color: var(--accent);">${staticUI.injuryDetected[lang]}</h3>
-          <h2 style="margin: 0 0 12px 0; font-size: 1.5rem;">${subcatObj.title[lang]}</h2>
+      <div class="assessment-container">
+        <div class="title-section">
+          <div class="ai-header-red">${staticUI.aiAssessment[lang]}</div>
+          <div class="injury-subheader-red">${staticUI.injuryDetected[lang]}</div>
+          <h1 class="injury-title-main">${subcatObj.title[lang]}</h1>
         </div>
         
-        <div style="padding: 20px;">
+        <div style="padding: 0 20px 20px 20px;">
           ${kitSection}
           
-          <h3 style="margin: 24px 0 16px 0; display:flex; align-items:center; gap:8px;">
-            <i data-lucide="list-checks" size="20" color="var(--primary)"></i> ${staticUI.stepsFromKit[lang]}
-          </h3>
+          <div class="steps-heading-premium">
+            📋 ${staticUI.stepsFromKit[lang].replace('📋 ', '')}
+          </div>
           <div class="steps-container">
-            ${stepsHtml}
+            ${renderPremiumSteps(subcatObj.steps)}
           </div>
           
-          <div class="emergency-help" style="margin-top: 30px;">
-            ${subcatObj.emergency_help ? subcatObj.emergency_help[lang] : ""}
-          </div>
+          ${renderEmergencyPremium(subcatObj.emergency_help ? subcatObj.emergency_help[lang] : "")}
         </div>
       </div>
-      
     `;
   } else if (currentState === 'analyzing') {
     return `

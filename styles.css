@@ -300,8 +300,30 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  margin-top: 12px;
+  margin-top: 24px;
   width: 100%;
+}
+
+.camera-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+.camera-actions-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin: 16px 0;
+}
+
+.camera-action-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  justify-content: center;
 }
 
 .disclaimer {
@@ -329,18 +351,18 @@ body {
   background: white;
   color: var(--text-dark);
   border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 12px 24px;
+  border-radius: 30px;
+  padding: 14px 28px;
   font-weight: 700;
   cursor: pointer;
   width: 100%;
-  max-width: 280px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  transition: transform 0.1s;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 1rem;
 }
 .upload-btn:active {
   transform: scale(0.98);
@@ -358,17 +380,23 @@ body {
 
 .capture-btn {
   background: white;
-  color: #111;
+  color: #f90000;
   border: none;
-  border-radius: 24px;
-  padding: 12px 24px;
-  font-weight: 700;
+  border-radius: 40px;
+  padding: 16px 32px;
+  font-weight: 800;
   cursor: pointer;
   margin-top: 16px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  transition: transform 0.2s;
+  justify-content: center;
+  gap: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  font-size: 1.1rem;
+}
+.capture-btn i {
+  color: #f90000;
 }
 .capture-btn:active {
   transform: scale(0.95);
@@ -936,23 +964,46 @@ body {
 /* --- No Supplies Mode & Scanning Enhancements --- */
 
 .floating-no-supplies-btn {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
+  position: absolute;
+  right: -12px;
+  bottom: -4px;
   background: white;
-  color: #b91c1c;
-  padding: 12px 24px;
+  color: #dc2626;
+  padding: 12px 20px;
   border-radius: 40px;
   font-weight: 800;
   font-size: 0.95rem;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
   display: flex !important;
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  z-index: 9999;
-  border: 1px solid rgba(185, 28, 28, 0.1);
-  transition: all 0.2s ease;
+  border: 1px solid #fee2e2;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 10;
+}
+
+/* Red version if preferred by mockup, but user's latest has white bubble with red shadow/text? 
+   No, user's latest has RED bubble with white text/icon. 
+   Let me re-examine: Turn 29 screenshot has RED bubble.
+*/
+.floating-no-supplies-btn {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  border: 4px solid white;
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.45);
+}
+
+/* Label for bubble if needed, but mockup shows it mostly as an icon or small text */
+.floating-no-supplies-btn-fixed { /* keep this for any fixed needs */
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+}
+
+.floating-no-supplies-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 12px 30px rgba(220, 38, 38, 0.45);
 }
 
 .floating-no-supplies-btn:active {
@@ -1059,3 +1110,227 @@ body {
   gap: 14px;
 }
 
+/* --- Premium Redesign Styles --- */
+
+.assessment-container {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border: 1px solid #f1f5f9;
+}
+
+.title-section {
+    padding: 24px 20px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.ai-header-red {
+    color: #c40000;
+    font-weight: 800;
+    font-size: 1.3rem;
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: -0.2px;
+}
+
+.injury-subheader-red {
+    color: #c40000;
+    font-weight: 700;
+    font-size: 1rem;
+    margin: 0 0 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.95;
+}
+
+.injury-title-main {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin: 0;
+    color: #1a1a1a;
+}
+
+.status-card-premium {
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 16px;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.status-card-kit {
+    background: #f0fdf4;
+    border-color: #bcf0da;
+}
+
+.status-card-no-supplies {
+    background: #fffbeb;
+    border-color: #fde68a;
+}
+
+.kit-header-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.kit-header-row i {
+    color: #166534;
+}
+
+.kit-title-text {
+    font-weight: 800;
+    color: #166534;
+    font-size: 1rem;
+}
+
+.use-items-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    font-size: 0.8rem;
+    color: #166534;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 16px 0 8px 0;
+    padding-top: 12px;
+    border-top: 1px solid rgba(22, 101, 52, 0.1);
+}
+
+.kit-items-list {
+    color: #14532d;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.steps-heading-premium {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin: 32px 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.step-card-premium {
+    background: white;
+    border-radius: 14px;
+    margin-bottom: 16px;
+    display: flex;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    border: 1px solid #f1f5f9;
+    position: relative;
+    transition: transform 0.2s;
+}
+
+.step-card-premium::before {
+    content: '';
+    width: 6px;
+    background: #c40000;
+    flex-shrink: 0;
+}
+
+.step-number-col {
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #c40000;
+    font-size: 1.1rem;
+    border-right: 1px solid #f8fafc;
+}
+
+.step-content-col {
+    padding: 18px 20px;
+    flex: 1;
+    font-weight: 600;
+    color: #334155;
+    line-height: 1.4;
+    font-size: 1rem;
+}
+
+.emergency-help-premium {
+    margin-top: 32px;
+    background: #fff1f2;
+    border: 1px dashed #fecaca;
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.emergency-title-premium {
+    color: #991b1b;
+    font-weight: 800;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.emergency-list-premium {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.emergency-item-premium {
+    color: #991b1b;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.emergency-item-premium::before {
+    content: '-';
+    font-weight: 800;
+}
+
+.safety-note-premium {
+    margin-top: 24px;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.safety-note-icon {
+    background: #fef3c7;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.safety-note-content h4 {
+    margin: 0 0 4px 0;
+    color: #92400e;
+    font-weight: 800;
+    font-size: 1rem;
+}
+
+.safety-note-content p {
+    margin: 0;
+    color: #b45309;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
