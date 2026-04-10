@@ -468,6 +468,42 @@ const firstAidData = {
           { en: "Monitor symptoms", hi: "लक्षणों पर नज़र रखें", gu: "લક્ષણો પર નજર રાખો" }
         ]
       },
+      "head_bruise": {
+        id: "head_bruise",
+        title: { en: "Head Bruise", hi: "सिर पर नील/चोट", gu: "માથામાં ઉઝરડો" },
+        severity: "Moderate",
+        kit_items: {
+          en: "Cold pack, Paracetamol, Clean cloth",
+          hi: "कोल्ड पैक, पैरासिटामोल, साफ कपड़ा",
+          gu: "કોલ્ડ પેક, પેરાસીટામોલ, ચોખ્ખું કપડું"
+        },
+        steps: [
+          { en: "Apply cold compress", hi: "ठंडा सेक लगाएं", gu: "ઠંડો શેક લગાવો" },
+          { en: "Rest and avoid movement", hi: "आराम करें और हिलने-डुलने से बचें", gu: "આરામ કરો અને હલનચલન ટાળો" }
+        ],
+        emergency_help: {
+          en: "🚨 When to Seek Help\n- Monitor for dizziness or vomiting\n- If pain becomes severe\n- Loss of consciousness",
+          hi: "🚨 मदद कब लें\n- चक्कर आने या उल्टी होने पर नज़र रखें\n- यदि दर्द गंभीर हो जाए\n- बेहोशी",
+          gu: "🚨 ક્યારે મદદ લેવી\n- ચક્કર અથવા ઉલટી થાય છે કે કેમ તે તપાસતા રહો\n- જો દુખાવો અસહ્ય થઈ જાય\n- બેભાન થઈ જવું"
+        },
+        noSuppliesMode: {
+          immediate: [
+            { en: "Apply cold compress (cloth + cold water)", hi: "ठंडा सेक लगाएं (कपड़ा + ठंडा पानी)", gu: "ઠંડો શેક લગાવો (કપડું + ઠંડુ પાણી)" },
+            { en: "Rest and avoid movement", hi: "आराम करें और हिलने-डुलने से बचें", gu: "આરામ કરો અને હલનચલન ટાળો" },
+            { en: "Monitor for dizziness or vomiting", hi: "चक्कर आने या उल्टी होने पर नज़र रखें", gu: "ચક્કર અથવા ઉલટી થાય છે કે કેમ તે તપાસતા રહો" }
+          ],
+          getToGet: [
+            { en: "Instant cold pack", hi: "इंस्टेंट कोल्ड पैक", gu: "ઇંસ્ટન્ટ કોલ્ડ પેક" },
+            { en: "Paracetamol (pain relief)", hi: "पैरासिटामोल (दर्द निवारक)", gu: "પેરાસીટામોલ (દુખાવાની રાહત માટે)" },
+            { en: "Clean cloth or gauze", hi: "साफ कपड़ा या गेज", gu: "ચોખ્ખું કપડું અથવા જાળી" }
+          ],
+          afterSupplies: [
+            { en: "Apply cold pack for 10–15 minutes", hi: "10-15 मिनट के लिए कोल्ड पैक लगाएं", gu: "૧૦-૧૫ મિનિટ માટે કોલ્ડ પેક લગાવો" },
+            { en: "Take pain relief if needed", hi: "जरूरत पड़ने पर दर्द निवारक दवा लें", gu: "જરૂર પડે તો દુખાવાની દવા લો" },
+            { en: "Rest and monitor symptoms", hi: "आराम करें और लक्षणों पर नजर रखें", gu: "આરામ કરો અને લક્ષણો તપાસતા રહો" }
+          ]
+        }
+      },
       "face_bruise": {
         id: "face_bruise",
         title: { en: "Face Bruise (Facial Abrasion)", hi: "चेहरे की खरोंच (Abrasion)", gu: "ચહેરા પર ઉઝરડો (Abrasion)" },

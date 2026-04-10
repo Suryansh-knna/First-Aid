@@ -549,21 +549,21 @@ function getViewHTML() {
             <div class="no-supplies-section-title">
               <i data-lucide="clock" size="18"></i> ${staticUI.whatToDoNowTitle[lang]}
             </div>
-            ${renderNoSuppSteps(mode.immediate)}
+            ${renderNoSuppSteps(mode.immediate || [])}
           </div>
 
           <div class="no-supplies-section">
             <div class="no-supplies-section-title">
               <i data-lucide="shopping-cart" size="18"></i> ${staticUI.recommendedItemsTitle[lang]}
             </div>
-            ${renderNoSuppSteps(mode.getToGet)}
+            ${renderNoSuppSteps(mode.getToGet || [])}
           </div>
 
           <div class="no-supplies-section">
             <div class="no-supplies-section-title">
               <i data-lucide="check-circle" size="18"></i> ${staticUI.afterGettingSuppliesTitle[lang]}
             </div>
-            ${renderNoSuppSteps(mode.afterSupplies)}
+            ${renderNoSuppSteps(mode.afterSupplies || [])}
           </div>
 
           <div class="safety-note-box">
@@ -579,14 +579,16 @@ function getViewHTML() {
     
     // --- REGULAR MODE ---
     let stepsHtml = '';
-    subcatObj.steps.forEach((step, idx) => {
-      stepsHtml += `
-        <div class="step-card">
-          <div class="step-number">${idx + 1}</div>
-          <div class="step-text">${step[lang]}</div>
-        </div>
-      `;
-    });
+    if (subcatObj.steps) {
+      subcatObj.steps.forEach((step, idx) => {
+        stepsHtml += `
+          <div class="step-card">
+            <div class="step-number">${idx + 1}</div>
+            <div class="step-text">${step[lang]}</div>
+          </div>
+        `;
+      });
+    }
 
     let emergencyPrompt = '';
     if (sev === 'Severe') {
@@ -690,7 +692,7 @@ function getViewHTML() {
           
           <div style="border-top: 1px solid #bcf0da; pt: 12px; margin-top: 12px;">
             <p style="font-weight: 800; font-size: 0.85rem; color: #166534; margin: 12px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;">${staticUI.itemsFromKit[lang]}</p>
-            <p style="color: #14532d; font-weight: 600;">${subcatObj.kit_items[lang]}</p>
+            <p style="color: #14532d; font-weight: 600;">${subcatObj.kit_items ? subcatObj.kit_items[lang] : "-"}</p>
           </div>
         </div>
       `;
@@ -703,14 +705,16 @@ function getViewHTML() {
     }
     
     let stepsHtml = '';
-    subcatObj.steps.forEach((step, idx) => {
-      stepsHtml += `
-        <div class="step-card">
-          <div class="step-number">${idx + 1}</div>
-          <div class="step-text">${step[lang]}</div>
-        </div>
-      `;
-    });
+    if (subcatObj.steps) {
+      subcatObj.steps.forEach((step, idx) => {
+        stepsHtml += `
+          <div class="step-card">
+            <div class="step-number">${idx + 1}</div>
+            <div class="step-text">${step[lang]}</div>
+          </div>
+        `;
+      });
+    }
 
     return `
       <button class="back-btn" onclick="navigate('home')"><i data-lucide="arrow-left"></i> ${staticUI.back[lang]}</button>
@@ -736,7 +740,7 @@ function getViewHTML() {
           </div>
           
           <div class="emergency-help" style="margin-top: 30px;">
-            ${subcatObj.emergency_help[lang]}
+            ${subcatObj.emergency_help ? subcatObj.emergency_help[lang] : ""}
           </div>
         </div>
       </div>
