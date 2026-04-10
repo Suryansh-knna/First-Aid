@@ -305,9 +305,9 @@ window.showAIResponse = async function(base64Image, source) {
       window.activeCategory = "bleeding_cuts";
       window.activeSubcategory = "minor_knee_scrape";
     } else if (isFaceBruise) {
-      window.matchedInjury = "face_bruise";
+      window.matchedInjury = "head_bruise";
       window.activeCategory = "head";
-      window.activeSubcategory = "face_bruise";
+      window.activeSubcategory = "head_bruise";
     }
 
     if (window.matchedInjury) {
@@ -659,7 +659,7 @@ function getViewHTML() {
 
         <div class="scan-guidelines">
           <div class="scan-guidelines-title">${staticUI.howToScanTitle[lang]}</div>
-          ${staticUI.howToScanGuidelines[lang].map(g => `<div class="guideline-item"><i data-lucide="check-circle-2" size="14"></i> ${g[lang]}</div>`).join('')}
+          ${staticUI.howToScanGuidelines.map(g => `<div class="guideline-item"><i data-lucide="check-circle-2" size="14"></i> ${g[lang]}</div>`).join('')}
         </div>
 
         <div class="floating-no-supplies-btn" onclick="window.hasFirstAid = false; navigate('instructions')">
