@@ -664,16 +664,15 @@ function getViewHTML() {
           ${staticUI.howToScanGuidelines.map(g => `<div class="guideline-item"><i data-lucide="check-circle-2" size="14"></i> ${g[lang]}</div>`).join('')}
         </div>
 
-        <div class="floating-no-supplies-btn" onclick="window.hasFirstAid = false; navigate('instructions')">
-          <i data-lucide="help-circle" size="18"></i> ${staticUI.noFirstAidButtonText[lang]}
-        </div>
-
         <div class="camera-footer" id="camera-footer-2">
           <div class="or-divider">${staticUI.orText[lang]}</div>
           <input type="file" id="file-upload-2" accept="image/png, image/jpeg" style="display:none;" onchange="window.hasFirstAid = true; handleFileUpload(event, 'analyze')">
-          <button class="upload-btn" onclick="document.getElementById('file-upload-2').click()">
+          <button class="upload-btn" onclick="document.getElementById('file-upload-2').click()" style="margin-bottom: 8px;">
             <i data-lucide="image" style="margin-right:8px;"></i> ${staticUI.uploadPhoto[lang]}
           </button>
+          <div class="floating-no-supplies-btn" onclick="window.hasFirstAid = false; navigate('instructions')">
+            <i data-lucide="help-circle" size="18"></i> ${staticUI.noFirstAidButtonText[lang]}
+          </div>
         </div>
       `;
   } else if (currentState === 'chat') {
