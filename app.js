@@ -72,6 +72,13 @@ window.liveSearch = function(query) {
         </div>
       </div>
     `;
+
+    // Toggle clear button visibility
+    const clearBtn = document.getElementById('clear-search');
+    if (clearBtn) {
+      clearBtn.style.display = 'none';
+    }
+
     if (window.lucide) lucide.createIcons();
     return;
   }
@@ -149,6 +156,12 @@ window.liveSearch = function(query) {
   // STEP 6: FILTER & RANK (Score >= 2 already filtered, now sort)
   scoredResults.sort((a, b) => b.score - a.score);
   
+  // Toggle clear button visibility
+  const clearBtn = document.getElementById('clear-search');
+  if (clearBtn) {
+    clearBtn.style.display = rawQuery.length > 0 ? 'block' : 'none';
+  }
+
   // STEP 7: DISPLAY RESULTS
   if (scoredResults.length === 0) {
     dynamicArea.innerHTML = `
@@ -305,6 +318,15 @@ window.handleSearch = function() {
   }
 };
 
+window.clearSearch = function() {
+  const input = document.getElementById('search-input');
+  if (input) {
+    input.value = '';
+    window.liveSearch('');
+    input.focus();
+  }
+};
+
 window.startVoiceSearch = function() {
   const micIcon = document.getElementById('mic-icon');
   if (micIcon) {
@@ -368,6 +390,7 @@ function getViewHTML() {
       <div class="search-container" style="margin-bottom: 12px;">
         <i data-lucide="search" color="var(--text-muted)"></i>
         <input type="text" id="search-input" placeholder="${staticUI.placeholder[lang]}" oninput="liveSearch(this.value)" onkeypress="if(event.key === 'Enter') handleSearch()">
+        <i id="clear-search" data-lucide="x-circle" color="var(--text-muted)" style="cursor:pointer; display:none;" onclick="clearSearch()"></i>
         <i id="mic-icon" data-lucide="mic" color="var(--primary)" style="cursor:pointer;" onclick="startVoiceSearch()"></i>
       </div>
       <div class="lang-selector-container">
