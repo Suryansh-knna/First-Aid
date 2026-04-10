@@ -29,7 +29,7 @@ const staticUI = {
   analyzingImage: { en: "Analyzing image...", hi: "छवि का विश्लेषण हो रहा है...", gu: "છબીનું વિશ્લેષણ કરી રહ્યા છીએ..." },
   identifyingInjury: { en: "Identifying injury...", hi: "चोट की पहचान हो रही है...", gu: "ઇજાને ઓળખી રહ્યા છીએ..." },
   generatingSteps: { en: "Generating first aid steps...", hi: "प्राथमिक चिकित्सा चरण उत्पन्न हो रहे हैं...", gu: "પ્રાથમિક સારવારનાં પગલાં જનરેટ કરી રહ્યા છીએ..." },
-  aiAssessment: { en: "🤖 AI Assessment", hi: "🤖 AI मूल्यांकन", gu: "🤖 AI આકારણી" },
+  aiAssessment: { en: "AI Assessment", hi: "AI मूल्यांकन", gu: "AI આકારણી" },
   notAccurate: { en: "Not accurate? Select manually", hi: "सटीक नहीं है? मैन्युअल रूप से चुनें", gu: "ચોક્કસ નથી? જાતે પસંદ કરો" },
   matchingDatabase: { en: "Matching against reference database...", hi: "संदर्भ डेटाबेस के साथ मिलान हो रहा है...", gu: "સંદર્ભ ડેટાબેઝ સાથે મેચ કરી રહ્યા છીએ..." },
   unableToIdentify: { en: "Unable to identify injury. Please select manually.", hi: "चोट की पहचान करने में असमर्थ। कृपया मैन्युअल रूप से चुनें।", gu: "ઇજાને ઓળખવામાં અસમર્થ. કૃપા કરીને જાતે પસંદ કરો." },
@@ -41,7 +41,6 @@ const staticUI = {
   standardKitAvailable: { en: "Standard first aid kit available", hi: "मानक प्राथमिक चिकित्सा किट उपलब्ध है", gu: "સ્ટાન્ડર્ડ ફર્સ્ટ એઇડ કીટ ઉપલબ્ધ છે" },
   kitScanPrompt: { en: "Injury identified. Now scan original first aid kit.", hi: "चोट की पहचान हो गई है। अब अपनी मूल प्राथमिक चिकित्सा किट को स्कैन करें.", gu: "ઇજાની ઓળખ થઈ ગઈ છે. હવે તમારી મૂળ પ્રાથમિક સારવાર કીટને સ્કેન કરો." },
   preparingGuidance: { en: "Preparing guidance...", hi: "मार्गदर्शन तैयार हो रहा है...", gu: "માર્ગદર્શન તૈયાર કરી રહ્યા છીએ..." },
-  emergency_help_title: { en: "When to Seek Help", hi: "चिकित्सीय सहायता कब लें", gu: "ક્યારે તબીબી મદદ લેવી" },
   scanKitHelpSubtitle: { 
     en: "Scan for first aid kits, medicine cabinets, or individual medicines", 
     hi: "फर्स्ट एड किट, मेडिसिन कैबिनेट या दवाओं को स्कैन करें", 
@@ -60,10 +59,10 @@ const staticUI = {
     { en: "Include all supplies in one frame", hi: "सभी आपूर्ति को एक फ्रेम में शामिल करें", gu: "બધી વસ્તુઓ એક ફ્રેમમાં સમાવવાનો પ્રયાસ કરો" }
   ],
   noFirstAidButtonText: { en: "No first aid?", hi: "फर्स्ट एड नहीं है?", gu: "ફર્સ્ટ એઇડ નથી?" },
-  noSuppliesLabel: { en: "⚠️ No supplies mode", hi: "⚠️ बिना आपूर्ति मोड", gu: "⚠️ વસ્તુઓ વગરનો મોડ" },
-  whatToDoNowTitle: { en: "⏳ What you can do right now", hi: "⏳ अभी आप क्या कर सकते हैं", gu: "⏳ તમે અત્યારે શું કરી શકો" },
-  recommendedItemsTitle: { en: "🛒 Recommended items to get", hi: "🛒 प्राप्त करने के लिए अनुशंसित वस्तुएं", gu: "🛒 મેળવવા માટે જરૂરી વસ્તુઓ" },
-  afterGettingSuppliesTitle: { en: "✅ When you have supplies", hi: "✅ जब आपके पास आपूर्ति हो", gu: "✅ જ્યારે તમારી પાસે વસ્તુઓ હોય" },
+  noSuppliesLabel: { en: "No supplies mode", hi: "बिना आपूर्ति मोड", gu: "વસ્તુઓ વગરનો મોડ" },
+  whatToDoNowTitle: { en: "What you can do right now", hi: "अभी आप क्या कर सकते हैं", gu: "તમે અત્યારે શું કરી શકો" },
+  recommendedItemsTitle: { en: "Recommended items to get", hi: "प्राप्त करने के लिए अनुशंसित वस्तुएं", gu: "મેળવવા માટે જરૂરી વસ્તુઓ" },
+  afterGettingSuppliesTitle: { en: "When you have supplies", hi: "जब आपके पास आपूर्ति हो", gu: "જ્યારે તમારી પાસે વસ્તુઓ હોય" },
   safetyNoteTitle: { en: "Safety Note", hi: "सुरक्षा नोट", gu: "સુરક્ષા નોંધ" },
   safetyNoteText: { 
     en: "If symptoms worsen, seek medical help immediately", 
