@@ -809,15 +809,26 @@ body {
   padding: 0 4px;
 }
 
-.voice-wave {
-  position: absolute;
+/* Sound Wave Mic Animation */
+.mic-wrapper {
+  position: relative;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.voice-wave {
+  display: none; /* Strict: removed from layout when idle */
+  align-items: center;
+  justify-content: center;
   gap: 3px;
   height: 24px;
+  width: 32px;
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  z-index: 10;
 }
 
 .wave-bar {
@@ -825,26 +836,31 @@ body {
   height: 20%;
   background-color: var(--accent);
   border-radius: 1.5px;
-  transition: height 0.3s ease, background-color 0.3s ease;
+  transition: height 0.3s ease;
+}
+
+#mic-icon {
+  z-index: 1;
+  background: none !important;
+  box-shadow: none !important;
+  transition: transform 0.3s ease;
 }
 
 /* States */
 .mic-wrapper.listening .voice-wave {
-  opacity: 1;
-}
-
-#mic-icon {
-  transition: transform 0.3s ease, opacity 0.15s ease;
+  display: flex; /* STRICT: ONLY waveform visible */
 }
 
 .mic-wrapper.listening #mic-icon {
-  opacity: 0;
-  pointer-events: none;
+  display: none !important; /* STRICT: MIC REMOVED from render tree */
+}
+
+.mic-wrapper.processing .voice-wave {
+  display: flex;
 }
 
 .mic-wrapper.processing #mic-icon {
-  opacity: 0.2;
-  transform: scale(0.9);
+  display: none !important;
 }
 
 /* Staggered Animations for Listening state */
