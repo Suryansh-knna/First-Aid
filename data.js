@@ -1,5 +1,5 @@
 const staticUI = {
-  appTitle: { en: "FirstAid AI", hi: "फर्स्टएड AI", gu: "ફર્સ્ટએડ AI" },
+  appTitle: { en: "Act First", hi: "एक्ट फर्स्ट", gu: "એક્ટ ફર્સ્ટ" },
   cameraAssistant: { en: "Scan for help", hi: "मदદ के लिए स्कैन करें", gu: "મદદ માટે સ્કેન કરો" },
   cameraDesc: { en: "Scan injury & available first aid kits", hi: "चोट और उपलब्ध प्राथमिक चिकित्सा किट स्कैन करें", gu: "ઇજા અને ઉપલબ્ધ પ્રાથમિક સારવાર કીટ્સ સ્કેન કરો" },
   placeholder: { en: "Search injuries...", hi: "चोटें खोजें...", gu: "ઇજાઓ શોધો..." },
