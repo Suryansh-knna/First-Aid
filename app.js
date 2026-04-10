@@ -420,9 +420,9 @@ function getViewHTML() {
     }
     return `
       <div class="search-container" style="margin-bottom: 12px;">
-        <i data-lucide="search" color="var(--accent)"></i>
+        <i data-lucide="search" size="20" color="var(--accent)"></i>
         <input type="text" id="search-input" placeholder="${staticUI.placeholder[lang]}" oninput="liveSearch(this.value)" onkeypress="if(event.key === 'Enter') handleSearch()">
-        <i id="clear-search" data-lucide="x-circle" color="var(--text-muted)" style="cursor:pointer; display:none;" onclick="clearSearch()"></i>
+        <i id="clear-search" data-lucide="x-circle" size="20" color="var(--text-muted)" style="cursor:pointer; display:none;" onclick="clearSearch()"></i>
         <div class="mic-wrapper">
           <div class="voice-wave">
             <div class="wave-bar"></div>
@@ -431,7 +431,7 @@ function getViewHTML() {
             <div class="wave-bar"></div>
             <div class="wave-bar"></div>
           </div>
-          <i id="mic-icon" data-lucide="mic" color="var(--accent)" style="cursor:pointer;" onclick="startVoiceSearch()"></i>
+          <i id="mic-icon" data-lucide="mic" size="20" color="var(--accent)" style="cursor:pointer;" onclick="startVoiceSearch()"></i>
         </div>
       </div>
       <div class="lang-selector-container">
