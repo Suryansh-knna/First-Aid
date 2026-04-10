@@ -80,7 +80,7 @@ window.liveSearch = function(query) {
     `;
 
     // Toggle clear button visibility
-    const clearBtn = document.getElementById('clear-search');
+    const clearBtn = document.getElementById('clear-search-wrapper');
     if (clearBtn) {
       clearBtn.style.display = 'none';
     }
@@ -167,9 +167,9 @@ window.liveSearch = function(query) {
   scoredResults.sort((a, b) => b.score - a.score);
   
   // Toggle clear button visibility
-  const clearBtn = document.getElementById('clear-search');
+  const clearBtn = document.getElementById('clear-search-wrapper');
   if (clearBtn) {
-    clearBtn.style.display = rawQuery.length > 0 ? 'block' : 'none';
+    clearBtn.style.display = rawQuery.length > 0 ? 'flex' : 'none';
   }
 
   // STEP 7: DISPLAY RESULTS
@@ -420,9 +420,13 @@ function getViewHTML() {
     }
     return `
       <div class="search-container" style="margin-bottom: 12px;">
-        <i data-lucide="search" size="20" color="var(--accent)"></i>
+        <div class="icon-wrapper">
+          <i data-lucide="search" size="24" color="var(--accent)"></i>
+        </div>
         <input type="text" id="search-input" placeholder="${staticUI.placeholder[lang]}" oninput="liveSearch(this.value)" onkeypress="if(event.key === 'Enter') handleSearch()">
-        <i id="clear-search" data-lucide="x-circle" size="20" color="var(--text-muted)" style="cursor:pointer; display:none;" onclick="clearSearch()"></i>
+        <div class="icon-wrapper" id="clear-search-wrapper" style="display:none;">
+          <i id="clear-search" data-lucide="x-circle" size="24" color="var(--text-muted)" style="cursor:pointer;" onclick="clearSearch()"></i>
+        </div>
         <div class="mic-wrapper">
           <div class="voice-wave">
             <div class="wave-bar"></div>
@@ -431,7 +435,7 @@ function getViewHTML() {
             <div class="wave-bar"></div>
             <div class="wave-bar"></div>
           </div>
-          <i id="mic-icon" data-lucide="mic" size="20" color="var(--accent)" style="cursor:pointer;" onclick="startVoiceSearch()"></i>
+          <i id="mic-icon" data-lucide="mic" size="24" color="var(--accent)" style="cursor:pointer;" onclick="startVoiceSearch()"></i>
         </div>
       </div>
       <div class="lang-selector-container">
